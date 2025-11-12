@@ -1,0 +1,5 @@
+running geo.py required resetting the python version in
+  Build/Configure build tools/python
+Setting it to versino 3.13 (xcode is 3.9) works.
+Now I can import numpy and geopandas.
+
