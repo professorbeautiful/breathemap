@@ -56,7 +56,7 @@ fluidPage({
                   column(7, selectInput("town", "Select a town by clicking it or typing it in here: ",
                                         PAtownnames,
                                         selected = ""),
-                         #selected = "Census Tract 1402"),
+                         #selected = "Census Tract 1402"),   #OK now; set in server().
                   leafletOutput("map", height = 450), br(),
                           fluidRow(
                             column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
