@@ -1,0 +1,19 @@
+_____ $ ls appdatafilesforbreathemap/
+appData.Rdata                           massachusetts_columnchartdata.Rdata
+_____ $ mkdir appdatafiles_MA
+_____ $ mv app
+appData.Rdata              appdatafiles_MA/           appdatafilesforbreathemap/
+_____ $ mv appData.Rdata appdatafiles_MA/
+
+_____ $ ls
+appdatafiles_MA                 rsconnect                       ui.R
+appdatafilesforbreathemap       run.R
+global.R                        server.R
+_____ $ ln app*map/* .
+_____ $ ls
+appData.Rdata                           rsconnect
+appdatafiles_MA                         run.R
+appdatafilesforbreathemap               server.R
+global.R                                ui.R
+massachusetts_columnchartdata.Rdata
+_____ $
