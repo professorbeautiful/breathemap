@@ -1,3 +1,5 @@
+#### proceeding as if the new data with "MA" in file names really are "PA".
+
 for (ob in ls())  {
   cat('===', ob, '\n')
   print(str(get(ob)))
@@ -16,21 +18,21 @@ library(dplyr)
 #rm(list = ls(envMA))
 #load(file = 'app/appdatafilesforbreathemap/appData.Rdata')
 load(file = '../app/appdatafilesforbreathemap/massachusetts_columnchartdata.Rdata')
-setdiff(names(MAtown), y=names(envMA$MAtown))
-setdiff(names(MAtown), x=names(envMA$MAtown))
-intersect(names(MAtown), x=names(envMA$MAtown))
+setdiff(names(PAtown), y=names(envMA$MAtown))
+setdiff(names(PAtown), x=names(envMA$MAtown))
+intersect(names(PAtown), x=names(envMA$MAtown))
 
 #newdata
-dim(MAtown) #739  26
-newFields = setdiff(names(MAtown), y=names(envMA$MAtown))   # 10
+dim(PAtown) #739  26
+newFields = setdiff(names(PAtown), y=names(envMA$MAtown))   # 10
 newFields
 
 #previous
 dim(envMA$MAtown) #351  19
-extraFieldsPrevious = setdiff(names(MAtown), x=names(envMA$MAtown))
+extraFieldsPrevious = setdiff(names(PAtown), x=names(envMA$MAtown))
 #"POPCH80_90" "lon"        "lat"
 
 #fields in common
-intersect(names(MAtown), x=names(envMA$MAtown))     #16
+intersect(names(PAtown), x=names(envMA$MAtown))     #16
 
 
