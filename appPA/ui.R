@@ -2,7 +2,7 @@ fluidPage({
   mainPanel(width = 12,
             tags$head(
               # style tags used throughout app
-              tags$style(type="text/css", 
+              tags$style(type="text/css",
                           "a{
                             color:#8a100b;
                             background-color:transparent;
@@ -49,16 +49,19 @@ fluidPage({
                          }"
               )
             ),
-            # all ui components, layout, and element ordering for whole app 
+            # all ui components, layout, and element ordering for whole app
             tabsetPanel(
               tabPanel("Map Tool",
                 fluidRow(
-                  column(7, selectInput("town", "Select a town by clicking it or typing it in here: ", PAtownnames, selected = ""), 
-                          leafletOutput("map", height = 450), br(),
+                  column(7, selectInput("town", "Select a town by clicking it or typing it in here: ",
+                                        PAtownnames,
+                                        selected = ""),
+                         #selected = "Census Tract 1402"),
+                  leafletOutput("map", height = 450), br(),
                           fluidRow(
                             column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
                             column(width = 2, offset = 0.5, downloadButton("downloadData", "Export Data"), br(), br()))),
-                  column(5, dataTableOutput("tabledemog"), 
+                  column(5, dataTableOutput("tabledemog"),
                          dataTableOutput("tableest"), br(),
                          textOutput("hotext"), br(),
                          p("**Performance IQ is a measure of intelligence related to problem solving skills.")))),

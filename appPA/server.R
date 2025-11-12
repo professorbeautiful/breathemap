@@ -1,10 +1,12 @@
 function(input, output, session) {
-  
+  PAtowndata$Town = PAtowndata$NAMELSAD
+    #observe({})
  # clicking updates selectInput
+
   observe({
     click <- input$map_shape_click
     if(is.null(click))
-      return()
+      updateSelectInput(session, "town", selected = "Census Tract 1402")
     else
       updateSelectInput(session, "town", selected = click$id)
   })
@@ -31,7 +33,7 @@ function(input, output, session) {
                     fillOpacity = 1,
                     bringToFront = T))
   })
-  
+
   # Map animations and reactive selectors
   observeEvent(input$town, {
     leafletProxy("map", session) %>%
@@ -42,18 +44,18 @@ function(input, output, session) {
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
     if (input$town == " "){
-      output$tabledemog <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town=="Boston",c(1,5,4)]),
+      output$tabledemog <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town=="default_town",c(1,5,4)]),
                                                caption = demogcaption,
                                                options = list(
                                                  dom="t",
                                                  columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                  headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town=="Boston",c(9:12,8,15,16)]),
+      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town=="default_town",c(9:12,8,15,16)]),
                                              caption = estcaption,
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$hotext <- renderText(paste("*All statistics are based on annual air pollution estimates. For example, in", "Boston", "approximately",
+      output$hotext <- renderText(paste("*All statistics are based on annual air pollution estimates. For example, in", "default_town", "approximately",
                                         "176", "people die due to cancers caused by air pollution every year."))
     }
     else {
@@ -79,35 +81,35 @@ function(input, output, session) {
       write.csv(PAtowndata, file)
     }
   )
-  
+
   # Reactive storage of comparative tool inputs. Speeds up app
   secondpageinput <- reactive(c(input$townleft, input$townright))
-  
+
   # datatables for comparison tool
   output$tabledemogleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town==secondpageinput()[1],c(1,4,5)]),
                                                caption = demogcaption,
                                                options = list(dom="t",
                                                               columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                               headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  
+
   output$tablepoprateleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town==secondpageinput()[1],c(19:20,17:18)]),
                                              caption = popratecaption,
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
- 
+
   output$tableIQleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town==secondpageinput()[1],c(15:16)]),
                                             caption = IQcaption,
                                             options = list(dom="t",
                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  
+
   output$tabledemogright <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town==secondpageinput()[2],c(1,4,5)]),
                                                 caption = demogcaption,
                                                 options = list(dom="t",
                                                                columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                                headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  
+
   output$tablepoprateright <- DT::renderDataTable(t(PAtowndata[PAtowndata$Town==secondpageinput()[2],c(19:20,17:18)]),
                                               caption = popratecaption,
                                               options = list(dom="t",
@@ -119,19 +121,19 @@ function(input, output, session) {
                                                 options = list(dom="t",
                                                                columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                                headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  
+
   # column plot for comparison tool (hidden for small devices)
   reactivedata <- reactive(columnchartdata[columnchartdata$Town == secondpageinput()[1] | columnchartdata$Town ==secondpageinput()[2],])
-  
+
   output$comptable <- renderPlot(ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
                                   geom_bar(stat="identity", position=position_dodge(), colour="black") +
                                   theme_classic() + xlab("Incidence Rates") + ylab("") +
                                   scale_fill_manual(values = c("#8a100b", "#b29d6c")) +
                                   scale_x_discrete(labels= c("CancerDeaths_IR"="Cancer Deaths per 10,000 Population", "IHDDeaths_IR"="Heart Disease Deaths per 10,000 Population",
                                                               "**PIQ points lost per child"="PIQ Points Lost per child")))
-  
 
-  
+
+
 }
 
 
