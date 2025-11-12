@@ -1,0 +1,39 @@
+Mapping census tracts in Pennsylvania to town names is a complex geospatial data task due to these factors:
+
+Census Tracts: These are geographic regions defined by the US Census Bureau, typically used for statistical purposes and do not always align with town (municipality) boundaries.
+Towns: In Pennsylvania, "towns" can refer to boroughs, cities, townships, or one actual "town" (Bloomsburg). The relationship between census tracts and towns is not one-to-one—tracts can span multiple towns, and towns can cover multiple tracts.
+How to Perform the Mapping:
+
+Obtain Data:
+Census Tract Shapefile: Provided by the US Census Bureau via TIGER/Line Shapefiles (here).
+Municipality Shapefile: Pennsylvania Department of Transportation or Pennsylvania State Data Center (here, PennDOT GIS).
+Join the Data:
+Use a GIS platform (QGIS, ArcGIS, or Python with geopandas) to spatially join census tracts to municipalities by overlaying the tract and town boundaries.
+Example in Python (geopandas):
+
+Python
+import geopandas as gpd
+
+# Load census tracts and municipalities shapefiles
+tracts = gpd.read_file("tl_2023_42_tract.shp")  # PA state code is 42
+towns = gpd.read_file("pa_municipalities.shp")
+
+# Ensure reference systems match
+tracts = tracts.to_crs(towns.crs)
+
+# Perform a spatial join - assigns each tract to the town it most overlaps
+joined = gpd.sjoin(tracts, towns, how='left', op='intersects')
+
+# Save to CSV with tract GEOID and town NAME
+joined[["GEOID", "NAME"]].to_csv("tracts_to_towns.csv", index=False)
+Notes:
+
+You may need to resolve cases where tracts split across multiple towns.
+For authoritative mapping, check if the Pennsylvania State Data Center or GIS repositories provide pre-made lookup tables.
+Summary Table Output Example:
+
+Census Tract GEOID	Town Name
+42003020100	Pittsburgh
+42003020200	Pittsburgh
+42045010600	Philadelphia
+...	...
