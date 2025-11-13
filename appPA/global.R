@@ -4,6 +4,7 @@ library(leaflet)
 library(DT)
 library(ggplot2)
 library(data.table)
+library(shinyDebuggingPanel)
 
 # loads data required for app
 load("appData.Rdata")

@@ -1,25 +1,40 @@
 function(input, output, session) {
-  PAtowndata$Town = PAtowndata$NAMELSAD  ### temporary
-    #observe({})
+  shinyDebuggingPanel::makeDebuggingPanelOutput()
+  load('tracts_with_towns.Rd')  ### shoudl be in the folder appPA
+  tracts = PAtowndata$NAMELSAD
+  towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
+  towns [ is.na(towns )] = '___'
+  lats = tracts_with_towns$lat.x[match(tracts, tracts_with_towns$tracts)]
+  lons = tracts_with_towns$lon.x[match(tracts, tracts_with_towns$tracts)]
+  PAtownnames = PAtowndata$Town = paste(towns, tracts, sep= ', ')
+  PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
+  PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
+  PAtowndata$lat = lats[match(tracts, PAtowndata$NAMELSAD)]
+  PAtowndata$lon = lons[match(tracts, PAtowndata$NAMELSAD)]
+
+  # to speed app up and lower RAM
+  #townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
+  townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
+  #needs Town, lat, lon
+
+  medianLON= median(as.numeric(pa_tracts$INTPTLON[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
+  medianLAT= median(as.numeric(pa_tracts$INTPTLAT[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
+
+
  # clicking updates selectInput
-  meanLON=-77.12191 #mean(as.numeric(pa_tracts$INTPTLON))
-  meanLAT= 40.47228 #mean(as.numeric(pa_tracts$INTPTLAT))
   observe({
     click <- input$map_shape_click
     if(is.null(click))
-      updateSelectInput(session, "town", selected = "Census Tract 1402")
+      updateSelectInput(session, "town", selected = PAtowndata$Town[1])
     else
       updateSelectInput(session, "town", selected = click$id)
   })
 
-  # to speed app up and lower RAM
-  townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
-
-  # leaflet map
+ # leaflet map
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 11)) %>%
-      setView(lng = -77.12191, lat = 40.47228, zoom = 7)  %>%
+      setView(lng = medianLON, lat = medianLAT, zoom = 7)  %>%
       addPolygons(data = PAtown,
                   weight = 1,
                   color = "Black",
@@ -37,10 +52,11 @@ function(input, output, session) {
 
   # Map animations and reactive selectors
   observeEvent(input$town, {
+    print(townreac())
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
-      addPolygons(data=PAtown[PAtown$TOWN==townreac()$Town,], weight = 1, color="Red", fillColor="Yellow",fillOpacity = 1, group="selectedTownShp")
+      addPolygons(data=PAtown[PAtown$Town==townreac()$Town,], weight = 1, color="Red", fillColor="Yellow",fillOpacity = 1, group="selectedTownShp")
 
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
