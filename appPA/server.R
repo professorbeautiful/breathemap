@@ -1,8 +1,9 @@
 function(input, output, session) {
-  PAtowndata$Town = PAtowndata$NAMELSAD
+  PAtowndata$Town = PAtowndata$NAMELSAD  ### temporary
     #observe({})
  # clicking updates selectInput
-
+  meanLON=-77.12191 #mean(as.numeric(pa_tracts$INTPTLON))
+  meanLAT= 40.47228 #mean(as.numeric(pa_tracts$INTPTLAT))
   observe({
     click <- input$map_shape_click
     if(is.null(click))
@@ -18,7 +19,7 @@ function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 11)) %>%
-      setView(lng = -71.7989, lat = 41.9410, zoom = 7)  %>%
+      setView(lng = -77.12191, lat = 40.47228, zoom = 7)  %>%
       addPolygons(data = PAtown,
                   weight = 1,
                   color = "Black",
