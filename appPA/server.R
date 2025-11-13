@@ -7,10 +7,13 @@ function(input, output, session) {
   lats = tracts_with_towns$lat.x[match(tracts, tracts_with_towns$tracts)]
   lons = tracts_with_towns$lon.x[match(tracts, tracts_with_towns$tracts)]
   PAtownnames = PAtowndata$Town = paste(towns, tracts, sep= ', ')
-  PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
-  PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
+  PAtown$TOWN = PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
+  PAtowndata$TOWN =PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
   PAtowndata$lat = lats[match(tracts, PAtowndata$NAMELSAD)]
   PAtowndata$lon = lons[match(tracts, PAtowndata$NAMELSAD)]
+  PAtown$lat = lats[match(tracts, PAtown$NAMELSAD)]
+  PAtown$lon = lons[match(tracts, PAtown$NAMELSAD)]
+  #  these lat and lon do locate correctly.
 
   # to speed app up and lower RAM
   #townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
@@ -53,10 +56,11 @@ function(input, output, session) {
   # Map animations and reactive selectors
   observeEvent(input$town, {
     print(townreac())
+    townRowNumber = which(PAtown$NAME==townreac()$Town)
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
-      addPolygons(data=PAtown[PAtown$Town==townreac()$Town,], weight = 1, color="Red", fillColor="Yellow",fillOpacity = 1, group="selectedTownShp")
+      addPolygons(data=PAtown[townRowNumber,], weight = 1, color="Red", fillColor="Yellow",fillOpacity = 1, group="selectedTownShp")
 
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
