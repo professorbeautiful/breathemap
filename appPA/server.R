@@ -15,9 +15,11 @@ function(input, output, session) {
   PAtown$lon = lons[match(tracts, PAtown$NAMELSAD)]
   #  these lat and lon do locate correctly.
 
+
+
   # to speed app up and lower RAM
   #townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
-  townreac <- reactive(PAtowndata[PAtowndata$Town==input$town,])
+  townreac <- reactive(PAtowndata[which(PAtowndata$Town==input$town),])
   #needs Town, lat, lon
 
   medianLON= median(as.numeric(pa_tracts$INTPTLON[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
