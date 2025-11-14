@@ -56,8 +56,8 @@ fluidPage({
               tabPanel("Map Tool",
                 fluidRow(
                   column(7, selectInput("town", "Select a town by clicking it or typing it in here: ",
-                                        PAtowndata$Town,
-                                        selected = ""),
+                                        PAtownnames,
+                                        selected = PAtownnames[1]),
                   leafletOutput("map", height = 450), br(),
                           fluidRow(
                             column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
