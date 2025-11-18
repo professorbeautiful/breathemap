@@ -1,8 +1,10 @@
 fluidPage({
 
   mainPanel(width = 12,
-            shinyDebuggingPanel::withDebuggingPanel(),
             tags$head(
+              includeScript('www/KeyHandler.js'),
+              includeScript('navigateToId.js'),   ### ESCAPE key to return.
+
               # style tags used throughout app
               tags$style(type="text/css",
                           "a{
@@ -51,6 +53,8 @@ fluidPage({
                          }"
               )
             ),
+            shinyDebuggingPanel::withDebuggingPanel(),
+
             # all ui components, layout, and element ordering for whole app
             tabsetPanel(
               tabPanel("Map Tool",

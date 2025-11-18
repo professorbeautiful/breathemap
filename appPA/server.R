@@ -1,10 +1,13 @@
 function(input, output, session) {
-  shinyDebuggingPanel::makeDebuggingPanelOutput()
+  includeScript('www/KeyHandler.js')
+  observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
+  shinyDebuggingPanel::makeDebuggingPanelOutput(
+       session, toolsInitialState = FALSE,
+       #condition='ctrlDpressed === true'
+      )
 
 
-
-
-  # to speed app up and lower RAM
+    # to speed app up and lower RAM
   #townreac <- reactive(PAtowndata[PAtowndata$NAME==input$town,])
   townreac <- reactive(PAtowndata[which(PAtowndata$NAME==input$town),])
   #needs Town, lat, lon
@@ -49,8 +52,21 @@ function(input, output, session) {
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
-      addPolygons(data=PAtown[townRowNumber,], weight = 1, color="Red", fillColor="Yellow",fillOpacity = 1, group="selectedTownShp")
-
+      addPolygons(data=PAtown[townRowNumber,], weight = 1,
+                  color="Red", fillColor="Lightgreen",
+                  fillOpacity = 1, group="selectedTownShp") #%>%
+      # addLabelOnlyMarkers(    ## not working, not important
+      #   lng = townreac()$lon, lat = townreac()$lat,
+      #   layerId = NULL,
+      #   group = 'selectedTownShp',
+      #   icon = NULL,
+      #   label = 'hello', #townreac()$NAME,
+      #   labelOptions = labelOptions(noHide = T, direction = 'top', textOnly = T),
+      #   #options = markerOptions(),
+      #   clusterOptions = NULL,
+      #   clusterId = NULL,
+      #   data = getMapData(map)
+      # )
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
     if (input$town == " "){

@@ -4,6 +4,8 @@ library(leaflet)
 library(DT)
 library(ggplot2)
 library(data.table)
+if(!require(shinyDebuggingPanel))
+  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 library(shinyDebuggingPanel)
 
 # loads data required for app
