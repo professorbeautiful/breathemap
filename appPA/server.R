@@ -69,36 +69,37 @@ function(input, output, session) {
       # )
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
-    if (input$town == " "){
-      output$tabledemog <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME=="default_town",c(1,5,4)]),
-                                               caption = demogcaption,
-                                               options = list(
-                                                 dom="t",
-                                                 columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                 headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME=="default_town",c(9:12,8,15,16)]),
-                                             caption = estcaption,
-                                             options = list(dom="t",
-                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$hotext <- renderText(paste("*All statistics are based on annual air pollution estimates. For example, in", "default_town", "approximately",
-                                        "176", "people die due to cancers caused by air pollution every year."))
-    }
-    else {
-      output$tabledemog <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==townreac()$NAME,c(1,5,4)]),
-                                               caption = demogcaption,
-                                               options = list(dom="t",
-                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==townreac()$NAME,c(9:12,8,15,16)]),
+    default_town = 'Adamsburg, Census Tract'
+    if (input$town == " ")
+      updateSelectInput(inputId='town', selected = default_town)
+    #   townChosen = default_town
+    # else     townChosen = townreac()$NAME
+    columns.tabledemog = c("NAME", "Total Population (2019)", "PM_avg")
+        # columns for tabledemog  are: c("NAME", "Total Population (2019)", "PM_avg")  (was 1,5,4)
+    # columns for tableest  were c(9:12,8,15,16)
+    columns.tableest = c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
+                         "All Cause Deaths, Laden Estimate"  ,
+                         "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+                         "All Cause Deaths, Di Estimate",
+                         "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
+    output$tabledemog <- DT::renderDataTable(
+      t(PAtowndata[PAtowndata$NAME==townreac()$NAME,
+                   columns.tabledemog]),
+      caption = demogcaption,
+      options = list(
+        dom="t",
+        columnDefs = list(list(className = 'dt-right', targets = 1)),
+        headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==townreac()$NAME,
+                                                          columns.tableest]),
                                              caption = estcaption,
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
       output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", townreac()$NAME, "approximately",
-                                        townreac()$`Cancer Deaths`, "people die due to cancers caused by air pollution every year."))
+                                        "was townreac()$`Cancer Deaths`", "people die due to cancers caused by air pollution every year."))
     }
-  })
+  )
 
   # export button
   output$downloadData <- downloadHandler(
