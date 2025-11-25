@@ -9,9 +9,11 @@ if(!require(shinyDebuggingPanel))
 library(shinyDebuggingPanel)
 
 # loads data required for app
+
 source('geodataPA.R', local=TRUE)
 load('PAtown.Rd')
-load('PAtowndata.Rd')
+load('PAtowndata.lukedata.Rd')
+PAtowndata = PAtowndata.lukedata
 load('tracts_with_towns.Rd')  ### shoudl be in the folder appPA
 tracts = PAtowndata$NAMELSAD
 towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
