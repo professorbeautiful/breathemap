@@ -81,5 +81,7 @@ duplicatedNAMELSAD = PAtowndata.lukedata$NAMELSAD [
 
 duplicatedNAMELSAD.rows = PAtowndata.lukedata[ PAtowndata.lukedata$NAMELSAD %in% duplicatedNAMELSAD, ]
 duplicatedNAMELSAD.rows [order(duplicatedNAMELSAD.rows$NAMELSAD), ]
+
 ## REMEMBER to save PAtowndata.Rd in appPA.
 
+save(PAtowndata.lukedata, file = 'appPA/PAtowndata.lukedata.Rd')
