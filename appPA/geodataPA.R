@@ -19,6 +19,9 @@ pa_tracts = pa_tracts %>% dplyr::rename(tractNumber = NAME)
 pa_tracts = pa_tracts %>% dplyr::rename(CT_tractNumber = NAMELSAD)
 # GEOID = paste0(STATEFP,COUNTYFP,TRACTCE)
 # TRACTCE = as.character(tractNumber*100)
+with(pa_tracts, cbind(as.numeric(TRACTCE)/100, tractNumber,
+                      as.numeric(TRACTCE)/100 ==tractNumber
+                       ) )     ### OK.
 # NAMELSAD = paste('Census Tract', tractNumber)
 # drop unneeded fields
 pa_tracts = pa_tracts %>% dplyr::select( ! GEOID)
@@ -33,13 +36,14 @@ names(pa_tracts)
 ## 67 COUNTIES originally.  We only need those in countymap (8).
 # table(PAtown$COUNTYFP)
 dim(pa_tracts)
-dim(pa_tracts %>% dplyr::filter(COUNTYFP %in% countymap[[1]]) )   #### 752 7
+dim(pa_tracts %>% dplyr::filter(COUNTYFP %in% countymap[[1]]) )
 pa_tracts = pa_tracts %>% dplyr::filter(COUNTYFP %in% countymap[[1]])
 head(pa_tracts, 1)
+dim(pa_tracts)    #### 752 7
 
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
 pa_places <- places(state = "PA", year = 2020, class = "sf")   ### '.y'
-dim(pa_places)
+dim(pa_places)  ## 1888
 head(pa_places, 1)  #Only 1888 rows
 # The names are confusing.  Especially "NAME"!
 pa_places = pa_places %>% dplyr::rename(townName = NAME)
@@ -51,26 +55,42 @@ pa_places = pa_places %>% dplyr::select(
   strsplit(split=' ',
            'PLACEFP PLACENS TRACTCE townName townNamePlus INTPTLAT INTPTLON geometry')[[1]])
 
-intersect(names(pa_tracts), names(pa_places))  #"TRACTCE"  "INTPTLAT" "INTPTLON" "geometry"
 
 pa_tracts = pa_tracts %>% dplyr::rename(lat = INTPTLAT)
 pa_tracts = pa_tracts %>% dplyr::rename(lon = INTPTLON)
 pa_places = pa_places %>% dplyr::rename(lat = INTPTLAT)
 pa_places = pa_places %>% dplyr::rename(lon = INTPTLON)
 
-pa_tracts$latlon = pa_tracts_latlon = apply(X = cbind(pa_tracts$INTPTLAT,pa_tracts$INTPTLON),
+pa_tracts$latlon = pa_tracts_latlon = apply(X = cbind(pa_tracts$lat,pa_tracts$lon),
                          MARGIN = 1, paste, collapse=',')
-pa_places$latlon = pa_places_latlon = apply(X = cbind(pa_places$INTPTLAT,pa_places$INTPTLON),
+pa_places$latlon = pa_places_latlon = apply(X = cbind(pa_places$lat,pa_places$lon),
                          MARGIN = 1, paste, collapse=',')
-head(sort(pa_tracts_latlon))
-head(sort(pa_places_latlon))
-intersect(y=pa_tracts_latlon , pa_places_latlon)  ### only 256 the same.
-intersect(y=pa_tracts$latlon , pa_places$latlon)  ### only 256 the same.
+head(sort(pa_tracts_latlon),3)
+head(sort(pa_places_latlon),3)
+intersect(y=pa_tracts_latlon , pa_places_latlon)  ### only 74 identical
+intersect(y=pa_tracts$latlon , pa_places$latlon)  ### only 74 the same.
+table(pa_places$geometry %in% pa_tracts$geometry) # only 65
+table(pa_places$latlon %in% pa_tracts$latlon) # only 74
+pa_places
+st_join()
 
-tracts_with_towns =  st_join(pa_tracts %>% select(c('lat', 'lon','latlon', 'tracts')),
-                             pa_places %>% select(c('lat', 'lon','latlon', 'towns')),
+intersect(names(pa_tracts), names(pa_places))  #"TRACTCE"  "lat" "lon" "geometry" "latlon"
+setdiff(names(pa_tracts), names(pa_places)) #"COUNTYFP"       "tractNumber"    "CT_tractNumber"
+setdiff( names(pa_places), names(pa_tracts)) # "PLACEFP"      "PLACENS"      "townName"     "townNamePlus"
+dim(pa_tracts)
+dim(pa_places)
+
+
+tracts_with_towns =  st_join(pa_tracts %>% select(c('lat', 'lon','latlon', 'TRACTCE')),
+                             pa_places %>% select(c('lat', 'lon','latlon', 'towns', 'TRACTCE')),
                                                  join=st_intersects
 )
+tracts_with_towns =  st_join(pa_tracts, pa_places, join=st_intersects)
+dim(pa_tracts)
+dim(pa_places)
+dim(tracts_with_towns)
+head(tracts_with_towns)
+
 #### vastly faster computation than copilot's join.
 # plot(tracts_with_towns$lat.x, tracts_with_towns$lat.y)
 # plot(tracts_with_towns$lon.x, tracts_with_towns$lon.y)
