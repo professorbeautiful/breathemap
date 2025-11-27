@@ -12,25 +12,51 @@ options(tigris_use_cache = TRUE)
 # Download Pennsylvania census tracts
 pa_tracts <- tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
 dim(pa_tracts)    # 3446 rows
+head(pa_tracts,1)
+# The names are confusing.  Especially "NAME"!
+# DONE pa_tracts_original = pa_tracts
+pa_tracts = pa_tracts %>% dplyr::rename(tractNumber = NAME)
+pa_tracts = pa_tracts %>% dplyr::rename(CT_tractNumber = NAMELSAD)
+# GEOID = paste0(STATEFP,COUNTYFP,TRACTCE)
+# TRACTCE = as.character(tractNumber*100)
+# NAMELSAD = paste('Census Tract', tractNumber)
+# drop unneeded fields
+pa_tracts = pa_tracts %>% dplyr::select( ! GEOID)
+pa_tracts = pa_tracts %>% dplyr::select( ! MTFCC)
+pa_tracts = pa_tracts %>% dplyr::select( ! FUNCSTAT)  ## all = "S"
+pa_tracts = pa_tracts %>% dplyr::select( ! ALAND)
+pa_tracts = pa_tracts %>% dplyr::select( ! AWATER)
+pa_tracts = pa_tracts %>% dplyr::select( ! STATEFP)
 names(pa_tracts)
+# "COUNTYFP"       "TRACTCE"        "tractNumber"    "CT_tractNumber" "INTPTLAT"       "INTPTLON"       "geometry"
+
+## 67 COUNTIES originally.  We only need those in countymap (8).
+# table(PAtown$COUNTYFP)
+dim(pa_tracts)
+dim(pa_tracts %>% dplyr::filter(COUNTYFP %in% countymap[[1]]) )   #### 752 7
+pa_tracts = pa_tracts %>% dplyr::filter(COUNTYFP %in% countymap[[1]])
+head(pa_tracts, 1)
+
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
 pa_places <- places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa_places)
-names(pa_places)  #Only 1888 rows
-table(pa_places$NAMELSAD %in% pa_tracts$NAMELSAD )
-tail(sort(pa_tracts$NAMELSAD))   ### these are census tracts
-tail(sort(pa_places$NAMELSAD))   ### these are town names
-pa_tracts$tracts = pa_tracts$NAMELSAD
-pa_places$towns = pa_places$NAMELSAD
-##### so do NOT merge by them.
-pa_places$towns = pa_places$NAME  ### better;  leave out 'borough' etc
+head(pa_places, 1)  #Only 1888 rows
+# The names are confusing.  Especially "NAME"!
+pa_places = pa_places %>% dplyr::rename(townName = NAME)
+pa_places = pa_places %>% dplyr::rename(townNamePlus = NAMELSAD)  ### includes "city", "borough" etc
+table(gsub(".* ", "", pa_places$townNamePlus))
+# this GEOID is the same as pa_tracts$TRACTCE .
+pa_places = pa_places %>% dplyr::rename(TRACTCE = GEOID)
+pa_places = pa_places %>% dplyr::select(
+  strsplit(split=' ',
+           'PLACEFP PLACENS TRACTCE townName townNamePlus INTPTLAT INTPTLON geometry')[[1]])
 
-tail(sort(pa_tracts$GEOID))   ### "42133024002"
-tail(sort(pa_places$GEOID))   ### "4287320"dim
-pa_tracts$lat = pa_tracts$INTPTLAT
-pa_tracts$lon = pa_tracts$INTPTLON
-pa_places$lat = pa_places$INTPTLAT
-pa_places$lon = pa_places$INTPTLON
+intersect(names(pa_tracts), names(pa_places))  #"TRACTCE"  "INTPTLAT" "INTPTLON" "geometry"
+
+pa_tracts = pa_tracts %>% dplyr::rename(lat = INTPTLAT)
+pa_tracts = pa_tracts %>% dplyr::rename(lon = INTPTLON)
+pa_places = pa_places %>% dplyr::rename(lat = INTPTLAT)
+pa_places = pa_places %>% dplyr::rename(lon = INTPTLON)
 
 pa_tracts$latlon = pa_tracts_latlon = apply(X = cbind(pa_tracts$INTPTLAT,pa_tracts$INTPTLON),
                          MARGIN = 1, paste, collapse=',')
@@ -49,6 +75,8 @@ tracts_with_towns =  st_join(pa_tracts %>% select(c('lat', 'lon','latlon', 'trac
 # plot(tracts_with_towns$lat.x, tracts_with_towns$lat.y)
 # plot(tracts_with_towns$lon.x, tracts_with_towns$lon.y)
 #### OK.  close, NOT exact.  No wonder copilot code broke.
+### we will average them later.
+
 
 ### write out for input into the app.
 save(tracts_with_towns, file='tracts_with_towns.Rd')
@@ -56,8 +84,9 @@ save(tracts_with_towns, file='tracts_with_towns.Rd')
 
 
 
+#######SEE ABOVE.  all good. ##############################################################
 #####################################################################
-# DEAD END.  crap from copilot.  SEE ABOVE
+# DEAD END.  crap from copilot.
 # Spatial join: assign each tract to the town it intersects most with
 # tracts_with_towns <- st_join(pa_tracts, pa_places, join = st_intersects, largest = TRUE)
 # ### this does not work correctly.
