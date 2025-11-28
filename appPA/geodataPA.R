@@ -49,7 +49,7 @@ head(pa.places, 1)  #Only 1888 rows
 pa.places = pa.places %>% dplyr::rename(townName = NAME)
 pa.places = pa.places %>% dplyr::rename(townNamePlus = NAMELSAD)  ### includes "city", "borough" etc
 table(gsub(".* ", "", pa.places$townNamePlus))
-# this GEOID is the same as pa.tracts$TRACTCE .
+# this GEOID is the same as pa.tracts$TRACTCE ????
 pa.places = pa.places %>% dplyr::rename(TRACTCE = GEOID)
 pa.places = pa.places %>% dplyr::select(
   strsplit(split=' ',
