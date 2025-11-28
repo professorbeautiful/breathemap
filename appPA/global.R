@@ -24,13 +24,13 @@ townOrder = order(towns, na.last=TRUE)
 towns [ is.na(towns )] = '___'
 tracts_with_towns$townName [ is.na(tracts_with_towns$townName )] = '___'
 
-lats.x = as.numeric(tracts_with_towns$lat.x[match(tracts, tracts_with_towns$tracts)])
-lons.x = as.numeric(tracts_with_towns$lon.x[match(tracts, tracts_with_towns$tracts)])
-lats.y = as.numeric(tracts_with_towns$lat.y[match(tracts, tracts_with_towns$tracts)])
-lons.y = as.numeric(tracts_with_towns$lon.y[match(tracts, tracts_with_towns$tracts)])
-#plot(lats.x, lats.y); plot(lons.x, lons.y);
-lats = (lats.x+lats.y)/2    ### slightly more accurate, probably
-lons = (lons.x+lons.y)/2
+# lats.x = as.numeric(tracts_with_towns$lat.x[match(tracts, tracts_with_towns$tracts)])
+# lons.x = as.numeric(tracts_with_towns$lon.x[match(tracts, tracts_with_towns$tracts)])
+# lats.y = as.numeric(tracts_with_towns$lat.y[match(tracts, tracts_with_towns$tracts)])
+# lons.y = as.numeric(tracts_with_towns$lon.y[match(tracts, tracts_with_towns$tracts)])
+# #plot(lats.x, lats.y); plot(lons.x, lons.y);
+# lats = (lats.x+lats.y)/2    ### slightly more accurate, probably
+# lons = (lons.x+lons.y)/2
 PAtownnames = paste(towns, tracts, sep= ', ')
 PAtown$TOWN = PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
 PAtowndata$TOWN = PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]

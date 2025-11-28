@@ -67,12 +67,7 @@ pa.places$latlon = pa.places_latlon = apply(X = cbind(pa.places$lat,pa.places$lo
                          MARGIN = 1, paste, collapse=',')
 head(sort(pa.tracts_latlon),3)
 head(sort(pa.places_latlon),3)
-intersect(y=pa.tracts_latlon , pa.places_latlon)  ### only 74 identical
-intersect(y=pa.tracts$latlon , pa.places$latlon)  ### only 74 the same.
-table(pa.places$geometry %in% pa.tracts$geometry) # only 65
-table(pa.places$latlon %in% pa.tracts$latlon) # only 74
-pa.places
-st_join()
+### but if a 'place' has more than one tract???  There will be no latlon match.
 
 intersect(names(pa.tracts), names(pa.places))  #"TRACTCE"  "lat" "lon" "geometry" "latlon"
 setdiff(names(pa.tracts), names(pa.places)) #"COUNTYFP"       "tractNumber"    "CT_tractNumber"
@@ -80,16 +75,55 @@ setdiff( names(pa.places), names(pa.tracts)) # "PLACEFP"      "PLACENS"      "to
 dim(pa.tracts)
 dim(pa.places)
 
+##### matching lat and lon?  We conclude that latlon is the only reliable way to merge.
+pa.places =  pa.places[order(pa.places$latlon), ]
+pa.tracts =  pa.tracts[order(pa.tracts$latlon), ]
+intersect(y=pa.tracts_latlon , pa.places_latlon)  ### only 74 identical
+intersect(y=pa.tracts$latlon , pa.places$latlon)  ### only 74 the same.
+table(pa.places$latlon %in% pa.tracts$latlon) # only 74
+table(pa.places$geometry %in% pa.tracts$geometry) # only 65 identical
+pa.places.74 = pa.places[pa.places$latlon %in% pa.tracts$latlon, ]
+pa.tracts.74 = pa.tracts[pa.tracts$latlon %in% pa.places$latlon, ]
+pa.places.74 =  pa.places.74[order(pa.places.74$latlon), ]
+pa.tracts.74 =  pa.tracts.74[order(pa.tracts.74$latlon), ]
+table(pa.places.74$latlon == pa.tracts.74$latlon)  ### all TRUE
 
-tracts_with_towns =  st_join(pa.tracts %>% select(c('lat', 'lon','latlon', 'TRACTCE')),
-                             pa.places %>% select(c('lat', 'lon','latlon', 'towns', 'TRACTCE')),
-                                                 join=st_intersects
-)
-tracts_with_towns =  st_join(pa.tracts, pa.places, join=st_intersects)
-dim(pa.tracts)
-dim(pa.places)
-dim(tracts_with_towns)
-head(tracts_with_towns)
+
+pa.by.latlon.74 = cbind(pa.places.74, pa.tracts.74) %>% dplyr::select( !lat & !lon & !lat.1 & !lon.1 & !latlon.1)
+head(pa.by.latlon.74)
+table(pa.by.latlon.74$COUNTYFP)
+# 003 005 007 019 051 073 125 129
+# 42   4   8   4   2   1   7   6
+
+badGeom = which(pa.places.74$geometry != pa.tracts.74$geometry)  #2  3  7 30 43 63 68 69 72
+head(pa.by.latlon.74 [- badGeom, ], 5)
+pa.by.latlon.74 [badGeom, c('geometry', 'geometry.1')]
+### why are these 9 have conflicting geometry?  Unknown. So let's stick with the 65.
+pa.by.latlon.65 = pa.by.latlon.74 [- badGeom, ]
+dim(pa.by.latlon.65)
+pa.by.latlon.65
+
+table( countymap$county[match(pa.by.latlon.65$COUNTYFP, countymap$COUNTYFP)]  )
+# Allegheny    Armstrong       Beaver       Butler      Fayette     Lawrence   Washington Westmoreland
+# 40            4            6            2            1            1            5            6
+
+#DONE tracts_with_towns.earlier = tracts_with_towns
+
+tracts_with_towns = pa.by.latlon.65    # 65 x 12
+### write out for input into the app.
+save(c, file='tracts_with_towns.Rd')
+
+
+#
+# tracts_with_towns =  st_join(pa.tracts %>% select(c('lat', 'lon','latlon', 'TRACTCE')),
+#                              pa.places %>% select(c('lat', 'lon','latlon', 'towns', 'TRACTCE')),
+#                                                  join=st_intersects
+# )
+# tracts_with_towns =  st_join(pa.tracts, pa.places, join=st_intersects)
+# dim(pa.tracts)
+# dim(pa.places)
+# dim(tracts_with_towns)
+# head(tracts_with_towns)
 
 #### vastly faster computation than copilot's join.
 # plot(tracts_with_towns$lat.x, tracts_with_towns$lat.y)
