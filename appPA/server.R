@@ -9,7 +9,15 @@ function(input, output, session) {
 
     # to speed app up and lower RAM
   #townreac <- reactive(PAtowndata[PAtowndata$NAME==input$town,])
-  townreac <- reactive(PAtowndata[which(PAtowndata$NAME==input$town),])
+  townreac <- reactive({
+    result = PAtowndata[which(PAtowndata$NAME==input$town),]
+    if(nrow(result) > 1) {
+      print(result)
+      result = result[result$COUNTYFP == '003', ]  ### select Allegheny
+      print(result)
+    }
+    result
+    })
   #needs Town, lat, lon
 
   medianLON= median(as.numeric(pa_tracts$INTPTLON[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
