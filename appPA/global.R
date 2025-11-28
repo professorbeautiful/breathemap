@@ -14,13 +14,15 @@ source('geodataPA.R', local=TRUE)
 load('PAtown.Rd')
 load('PAtowndata.lukedata.Rd')
 PAtowndata = PAtowndata.lukedata
-load('tracts_with_towns.Rd')  ### shoudl be in the folder appPA
+load('tracts_with_towns.Rd')  ### should be in the folder appPA
 tracts = PAtowndata$NAMELSAD
-towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
+# DONE towns.previous = towns
+# DONE towns.previous = towns
+towns = tracts_with_towns$townName[match(tracts, tracts_with_towns$CT_tractNumber)]
 townOrder = order(towns, na.last=TRUE)
 
 towns [ is.na(towns )] = '___'
-tracts_with_towns$towns [ is.na(tracts_with_towns$towns )] = '___'
+tracts_with_towns$townName [ is.na(tracts_with_towns$townName )] = '___'
 
 lats.x = as.numeric(tracts_with_towns$lat.x[match(tracts, tracts_with_towns$tracts)])
 lons.x = as.numeric(tracts_with_towns$lon.x[match(tracts, tracts_with_towns$tracts)])
@@ -31,7 +33,7 @@ lats = (lats.x+lats.y)/2    ### slightly more accurate, probably
 lons = (lons.x+lons.y)/2
 PAtownnames = paste(towns, tracts, sep= ', ')
 PAtown$TOWN = PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
-PAtowndata$TOWN =PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
+PAtowndata$TOWN = PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
 PAtowndata$lat = lats[match(tracts, PAtowndata$NAMELSAD)]
 PAtowndata$lon = lons[match(tracts, PAtowndata$NAMELSAD)]
 

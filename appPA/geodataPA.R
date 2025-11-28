@@ -10,7 +10,7 @@ library(dplyr)
 options(tigris_use_cache = TRUE)
 
 # Download Pennsylvania census tracts
-pa.tracts <- tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
+pa.tracts <- pa.tracts.original <- tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
 dim(pa.tracts)    # 3446 rows
 head(pa.tracts,1)
 # The names are confusing.  Especially "NAME"!
@@ -42,7 +42,7 @@ head(pa.tracts, 1)
 dim(pa.tracts)    #### 752 7
 
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
-pa.places <- places(state = "PA", year = 2020, class = "sf")   ### '.y'
+pa.places <- pa.places.original <- places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa.places)  ## 1888
 head(pa.places, 1)  #Only 1888 rows
 # The names are confusing.  Especially "NAME"!
