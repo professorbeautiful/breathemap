@@ -12,6 +12,13 @@ library(shinyDebuggingPanel)
 
 source('geodataPA.R', local=TRUE)
 load('PAtown.Rd')
+st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
+### removes the error msg,
+# Warning: sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
+# Need '+proj=longlat +datum=WGS84'
+### But gives us a new  error msg,
+###Warning: st_crs<- : replacing crs does not reproject data; use st_transform for that
+
 load('PAtowndata.lukedata.Rd')
 PAtowndata = PAtowndata.lukedata
 load('tracts_with_towns.Rd')  ### shoudl be in the folder appPA
