@@ -158,17 +158,21 @@ function(input, output, session) {
                                                                headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
 
   # column plot for comparison tool (hidden for small devices)
-  reactivedata <- reactive(columnchartdata[columnchartdata$Town == secondpageinput()[1] | columnchartdata$Town ==secondpageinput()[2],])
-
-  output$comptable <- renderPlot(ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
+  reactivedata <- reactive({
+    if(exists(x = 'columnchartdata'))
+      columnchartdata[columnchartdata$Town == secondpageinput()[1] | columnchartdata$Town ==secondpageinput()[2],]
+  })
+  output$comptable <- renderPlot({
+    if(exists(x = 'columnchartdata'))
+      ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
                                   geom_bar(stat="identity", position=position_dodge(), colour="black") +
                                   theme_classic() + xlab("Incidence Rates") + ylab("") +
                                   scale_fill_manual(values = c("#8a100b", "#b29d6c")) +
                                   scale_x_discrete(labels= c("CancerDeaths_IR"="Cancer Deaths per 10,000 Population", "IHDDeaths_IR"="Heart Disease Deaths per 10,000 Population",
-                                                              "**PIQ points lost per child"="PIQ Points Lost per child")))
-
-
-
+                                                              "**PIQ points lost per child"="PIQ Points Lost per child"))
+  else
+    "WARNING: columnchartdata is not available"
+  })
 }
 
 
