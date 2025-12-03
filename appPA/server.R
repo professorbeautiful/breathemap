@@ -46,7 +46,7 @@ function(input, output, session) {
                   label = ~TOWN,
                   layerId = ~TOWN,
                   highlight = highlightOptions(
-                    fillColor = "Yellow",
+                    fillColor = "green",
                     color = "red",
                     weight = 2,
                     fillOpacity = 1,
@@ -61,7 +61,7 @@ function(input, output, session) {
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
       addPolygons(data=PAtown[townRowNumber,], weight = 1,
-                  color="Red", fillColor="Lightgreen",
+                  color="Red", fillColor="yellow",
                   fillOpacity = 1, group="selectedTownShp") #%>%
       # addLabelOnlyMarkers(    ## not working, not important
       #   lng = townreac()$lon, lat = townreac()$lat,
