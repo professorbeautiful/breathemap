@@ -177,7 +177,8 @@ function(input, output, session) {
   output$histTitle = renderUI( {
     thisFeature = as.numeric(PAtowndata[  , input$idFeature])
     thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
-    div(hr(), br(),
+    div(hr(),
+        strong("Comparing selected town/area with the entire region"),
         span(
           style='color:green',
           paste(input$town, ':  ', input$idFeature, ' = ',

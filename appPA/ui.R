@@ -56,24 +56,20 @@ fluidPage({
             shinyDebuggingPanel::withDebuggingPanel(),
 
             # all ui components, layout, and element ordering for whole app
-            tabsetPanel(
-              tabPanel("Map Tool",
+            # tabsetPanel(
+            #   tabPanel("Map Tool",
                 fluidRow(
-                  column(7, selectInput("town", "Select a town by clicking it or typing it in here: ",
+                  column(7, div(style='color:yellow; background-color:green',
+                                selectInput("town", "Select a town by clicking it or typing it in here: ",
                                         PAtownnames,
-                                        selected = PAtownnames[1]),
+                                        selected = PAtownnames[1])),
                   leafletOutput("map", height = 450), br(),
                           fluidRow(
                             column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
                             column(width = 2, offset = 0.5, downloadButton("downloadData", "Export Data"), br(), br()))),
-                  column(5, dataTableOutput("tabledemog"),
-                         dataTableOutput("tableest"), br(),
-                         textOutput("hotext"), br(),
-                         p("**Performance IQ is a measure of intelligence related to problem solving skills.")))),
-              tabPanel("Compare selected town/area with the entire region",
-                       br(),
-                       div(style='color:yellow; background-color:green',
-                            strong("Select a feature to show:")),
+                  column(5,
+                         div(style='color:yellow; background-color:green',
+                             strong("Select a feature to show:")),
                        fluidRow(
                          column(12, radioButtons(inputId='idFeature',
                                                    label=' ',
@@ -88,7 +84,14 @@ fluidPage({
                         #                  p("*All estimates are based on number of cases per 1,000 population annually"),
                         # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
                         )
-                ))))
+                ))),
+                fluidRow(
+                  dataTableOutput("tabledemog"),
+                  dataTableOutput("tableest"), br(),
+                  textOutput("hotext"), br(),
+                  p("**Performance IQ is a measure of intelligence related to problem solving skills."))
+            )
+
 })
 
 

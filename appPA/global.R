@@ -21,7 +21,10 @@ st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 
 load('PAtowndata.lukedata.Rd')
 PAtowndata = PAtowndata.lukedata
-load('tracts_with_towns.Rd')  ### shoudl be in the folder appPA
+PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
+  'All Cause Deaths, Laden Estimate',
+  'All Cause Deaths, Krewski Estimate') ])
+load('tracts_with_towns.Rd')  ### should be in the folder appPA
 tracts = PAtowndata$NAMELSAD
 towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
 townOrder = order(towns, na.last=TRUE)
@@ -74,8 +77,9 @@ IQcaption <- htmltools::tags$caption(
   'Estimated IQ Loss')
 
 featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
-               "All Cause Deaths, Laden Estimate"  ,
-               "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
-               "All Cause Deaths, Di Estimate",
+               # "All Cause Deaths, Laden Estimate"  ,
+               # "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+               # "All Cause Deaths, Di Estimate",
+               "All-cause deaths", # (avg Krewski, Laden)
                "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
                "Total Population (2019)", "PM_avg")
