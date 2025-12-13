@@ -175,21 +175,34 @@ function(input, output, session) {
   # })
 
   output$histTitle = renderUI(
-    span(
-    style='color:green',
-    paste(input$town, ':  ', input$idFeature, ' = ',
-          signif(digits=3,
-                 as.numeric(
-                   PAtowndata[PAtowndata$NAME==input$town, input$idFeature]))
-          ### population is char for some reason.
-    )))
+    div(hr(), br(),
+        span(
+          style='color:green',
+          paste(input$town, ':  ', input$idFeature, ' = ',
+                signif(digits=3,
+                       as.numeric(
+                         PAtowndata[PAtowndata$NAME==input$town, input$idFeature]))
+                ### population is char for some reason.
+          )),
+        br(),
+        span(
+          style='color:green', '(proportion smaller = ',
+          signif(digits=2, mean(na.rm = TRUE,
+               PAtowndata[  , input$idFeature]
+               < PAtowndata[PAtowndata$NAME==input$town, input$idFeature]
+          ))),
+        ')')
+      )
 
-    output$featurePlot <- renderPlot({
+  output$featurePlot <- renderPlot({
     hist(as.numeric(PAtowndata[ , input$idFeature]),
-         xlab=input$idFeature,
+         xlab=input$idFeature, ylab = 'count',
          main = '')
     abline(v=PAtowndata[PAtowndata$NAME==input$town, input$idFeature],
                         lwd=3, col='green')
+    arrows(x0 = PAtowndata[PAtowndata$NAME==input$town, input$idFeature], y0 = 0,
+           x1= PAtowndata[PAtowndata$NAME==input$town, input$idFeature], y1= par('usr')[4]*1.2, xpd=NA,
+           col='green', lwd=3)
 
   })
 }

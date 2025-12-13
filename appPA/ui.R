@@ -71,9 +71,12 @@ fluidPage({
                          textOutput("hotext"), br(),
                          p("**Performance IQ is a measure of intelligence related to problem solving skills.")))),
               tabPanel("Compare selected town/area with the entire region",
+                       br(),
+                       div(style='color:yellow; background-color:green',
+                            strong("Select a feature to show:")),
                        fluidRow(
                          column(12, radioButtons(inputId='idFeature',
-                                                   label='Feature',
+                                                   label=' ',
                                                    choices=featureList,
                                                  selected=featureList[1],
                                                  inline=TRUE)
