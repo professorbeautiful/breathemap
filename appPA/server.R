@@ -162,16 +162,35 @@ function(input, output, session) {
     if(exists(x = 'columnchartdata'))
       columnchartdata[columnchartdata$Town == secondpageinput()[1] | columnchartdata$Town ==secondpageinput()[2],]
   })
-  output$comptable <- renderPlot({
-    if(exists(x = 'columnchartdata'))
-      ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
-                                  geom_bar(stat="identity", position=position_dodge(), colour="black") +
-                                  theme_classic() + xlab("Incidence Rates") + ylab("") +
-                                  scale_fill_manual(values = c("#8a100b", "#b29d6c")) +
-                                  scale_x_discrete(labels= c("CancerDeaths_IR"="Cancer Deaths per 10,000 Population", "IHDDeaths_IR"="Heart Disease Deaths per 10,000 Population",
-                                                              "**PIQ points lost per child"="PIQ Points Lost per child"))
-  else
-    "WARNING: columnchartdata is not available"
+  # output$comptable <- renderPlot({
+  #   if(exists(x = 'columnchartdata'))
+  #     ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
+  #                                 geom_bar(stat="identity", position=position_dodge(), colour="black") +
+  #                                 theme_classic() + xlab("Incidence Rates") + ylab("") +
+  #                                 scale_fill_manual(values = c("#8a100b", "#b29d6c")) +
+  #                                 scale_x_discrete(labels= c("CancerDeaths_IR"="Cancer Deaths per 10,000 Population", "IHDDeaths_IR"="Heart Disease Deaths per 10,000 Population",
+  #                                                             "**PIQ points lost per child"="PIQ Points Lost per child"))
+  # else
+  #   "WARNING: columnchartdata is not available"
+  # })
+
+  output$histTitle = renderUI(
+    span(
+    style='color:green',
+    paste(input$town, ':  ', input$idFeature, ' = ',
+          signif(digits=3,
+                 as.numeric(
+                   PAtowndata[PAtowndata$NAME==input$town, input$idFeature]))
+          ### population is char for some reason.
+    )))
+
+    output$featurePlot <- renderPlot({
+    hist(as.numeric(PAtowndata[ , input$idFeature]),
+         xlab=input$idFeature,
+         main = '')
+    abline(v=PAtowndata[PAtowndata$NAME==input$town, input$idFeature],
+                        lwd=3, col='green')
+
   })
 }
 

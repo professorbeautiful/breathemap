@@ -72,3 +72,10 @@ popratecaption <- htmltools::tags$caption(
 IQcaption <- htmltools::tags$caption(
   style = 'font-weight: bold; text-align: center; color:#FFFFFF; background-color:#8a100b; padding:0.5em;',
   'Estimated IQ Loss')
+
+featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
+               "All Cause Deaths, Laden Estimate"  ,
+               "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+               "All Cause Deaths, Di Estimate",
+               "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
+               "Total Population (2019)", "PM_avg")

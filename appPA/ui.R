@@ -70,21 +70,21 @@ fluidPage({
                          dataTableOutput("tableest"), br(),
                          textOutput("hotext"), br(),
                          p("**Performance IQ is a measure of intelligence related to problem solving skills.")))),
-              tabPanel("Comparison Tool",
-                fluidRow(
-                  column(6, selectInput("townleft", "Select a town to analyze: ", PAtownnames, selected = "Abington")),
-                  column(6, selectInput("townright", "Select a town to compare against: ", PAtownnames, selected = "Acton"))),
-                fluidRow(
-                  column(6, dataTableOutput("tabledemogleft"), class="col-xs-6"),
-                  column(6, dataTableOutput("tabledemogright"), class="col-xs-6")),
-                fluidRow(
-                  column(6, dataTableOutput("tablepoprateleft"), dataTableOutput("tableIQleft"), class="col-xs-6"),
-                  column(6, dataTableOutput("tablepoprateright"), dataTableOutput("tableIQright"), class="col-xs-6")),
-                fluidRow(
-                  column(12, plotOutput("comptable", height=300), br(),
-                        p("*All estimates are based on number of cases per 1,000 population annually"),
-                        p("**Performance IQ is a measure of intelligence related to problem solving skills."),
-                        br())
+              tabPanel("Compare selected town/area with the entire region",
+                       fluidRow(
+                         column(12, radioButtons(inputId='idFeature',
+                                                   label='Feature',
+                                                   choices=featureList,
+                                                 selected=featureList[1],
+                                                 inline=TRUE)
+                         )),
+                       uiOutput('histTitle'),
+                       fluidRow(
+                         column(12, plotOutput(outputId="featurePlot",
+                                               height=300)
+                        #                  p("*All estimates are based on number of cases per 1,000 population annually"),
+                        # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
+                        )
                 ))))
 })
 
