@@ -178,29 +178,33 @@ function(input, output, session) {
     thisFeature = as.numeric(PAtowndata[  , input$idFeature])
     thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
     div(hr(),
-        strong("Comparing selected town/area with the entire region"),
-        span(
+        span(strong("Selected town:"), span(
           style='color:green',
-          paste(input$town, ':  ', input$idFeature, ' = ',
-                signif(digits=3,
-                       as.numeric(thisTownFeature) )
-                ### population is char for some reason.
-          )),
+          paste(input$town))),
         br(),
-        span(
-          style='color:green', '(proportion smaller = ',
+        span(strong("Selected feature: "),
+             span(
+               style='color:green', input$idFeature, ' = ',
+             signif(digits=3,
+                    as.numeric(thisTownFeature) ))
+             ### population is char for some reason.
+        ),
+        br(),
+        span(strong("Compared with entire region: "),
+          span(style='color:green', 'proportion smaller = ',
           signif(digits=2, mean(na.rm = TRUE,
                PAtowndata[  , input$idFeature]
                < PAtowndata[PAtowndata$NAME==input$town, input$idFeature]
-          ))),
-        ')')
+          )))))
       })
 
   output$featurePlot <- renderPlot({
     thisFeature = as.numeric(PAtowndata[  , input$idFeature])
     thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
+    xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
+                input$idFeature)
     hist(thisFeature,
-         xlab=input$idFeature, ylab = 'count',
+         xlab=xlab, ylab = 'count',
          main = '')
     abline(v=PAtowndata[PAtowndata$NAME==input$town, input$idFeature],
                         lwd=3, col='green')
