@@ -53,7 +53,7 @@ fluidPage({
                          }"
               )
             ),
-            shinyDebuggingPanel::withDebuggingPanel(),
+             shinyDebuggingPanel::withDebuggingPanel(),
 
             # all ui components, layout, and element ordering for whole app
             # tabsetPanel(
