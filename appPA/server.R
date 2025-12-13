@@ -174,14 +174,15 @@ function(input, output, session) {
   #   "WARNING: columnchartdata is not available"
   # })
 
-  output$histTitle = renderUI(
+  output$histTitle = renderUI( {
+    thisFeature = as.numeric(PAtowndata[  , input$idFeature])
+    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
     div(hr(), br(),
         span(
           style='color:green',
           paste(input$town, ':  ', input$idFeature, ' = ',
                 signif(digits=3,
-                       as.numeric(
-                         PAtowndata[PAtowndata$NAME==input$town, input$idFeature]))
+                       as.numeric(thisTownFeature) )
                 ### population is char for some reason.
           )),
         br(),
@@ -192,16 +193,18 @@ function(input, output, session) {
                < PAtowndata[PAtowndata$NAME==input$town, input$idFeature]
           ))),
         ')')
-      )
+      })
 
   output$featurePlot <- renderPlot({
-    hist(as.numeric(PAtowndata[ , input$idFeature]),
+    thisFeature = as.numeric(PAtowndata[  , input$idFeature])
+    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
+    hist(thisFeature,
          xlab=input$idFeature, ylab = 'count',
          main = '')
     abline(v=PAtowndata[PAtowndata$NAME==input$town, input$idFeature],
                         lwd=3, col='green')
-    arrows(x0 = PAtowndata[PAtowndata$NAME==input$town, input$idFeature], y0 = 0,
-           x1= PAtowndata[PAtowndata$NAME==input$town, input$idFeature], y1= par('usr')[4]*1.2, xpd=NA,
+    arrows(x0 = thisTownFeature, y0 = 0,
+           x1 = thisTownFeature, y1= par('usr')[4]*1.2, xpd=NA,
            col='green', lwd=3)
 
   })
