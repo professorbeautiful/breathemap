@@ -75,8 +75,8 @@ function(input, output, session) {
   # Map animations and reactive selectors
   observeEvent(input$townSelectorId, {
     print(townreac())
-    # townRowNumber = which(PAtown$areaField==townreac()$areaField) [1]  # [1] for now.
-    townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
+     townRowNumber = which(PAtown[['areaField']]==townreac()[['areaField']]) [1]  # [1] for now.
+    #townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
