@@ -195,8 +195,8 @@ function(input, output, session) {
   # })
 
   output$histTitle = renderUI( {
-    thisFeature = as.numeric(PAtown[  , input$idFeature])
-    thisTownFeature = thisFeature[which(PAtown$NAME==input$townSelectorId)]
+    thisFeature = as.numeric(PAtown[[input$idFeature]])
+    thisTownFeature = thisFeature[which(PAtown$areaField==input$townSelectorId)]
     div(hr(),
         span(strong("Selected town:"), span(
           style='color:green',
@@ -212,12 +212,20 @@ function(input, output, session) {
         br(),
         span(strong("Compared with entire region: "),
           span(style='color:green', 'proportion smaller = ',
-          signif(digits=2, mean(na.rm = TRUE,
-               PAtown[  , input$idFeature]
-               < PAtown[PAtown$NAME==input$townSelectorId, input$idFeature]
-          )))))
-      })
-
+          textOutput('proportion_smaller')
+          )))
+  })
+  output$proportion_smaller <- renderText({
+    print(summary(PAtown[[input$idFeature]]))
+    print(PAtown[PAtown$areaField==input$townSelectorId, input$idFeature])
+    howManyLess = try({
+      PAtown[[input$idFeature]] <
+        PAtown[[input$idFeature]] [PAtown$areaField==input$townSelectorId]
+    })
+    if (class(howManyLess) == 'try-error')
+      howManyLess = 0
+    signif(digits=2, mean(na.rm = TRUE, howManyLess ) )
+  })
   output$featurePlot <- renderPlot({
     thisFeature = as.numeric(PAtown[[input$idFeature]])
     thisTownFeature = thisFeature[which(PAtown$areaField==input$townSelectorId)]
