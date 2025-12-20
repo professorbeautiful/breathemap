@@ -33,7 +33,7 @@ function(input, output, session) {
       updateSelectInput(session, "townSelectorId", selected = click$id)
   })
 
-  observeEvent(input$townToggleId, {
+  areaField = reactive({
     try({
       if(input$townToggleId == 'towns'){
       areaField = 'townName'
@@ -43,10 +43,11 @@ function(input, output, session) {
     }
     print(paste('areaField=', areaField))
     })
-    currentSelection = input$townSelectorId
-    print(paste('currentSelection', currentSelection))
-    # updateSelectInput(session, "townSelectorId", choices = PAtowndata[["NAME"]])
-
+    # print(head(PAtown[[areaField]]))
+    return(areaField)
+    # currentSelection = input$townSelectorId
+    # print(paste('currentSelection', currentSelection))
+    # updateSelectInput(session, "townSelectorId", choices = PAtown)
   })
  # leaflet map
   output$map <- renderLeaflet({
