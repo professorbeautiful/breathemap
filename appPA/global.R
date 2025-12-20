@@ -62,6 +62,13 @@ PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
 PAtown$towntractName = PAtowndata$TOWN
 PAtown$noTown = PAtown$townName == '___'
 table (PAtown$noTown)
+PAtown$areaField = PAtown$towntractName  ### until toggled
+PAtownExtra = setdiff(y=names(PAtown), names(PAtowndata))
+PAtown[PAtownExtra] = PAtowndata[PAtownExtra]
+class(PAtown)
+names(PAtown)
+##  OK, from here on, no more PAtowndata
+
 
 # creates headers for the datatables. Referenced in server.R
 demogcaption <- htmltools::tags$caption(

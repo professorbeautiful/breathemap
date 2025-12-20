@@ -91,7 +91,8 @@ fluidPage({
                         #                  p("*All estimates are based on number of cases per 1,000 population annually"),
                         # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
                         )
-                ))),
+                )))
+            ,
                 fluidRow(
                   dataTableOutput("tabledemog"),
                   dataTableOutput("tableest"), br(),

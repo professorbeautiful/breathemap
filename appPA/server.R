@@ -8,9 +8,9 @@ function(input, output, session) {
 
 
     # to speed app up and lower RAM
-  #townreac <- reactive(PAtowndata[PAtowndata$NAME==input$townSelectorId,])
+  #townreac <- reactive(PAtown[PAtown$NAME==input$townSelectorId,])
   townreac <- reactive({
-    result = PAtowndata[which(PAtowndata$NAME==input$townSelectorId),]
+    result = PAtown[which(PAtown[[areaFieldName()]]==input$townSelectorId),]
     if(nrow(result) > 1) {
       print(result)
       result = result[result$COUNTYFP == '003', ]  ### select Allegheny
@@ -20,31 +20,34 @@ function(input, output, session) {
     })
   #needs Town, lat, lon
 
-  medianLON= median(as.numeric(pa_tracts$INTPTLON[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
-  medianLAT= median(as.numeric(pa_tracts$INTPTLAT[pa_tracts$tracts %in% PAtowndata$NAMELSAD]))
+  medianLON= median(as.numeric(pa_tracts$INTPTLON[pa_tracts$tracts %in% PAtown$NAMELSAD]))
+  medianLAT= median(as.numeric(pa_tracts$INTPTLAT[pa_tracts$tracts %in% PAtown$NAMELSAD]))
 
 
  # clicking updates selectInput
   observe({
     click <- input$map_shape_click
     if(is.null(click))
-      updateSelectInput(session, "townSelectorId", selected = PAtowndata$NAME[1])
+      updateSelectInput(session, "townSelectorId", selected = PAtown$NAME[1])
     else
       updateSelectInput(session, "townSelectorId", selected = click$id)
   })
 
-  areaField = reactive({
+  areaFieldName = reactive({
+    areaField = 'towntractName'
     try({
       if(input$townToggleId == 'towns'){
-      areaField = 'townName'
-    }
-    else if(input$townToggleId == 'towns with tracts'){
-      areaField = 'towntractName'
-    }
-    print(paste('areaField=', areaField))
+        areaField = 'townName'
+      }
+      else if(input$townToggleId == 'towns with tracts'){
+        areaField = 'towntractName'
+      }
+      else areaField = 'towntractName'
     })
+    print(paste('areaField=', areaField))
     # print(head(PAtown[[areaField]]))
-    return(areaField)
+    PAtown$areaField <<-PAtown[[areaField]]
+    return(areaField)   ## areaFieldName
     # currentSelection = input$townSelectorId
     # print(paste('currentSelection', currentSelection))
     # updateSelectInput(session, "townSelectorId", choices = PAtown)
@@ -72,7 +75,8 @@ function(input, output, session) {
   # Map animations and reactive selectors
   observeEvent(input$townSelectorId, {
     print(townreac())
-    townRowNumber = which(PAtown$NAME==townreac()$NAME)
+    # townRowNumber = which(PAtown$areaField==townreac()$areaField) [1]  # [1] for now.
+    townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
@@ -107,14 +111,14 @@ function(input, output, session) {
                          "All Cause Deaths, Di Estimate",
                          "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
     output$tabledemog <- DT::renderDataTable(
-      t(PAtowndata[PAtowndata$NAME==townreac()$NAME,
+      t(PAtown[PAtown$NAME==townreac()$NAME,
                    columns.tabledemog]),
       caption = demogcaption,
       options = list(
         dom="t",
         columnDefs = list(list(className = 'dt-right', targets = 1)),
         headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==townreac()$NAME,
+      output$tableest <- DT::renderDataTable(t(PAtown[PAtown$NAME==townreac()$NAME,
                                                           columns.tableest]),
                                              caption = estcaption,
                                              options = list(dom="t",
@@ -129,7 +133,7 @@ function(input, output, session) {
   output$downloadData <- downloadHandler(
     filename = "Air-Pollution-PA.csv",
     content = function(file) {
-      write.csv(PAtowndata, file)
+      write.csv(PAtown, file)
     }
   )
 
@@ -137,37 +141,37 @@ function(input, output, session) {
   # secondpageinput <- reactive(c(input$townSelectorIdleft, input$townSelectorIdright))
 
   # datatables for comparison tool
-  # output$tabledemogleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(1,4,5)]),
+  # output$tabledemogleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(1,4,5)]),
   #                                              caption = demogcaption,
   #                                              options = list(dom="t",
   #                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
   #                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
   #
-  # output$tablepoprateleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(19:20,17:18)]),
+  # output$tablepoprateleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(19:20,17:18)]),
   #                                            caption = popratecaption,
   #                                            options = list(dom="t",
   #                                                           columnDefs = list(list(className = 'dt-right', targets = 1)),
   #                                                           headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
   #
-  # output$tableIQleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(15:16)]),
+  # output$tableIQleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(15:16)]),
   #                                           caption = IQcaption,
   #                                           options = list(dom="t",
   #                                                          columnDefs = list(list(className = 'dt-right', targets = 1)),
   #                                                          headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
   #
-  # output$tabledemogright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(1,4,5)]),
+  # output$tabledemogright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(1,4,5)]),
   #                                               caption = demogcaption,
   #                                               options = list(dom="t",
   #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
   #                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
   #
-  # output$tablepoprateright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(19:20,17:18)]),
+  # output$tablepoprateright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(19:20,17:18)]),
   #                                             caption = popratecaption,
   #                                             options = list(dom="t",
   #                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
   #                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
   #
-  # output$tableIQright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(15:16)]),
+  # output$tableIQright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(15:16)]),
   #                                               caption = IQcaption,
   #                                               options = list(dom="t",
   #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
@@ -191,8 +195,8 @@ function(input, output, session) {
   # })
 
   output$histTitle = renderUI( {
-    thisFeature = as.numeric(PAtowndata[  , input$idFeature])
-    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$townSelectorId)]
+    thisFeature = as.numeric(PAtown[  , input$idFeature])
+    thisTownFeature = thisFeature[which(PAtown$NAME==input$townSelectorId)]
     div(hr(),
         span(strong("Selected town:"), span(
           style='color:green',
@@ -209,20 +213,20 @@ function(input, output, session) {
         span(strong("Compared with entire region: "),
           span(style='color:green', 'proportion smaller = ',
           signif(digits=2, mean(na.rm = TRUE,
-               PAtowndata[  , input$idFeature]
-               < PAtowndata[PAtowndata$NAME==input$townSelectorId, input$idFeature]
+               PAtown[  , input$idFeature]
+               < PAtown[PAtown$NAME==input$townSelectorId, input$idFeature]
           )))))
       })
 
   output$featurePlot <- renderPlot({
-    thisFeature = as.numeric(PAtowndata[  , input$idFeature])
-    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$townSelectorId)]
+    thisFeature = as.numeric(PAtown[[input$idFeature]])
+    thisTownFeature = thisFeature[which(PAtown$areaField==input$townSelectorId)]
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
     hist(thisFeature,
          xlab=xlab, ylab = 'count',
          main = '')
-    abline(v=PAtowndata[PAtowndata$NAME==input$townSelectorId, input$idFeature],
+    abline(v=PAtown[PAtown$areaField==input$townSelectorId, input$idFeature],
                         lwd=3, col='green')
     arrows(x0 = thisTownFeature, y0 = 0,
            x1 = thisTownFeature, y1= par('usr')[4]*1.2, xpd=NA,
