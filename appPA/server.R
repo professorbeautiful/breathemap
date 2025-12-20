@@ -8,9 +8,9 @@ function(input, output, session) {
 
 
     # to speed app up and lower RAM
-  #townreac <- reactive(PAtowndata[PAtowndata$NAME==input$town,])
+  #townreac <- reactive(PAtowndata[PAtowndata$NAME==input$townSelectorId,])
   townreac <- reactive({
-    result = PAtowndata[which(PAtowndata$NAME==input$town),]
+    result = PAtowndata[which(PAtowndata$NAME==input$townSelectorId),]
     if(nrow(result) > 1) {
       print(result)
       result = result[result$COUNTYFP == '003', ]  ### select Allegheny
@@ -54,7 +54,7 @@ function(input, output, session) {
   })
 
   # Map animations and reactive selectors
-  observeEvent(input$town, {
+  observeEvent(input$townSelectorId, {
     print(townreac())
     townRowNumber = which(PAtown$NAME==townreac()$NAME)
     leafletProxy("map", session) %>%
@@ -78,8 +78,8 @@ function(input, output, session) {
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
     default_town = 'Adamsburg, Census Tract'
-    if (input$town == " ")
-      updateSelectInput(inputId='town', selected = default_town)
+    if (input$townSelectorId == " ")
+      updateSelectInput(inputId='townSelectorId', selected = default_town)
     #   townChosen = default_town
     # else     townChosen = townreac()$NAME
     columns.tabledemog = c("NAME", "Total Population (2019)", "PM_avg")
@@ -118,44 +118,44 @@ function(input, output, session) {
   )
 
   # Reactive storage of comparative tool inputs. Speeds up app
-  secondpageinput <- reactive(c(input$townleft, input$townright))
+  # secondpageinput <- reactive(c(input$townSelectorIdleft, input$townSelectorIdright))
 
   # datatables for comparison tool
-  output$tabledemogleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(1,4,5)]),
-                                               caption = demogcaption,
-                                               options = list(dom="t",
-                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  output$tablepoprateleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(19:20,17:18)]),
-                                             caption = popratecaption,
-                                             options = list(dom="t",
-                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  output$tableIQleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(15:16)]),
-                                            caption = IQcaption,
-                                            options = list(dom="t",
-                                                           columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                           headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  output$tabledemogright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(1,4,5)]),
-                                                caption = demogcaption,
-                                                options = list(dom="t",
-                                                               columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                               headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  output$tablepoprateright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(19:20,17:18)]),
-                                              caption = popratecaption,
-                                              options = list(dom="t",
-                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  output$tableIQright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(15:16)]),
-                                                caption = IQcaption,
-                                                options = list(dom="t",
-                                                               columnDefs = list(list(className = 'dt-right', targets = 1)),
-                                                               headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  # output$tabledemogleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(1,4,5)]),
+  #                                              caption = demogcaption,
+  #                                              options = list(dom="t",
+  #                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  #
+  # output$tablepoprateleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(19:20,17:18)]),
+  #                                            caption = popratecaption,
+  #                                            options = list(dom="t",
+  #                                                           columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                           headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  #
+  # output$tableIQleft <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[1],c(15:16)]),
+  #                                           caption = IQcaption,
+  #                                           options = list(dom="t",
+  #                                                          columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                          headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  #
+  # output$tabledemogright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(1,4,5)]),
+  #                                               caption = demogcaption,
+  #                                               options = list(dom="t",
+  #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  #
+  # output$tablepoprateright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(19:20,17:18)]),
+  #                                             caption = popratecaption,
+  #                                             options = list(dom="t",
+  #                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
+  #
+  # output$tableIQright <- DT::renderDataTable(t(PAtowndata[PAtowndata$NAME==secondpageinput()[2],c(15:16)]),
+  #                                               caption = IQcaption,
+  #                                               options = list(dom="t",
+  #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
+  #                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
 
   # column plot for comparison tool (hidden for small devices)
   reactivedata <- reactive({
@@ -176,11 +176,11 @@ function(input, output, session) {
 
   output$histTitle = renderUI( {
     thisFeature = as.numeric(PAtowndata[  , input$idFeature])
-    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
+    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$townSelectorId)]
     div(hr(),
         span(strong("Selected town:"), span(
           style='color:green',
-          paste(input$town))),
+          paste(input$townSelectorId))),
         br(),
         span(strong("Selected feature: "),
              span(
@@ -194,19 +194,19 @@ function(input, output, session) {
           span(style='color:green', 'proportion smaller = ',
           signif(digits=2, mean(na.rm = TRUE,
                PAtowndata[  , input$idFeature]
-               < PAtowndata[PAtowndata$NAME==input$town, input$idFeature]
+               < PAtowndata[PAtowndata$NAME==input$townSelectorId, input$idFeature]
           )))))
       })
 
   output$featurePlot <- renderPlot({
     thisFeature = as.numeric(PAtowndata[  , input$idFeature])
-    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$town)]
+    thisTownFeature = thisFeature[which(PAtowndata$NAME==input$townSelectorId)]
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
     hist(thisFeature,
          xlab=xlab, ylab = 'count',
          main = '')
-    abline(v=PAtowndata[PAtowndata$NAME==input$town, input$idFeature],
+    abline(v=PAtowndata[PAtowndata$NAME==input$townSelectorId, input$idFeature],
                         lwd=3, col='green')
     arrows(x0 = thisTownFeature, y0 = 0,
            x1 = thisTownFeature, y1= par('usr')[4]*1.2, xpd=NA,
