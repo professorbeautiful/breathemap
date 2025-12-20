@@ -28,9 +28,9 @@ function(input, output, session) {
   observe({
     click <- input$map_shape_click
     if(is.null(click))
-      updateSelectInput(session, "town", selected = PAtowndata$NAME[1])
+      updateSelectInput(session, "townSelectorId", selected = PAtowndata$NAME[1])
     else
-      updateSelectInput(session, "town", selected = click$id)
+      updateSelectInput(session, "townSelectorId", selected = click$id)
   })
 
  # leaflet map
