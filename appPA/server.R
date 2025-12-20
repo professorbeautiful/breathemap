@@ -33,6 +33,21 @@ function(input, output, session) {
       updateSelectInput(session, "townSelectorId", selected = click$id)
   })
 
+  observeEvent(input$townToggleId, {
+    try({
+      if(input$townToggleId == 'towns'){
+      areaField = 'townName'
+    }
+    else if(input$townToggleId == 'towns with tracts'){
+      areaField = 'towntractName'
+    }
+    print(paste('areaField=', areaField))
+    })
+    currentSelection = input$townSelectorId
+    print(paste('currentSelection', currentSelection))
+    # updateSelectInput(session, "townSelectorId", choices = PAtowndata[["NAME"]])
+
+  })
  # leaflet map
   output$map <- renderLeaflet({
     leaflet() %>%

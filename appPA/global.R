@@ -58,6 +58,10 @@ PAtown = PAtown[townOrder, ]
 PAtowndata = PAtowndata[townOrder, ]
 PAtownnames = PAtownnames[townOrder]
 
+PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
+PAtown$towntractName = PAtowndata$TOWN
+PAtown$noTown = PAtown$townName == '___'
+table (PAtown$noTown)
 
 # creates headers for the datatables. Referenced in server.R
 demogcaption <- htmltools::tags$caption(
