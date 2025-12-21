@@ -107,33 +107,18 @@ function(input, output, session) {
                   color="Red", fillColor="yellow",
                   label= ~towntractName, #layerId = ~towntractName,
                   fillOpacity = 1, group="selectedTownShp") #%>%
-      # addLabelOnlyMarkers(    ## not working, not important
-      #   lng = TARGETdatarows()$lon, lat = TARGETdatarows()$lat,
-      #   layerId = NULL,
-      #   group = 'selectedTownShp',
-      #   icon = NULL,
-      #   label = 'hello', #TARGETdatarows()$NAME,
-      #   labelOptions = labelOptions(noHide = T, direction = 'top', textOnly = T),
-      #   #options = markerOptions(),
-      #   clusterOptions = NULL,
-      #   clusterId = NULL,
-      #   data = getMapData(map)
-      # )
-    # A few things from the map tool tab: datatables and text
-    # if statement is used to give automatic value tables/no error when input is empty
     default_town = PAtown[["areaField"]] [1]
     if (input$areaSelectorId == " ")
       updateSelectInput(inputId='areaSelectorId', selected = default_town)
-    #   townChosen = default_town
-    # else     townChosen = TARGETdatarows()$NAME
-    columns.tabledemog = c("NAME", "Total Population (2019)", "PM_avg")
+    columns.tabledemog = c("Total Population (2019)", "PM_avg")
         # columns for tabledemog  are: c("NAME", "Total Population (2019)", "PM_avg")  (was 1,5,4)
-    # columns for tableest  were c(9:12,8,15,16)
-    columns.tableest = c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
-                         "All Cause Deaths, Laden Estimate"  ,
-                         "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
-                         "All Cause Deaths, Di Estimate",
-                         "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
+        # columns for tableest  were c(9:12,8,15,16)
+    columns.tableest = featureList
+      # c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
+      #                    "All Cause Deaths, Laden Estimate"  ,
+      #                    "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+      #                    "All Cause Deaths, Di Estimate",
+      #                    "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
     output$tabledemog <- DT::renderDataTable(
       t(TARGETdatarows() [featureList]),
       caption = demogcaption,
