@@ -67,8 +67,10 @@ fluidPage({
                                                   PAtownnames,
                                                   selected = PAtownnames[1]))),
                            column(4, div(style='color:yellow; background-color:green',
-                                radioButtons("townToggleId", "Show:", choices=c('towns', 'towns with tracts'),
-                                             selected='tracts', inline=TRUE)
+                                radioButtons("townToggleId", "Show:",
+                                             choiceNames=c('towns', 'towns with tracts'),
+                                             choiceValues=c('townName', 'towntractName'),
+                                             selected='towns', inline=TRUE)
                                 ))),
                   leafletOutput("map", height = 450), br(),
                           fluidRow(
