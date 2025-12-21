@@ -28,7 +28,7 @@ function(input, output, session) {
   observe({
     click <- input$map_shape_click
     if(is.null(click))
-      updateSelectInput(session, "townSelectorId", selected = PAtown$NAME[1])
+      updateSelectInput(session, "townSelectorId", selected = PAtown[['areaField']] [1])
     else
       updateSelectInput(session, "townSelectorId", selected = click$id)
   })
