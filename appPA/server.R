@@ -82,13 +82,13 @@ function(input, output, session) {
     which(PAtown[['areaField']] == TARGETstring())
   })
   TARGETdatarows = reactive({
-    PAtown[['areaField']][TARGETrownumbers()]
+    PAtown[TARGETrownumbers(), ]
   })
   # Map animations and reactive selectors
   observeEvent(c(input$townToggleId, input$townSelectorId), {
 
-    # print(paste('townreac', 'areaField', townreac()[['areaField']] ))
-    # print(paste('townreac', 'townName', townreac()$townName) )
+    # print(paste('townreac', 'areaField', TARGETdatarows()[['areaField']] ))
+    # print(paste('townreac', 'townName', TARGETdatarows()$townName) )
     print(paste('input$townSelectorId', input$townSelectorId) )
     print(paste('input$townToggleId', input$townToggleId) )
     # if(is.null(input$townToggleId)) {
@@ -100,20 +100,20 @@ function(input, output, session) {
     areaRowNumbers = TARGETrownumbers()
 
     print(paste('areaRowNumbers', paste(collapse=',', areaRowNumbers)))
-    #townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
+    #townRowNumber = which(PAtown$NAME==TARGETdatarows()$NAME) [1]  # [1] for now.
     leafletProxy("map", session) %>%
-      flyTo(lng = townreac()$lon[1], lat = townreac()$lat[1], zoom=10) %>%
+      flyTo(lng = TARGETdatarows()$lon[1], lat = TARGETdatarows()$lat[1], zoom=10) %>%
       clearGroup("selectedTownShp") %>%
       addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
                   label= ~townName, #layerId = ~towntractName,
                   fillOpacity = 1, group="selectedTownShp") #%>%
       # addLabelOnlyMarkers(    ## not working, not important
-      #   lng = townreac()$lon, lat = townreac()$lat,
+      #   lng = TARGETdatarows()$lon, lat = TARGETdatarows()$lat,
       #   layerId = NULL,
       #   group = 'selectedTownShp',
       #   icon = NULL,
-      #   label = 'hello', #townreac()$NAME,
+      #   label = 'hello', #TARGETdatarows()$NAME,
       #   labelOptions = labelOptions(noHide = T, direction = 'top', textOnly = T),
       #   #options = markerOptions(),
       #   clusterOptions = NULL,
@@ -126,7 +126,7 @@ function(input, output, session) {
     if (input$townSelectorId == " ")
       updateSelectInput(inputId='townSelectorId', selected = default_town)
     #   townChosen = default_town
-    # else     townChosen = townreac()$NAME
+    # else     townChosen = TARGETdatarows()$NAME
     columns.tabledemog = c("NAME", "Total Population (2019)", "PM_avg")
         # columns for tabledemog  are: c("NAME", "Total Population (2019)", "PM_avg")  (was 1,5,4)
     # columns for tableest  were c(9:12,8,15,16)
@@ -136,21 +136,21 @@ function(input, output, session) {
                          "All Cause Deaths, Di Estimate",
                          "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
     output$tabledemog <- DT::renderDataTable(
-      t(PAtown[PAtown$NAME==townreac()$NAME,
+      t(PAtown[PAtown$NAME==TARGETdatarows()$NAME,
                    featureList]),
       caption = demogcaption,
       options = list(
         dom="t",
         columnDefs = list(list(className = 'dt-right', targets = 1)),
         headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtown[PAtown$NAME==townreac()$NAME,
+      output$tableest <- DT::renderDataTable(t(PAtown[PAtown$NAME==TARGETdatarows()$NAME,
                                                           columns.tableest]),
                                              caption = estcaption,
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", townreac()$NAME, "approximately",
-                                        "was townreac()$`Cancer Deaths`", "people die due to cancers caused by air pollution every year."))
+      output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", TARGETdatarows()$NAME, "approximately",
+                                        "was TARGETdatarows()$`Cancer Deaths`", "people die due to cancers caused by air pollution every year."))
     }
   )
 
@@ -219,11 +219,28 @@ function(input, output, session) {
   #   "WARNING: columnchartdata is not available"
   # })
 
-  output$histTitle = renderUI( {
+  thisTownFeature = reactive({
     thisFeature = as.numeric(PAtown[[input$idFeature]])
-    thisTownFeature = thisFeature[which(PAtown$areaField==TARGETstring())]
+    return(thisFeature[TARGETrownumbers()])
+  })
+  thisTownFeatureSummary = reactive({
+    featureSummaryFunction = mean
+    ### for now.  May also be popWeightedMean or sum
+    return(featureSummaryFunction(thisTownFeature(), na.rm=TRUE))
+  })
+
+  output$histTitle = renderUI( {
+    print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
+    print(paste('histTitle:', 'input$idFeature', input$idFeature))
+
+    thisFeature = as.numeric(PAtown[[input$idFeature]])
+
+    print(paste('histTitle:', 'feature values', paste(collapse=',', thisTownFeature())))
+    print(paste('histTitle:', 'feature summary',
+                paste(collapse=',', thisTownFeatureSummary())))
+
     div(hr(),
-        span(strong(switch(input$townToggleId=='towns',
+        span(strong(switch(get_areaFieldName()=='townName',
                            "Selected town:", "Selected town/tract:")),
              span(
           style='color:green',
@@ -233,7 +250,7 @@ function(input, output, session) {
              span(
                style='color:green', input$idFeature, ' = ',
              signif(digits=3,
-                    sum(as.numeric(thisTownFeature) )) )
+                    thisTownFeatureSummary() ) )
              #### TODO: which features do we sum, which do we mean?
              ### population is char for some reason.
         ),
@@ -244,28 +261,29 @@ function(input, output, session) {
           )))
   })
   output$proportion_smaller <- renderText({
+    print(paste('proportion_smaller:', 'distribution of idFeature'))
     print(summary(PAtown[[input$idFeature]]))
-    print(PAtown[PAtown$areaField==input$townSelectorId, input$idFeature])
     howManyLess = try({
-      PAtown[[input$idFeature]] <
-        PAtown[[input$idFeature]] [PAtown$areaField==input$townSelectorId]
+      PAtown[[input$idFeature]] < thisTownFeatureSummary()
+#        PAtown[[input$idFeature]] [PAtown$areaField==input$townSelectorId]
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
     signif(digits=2, mean(na.rm = TRUE, howManyLess ) )
   })
+
   output$featurePlot <- renderPlot({
     thisFeature = as.numeric(PAtown[[input$idFeature]])
-    thisTownFeature = thisFeature[which(PAtown$areaField==input$townSelectorId)]
+    thisTownFeature = thisTownFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
     hist(thisFeature,
          xlab=xlab, ylab = 'count',
          main = '')
-    abline(v=PAtown[PAtown$areaField==input$townSelectorId, input$idFeature],
+    abline(v=thisTownFeatureSummary(),
                         lwd=3, col='green')
-    arrows(x0 = thisTownFeature, y0 = 0,
-           x1 = thisTownFeature, y1= par('usr')[4]*1.2, xpd=NA,
+    arrows(x0 = thisTownFeatureSummary(), y0 = 0,
+           x1 = thisTownFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
            col='green', lwd=3)
 
   })
