@@ -67,10 +67,8 @@ PAtownExtra = setdiff(y=names(PAtown), names(PAtowndata))
 PAtown[PAtownExtra] = PAtowndata[PAtownExtra]
 class(PAtown)
 names(PAtown)
-PAtown[['NAME2']] = PAtown[['NAME']]
-#   NOPE    PAtown[['NAME']] = PAtown[['areaField']]  ## kluge for leaflet ~NAME
 ##  OK, from here on, no more PAtowndata
-
+PAtown$`Total Population (2019)` = as.numeric(PAtown$`Total Population (2019)`)
 
 # creates headers for the datatables. Referenced in server.R
 demogcaption <- htmltools::tags$caption(
