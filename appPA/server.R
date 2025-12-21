@@ -85,28 +85,23 @@ function(input, output, session) {
     PAtown[TARGETrownumbers(), ]
   })
   # Map animations and reactive selectors
-  observeEvent(c(input$townToggleId, input$townSelectorId), {
+  mapObserver = observeEvent(c(input$townToggleId, input$townSelectorId), {
 
-    # print(paste('townreac', 'areaField', TARGETdatarows()[['areaField']] ))
-    # print(paste('townreac', 'townName', TARGETdatarows()$townName) )
-    print(paste('input$townSelectorId', input$townSelectorId) )
-    print(paste('input$townToggleId', input$townToggleId) )
-    # if(is.null(input$townToggleId)) {
-    #   updateRadioButtons(inputId='townToggleId'
-    #                      , selected = 'towns with tracts') # or towns with tracts.
-    # }
-    print(paste('TARGETstring', TARGETstring() ) )
+    print(paste('mapObserver: input$townSelectorId', input$townSelectorId) )
+    print(paste('mapObserver: input$townToggleId', input$townToggleId) )
+    print(paste('mapObserver: TARGETstring', TARGETstring() ) )
 
     areaRowNumbers = TARGETrownumbers()
 
-    print(paste('areaRowNumbers', paste(collapse=',', areaRowNumbers)))
+    print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
     #townRowNumber = which(PAtown$NAME==TARGETdatarows()$NAME) [1]  # [1] for now.
+
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon[1], lat = TARGETdatarows()$lat[1], zoom=10) %>%
       clearGroup("selectedTownShp") %>%
       addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~townName, #layerId = ~towntractName,
+                  label= ~towntractName, #layerId = ~towntractName,
                   fillOpacity = 1, group="selectedTownShp") #%>%
       # addLabelOnlyMarkers(    ## not working, not important
       #   lng = TARGETdatarows()$lon, lat = TARGETdatarows()$lat,
