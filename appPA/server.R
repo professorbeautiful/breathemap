@@ -77,13 +77,25 @@ function(input, output, session) {
 
   # Map animations and reactive selectors
   observeEvent(c(input$townToggleId, input$townSelectorId), {
-    print(townreac()$areaField)
-#    if(input$townToggleId == 'towns') {
-    areaRowNumbers = which(PAtown[['areaField']]==townreac()[['areaField']])
+    print(paste('townreac', 'areaField', townreac()[['areaField']] ))
+    print(paste('townreac', 'townName', townreac()$townName) )
+    print(paste('input$townSelectorId', input$townSelectorId) )
+    print(paste('input$townToggleId', input$townToggleId) )
+    if(is.null(input$townToggleId)) {
+      updateRadioButtons(inputId='townToggleId'
+                         , selected = 'towns with tracts') # or towns with tracts.
+    }
+    TARGET = input$townSelectorId
+    if(get_areaFieldName() == 'townName')
+      TARGET = PAtown$townName[PAtown$towntractName == TARGET]
+    print(paste('TARGET', TARGET) )
+
+    areaRowNumbers = which(PAtown[['areaField']] == TARGET)
+
     print(paste('areaRowNumbers', areaRowNumbers))
     #townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
     leafletProxy("map", session) %>%
-      flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
+      flyTo(lng = townreac()$lon[1], lat = townreac()$lat[1], zoom=10) %>%
       clearGroup("selectedTownShp") %>%
       addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
