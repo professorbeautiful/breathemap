@@ -12,7 +12,7 @@ function(input, output, session) {
   townreac <- reactive({
     areaFieldName = get_areaFieldName()
     print(paste('townreac: get_areaFieldName = ', areaFieldName))
-    result = PAtown[which(PAtown[[areaFieldName]]==input$townSelectorId),]
+    result = PAtown[which(PAtown[[areaFieldName]]==TARGET()),]
     if(nrow(result) > 1) {
       cat('==== townreac   --  duplicates ===== \n')
       print(result)
