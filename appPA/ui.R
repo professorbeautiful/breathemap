@@ -63,7 +63,7 @@ fluidPage({
                          fluidRow(
                            column(8,
                                   div(style='color:yellow; background-color:green',
-                                      selectInput("townSelectorId", "Select a town or area by clicking it or typing it in here: ",
+                                      selectInput("areaSelectorId", "Select a town or area by clicking it or typing it in here: ",
                                                   PAtownnames,
                                                   selected = PAtownnames[1]))),
                            column(4, div(style='color:yellow; background-color:green',

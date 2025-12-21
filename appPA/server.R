@@ -8,7 +8,7 @@ function(input, output, session) {
 
 
     # to speed app up and lower RAM
-  #townreac <- reactive(PAtown[PAtown$NAME==input$townSelectorId,])
+  #townreac <- reactive(PAtown[PAtown$NAME==input$areaSelectorId,])
   # townreac <- reactive({
   #   areaFieldName = get_areaFieldName()
   #   print(paste('townreac: get_areaFieldName = ', areaFieldName))
@@ -34,10 +34,10 @@ function(input, output, session) {
     click <- input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
-      #updateSelectInput(session, "townSelectorId", selected = PAtown[['areaField']] [1])
-      updateSelectInput(session, "townSelectorId", selected = PAtown[['towntractName']] [1])
+      #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
+      updateSelectInput(session, "areaSelectorId", selected = PAtown[['towntractName']] [1])
     else
-      updateSelectInput(session, "townSelectorId", selected = click$id)
+      updateSelectInput(session, "areaSelectorId", selected = click$id)
   })
 
   get_areaFieldName = reactive({
@@ -48,7 +48,7 @@ function(input, output, session) {
     print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
     PAtown[['areaField']] <<-PAtown[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
-    # updateSelectInput(session, "townSelectorId", choices = PAtown)
+    # updateSelectInput(session, "areaSelectorId", choices = PAtown)
   })
  # leaflet map
   output$map <- renderLeaflet({
@@ -72,7 +72,7 @@ function(input, output, session) {
                     bringToFront = T))
   })
   TARGETstring = reactive({
-    TARGETstring = (input$townSelectorId)
+    TARGETstring = (input$areaSelectorId)
     print(paste('TARGETstring (in):', TARGETstring))
     print(get_areaFieldName() )
     if(get_areaFieldName() == 'townName')
@@ -89,9 +89,9 @@ function(input, output, session) {
     PAtown[TARGETrownumbers(), ]
   })
   # Map animations and reactive selectors
-  mapObserver = observeEvent(c(input$townToggleId, input$townSelectorId), {
+  mapObserver = observeEvent(c(input$townToggleId, input$areaSelectorId), {
 
-    print(paste('mapObserver: input$townSelectorId', input$townSelectorId) )
+    print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('mapObserver: input$townToggleId', input$townToggleId) )
     print(paste('mapObserver: TARGETstring', TARGETstring() ) )
 
@@ -122,8 +122,8 @@ function(input, output, session) {
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
     default_town = PAtown[["areaField"]] [1]
-    if (input$townSelectorId == " ")
-      updateSelectInput(inputId='townSelectorId', selected = default_town)
+    if (input$areaSelectorId == " ")
+      updateSelectInput(inputId='areaSelectorId', selected = default_town)
     #   townChosen = default_town
     # else     townChosen = TARGETdatarows()$NAME
     columns.tabledemog = c("NAME", "Total Population (2019)", "PM_avg")
@@ -165,7 +165,7 @@ function(input, output, session) {
   )
 
   # Reactive storage of comparative tool inputs. Speeds up app
-  # secondpageinput <- reactive(c(input$townSelectorIdleft, input$townSelectorIdright))
+  # secondpageinput <- reactive(c(input$areaSelectorIdleft, input$areaSelectorIdright))
 
   # datatables for comparison tool
   # output$tabledemogleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(1,4,5)]),
@@ -267,7 +267,7 @@ function(input, output, session) {
     print(summary(PAtown[[input$idFeature]]))
     howManyLess = try({
       PAtown[[input$idFeature]] < thisTownFeatureSummary()
-#        PAtown[[input$idFeature]] [PAtown$areaField==input$townSelectorId]
+#        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
