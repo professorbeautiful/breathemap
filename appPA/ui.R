@@ -94,7 +94,7 @@ fluidPage({
                 )))
             ,
                 fluidRow(
-                  dataTableOutput("tabledemog"),
+                  #dataTableOutput("tabledemog"),
                   dataTableOutput("tableest"), br(),
                   textOutput("hotext"), br(),
                   p("**Performance IQ is a measure of intelligence related to problem solving skills."))

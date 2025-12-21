@@ -112,7 +112,7 @@ function(input, output, session) {
                          "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
     output$tabledemog <- DT::renderDataTable(
       t(PAtown[PAtown$NAME==townreac()$NAME,
-                   columns.tabledemog]),
+                   featureList]),
       caption = demogcaption,
       options = list(
         dom="t",
