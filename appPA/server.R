@@ -62,8 +62,8 @@ function(input, output, session) {
                   color = "Black",
                   fillColor = "blue",
                   fillOpacity = 0.3,
-                  label = ~TOWN,
-                  layerId = ~TOWN,
+                  label = ~NAME,
+                  layerId = ~NAME,
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",

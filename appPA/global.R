@@ -67,6 +67,7 @@ PAtownExtra = setdiff(y=names(PAtown), names(PAtowndata))
 PAtown[PAtownExtra] = PAtowndata[PAtownExtra]
 class(PAtown)
 names(PAtown)
+#   NOPE    PAtown[['NAME']] = PAtown[['areaField']]  ## kluge for leaflet ~NAME
 ##  OK, from here on, no more PAtowndata
 
 
