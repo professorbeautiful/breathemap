@@ -10,7 +10,7 @@ function(input, output, session) {
     # to speed app up and lower RAM
   #townreac <- reactive(PAtown[PAtown$NAME==input$townSelectorId,])
   townreac <- reactive({
-    result = PAtown[which(PAtown[[areaFieldName()]]==input$townSelectorId),]
+    result = PAtown[which(PAtown[[get_areaFieldName()]]==input$townSelectorId),]
     if(nrow(result) > 1) {
       print(result)
       result = result[result$COUNTYFP == '003', ]  ### select Allegheny
@@ -33,21 +33,21 @@ function(input, output, session) {
       updateSelectInput(session, "townSelectorId", selected = click$id)
   })
 
-  areaFieldName = reactive({
-    areaField = 'towntractName'
+  get_areaFieldName = reactive({
+    areaFieldName = 'towntractName'
     try({
       if(input$townToggleId == 'towns'){
-        areaField = 'townName'
+        areaFieldName = 'townName'
       }
       else if(input$townToggleId == 'towns with tracts'){
-        areaField = 'towntractName'
+        areaFieldName = 'towntractName'
       }
-      else areaField = 'towntractName'
+      else areaFieldName = 'towntractName'
     })
-    print(paste('areaField=', areaField))
-    # print(head(PAtown[[areaField]]))
-    PAtown$areaField <<-PAtown[[areaField]]
-    return(areaField)   ## areaFieldName
+    print(paste('areaFieldName=', areaFieldName))
+    # print(head(PAtown[[areaFieldName]]))
+    PAtown[['areaField']] <<-PAtown[[areaFieldName]]
+    return(areaFieldName)   ## get_areaFieldName
     # currentSelection = input$townSelectorId
     # print(paste('currentSelection', currentSelection))
     # updateSelectInput(session, "townSelectorId", choices = PAtown)
@@ -97,7 +97,7 @@ function(input, output, session) {
       # )
     # A few things from the map tool tab: datatables and text
     # if statement is used to give automatic value tables/no error when input is empty
-    default_town = 'Adamsburg, Census Tract'
+    default_town = PAtown[["areaField"]] [1]
     if (input$townSelectorId == " ")
       updateSelectInput(inputId='townSelectorId', selected = default_town)
     #   townChosen = default_town
