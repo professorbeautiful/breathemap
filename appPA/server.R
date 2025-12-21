@@ -10,6 +10,7 @@ function(input, output, session) {
     # to speed app up and lower RAM
   #townreac <- reactive(PAtown[PAtown$NAME==input$townSelectorId,])
   townreac <- reactive({
+    print(paste('get_areaFieldName', get_areaFieldName()))
     result = PAtown[which(PAtown[[get_areaFieldName()]]==input$townSelectorId),]
     if(nrow(result) > 1) {
       print(result)
@@ -62,8 +63,10 @@ function(input, output, session) {
                   color = "Black",
                   fillColor = "blue",
                   fillOpacity = 0.3,
-                  label = ~NAME,
-                  layerId = ~NAME,
+                  # label is the label shown
+                  #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
+                  label = ~towntractName, #PAtown[['NAME']] = PAtown[['areaField']]
+                  layerId = ~towntractName, ## initially.
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",
@@ -73,15 +76,18 @@ function(input, output, session) {
   })
 
   # Map animations and reactive selectors
-  observeEvent(input$townSelectorId, {
-    print(townreac())
-     townRowNumber = which(PAtown[['areaField']]==townreac()[['areaField']]) [1]  # [1] for now.
+  observeEvent(c(input$townToggleId, input$townSelectorId), {
+    print(townreac()$areaField)
+#    if(input$townToggleId == 'towns') {
+    areaRowNumbers = which(PAtown[['areaField']]==townreac()[['areaField']])
+    print(paste('areaRowNumbers', areaRowNumbers))
     #townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
     leafletProxy("map", session) %>%
       flyTo(lng = townreac()$lon, lat = townreac()$lat, zoom=10) %>%
       clearGroup("selectedTownShp") %>%
-      addPolygons(data=PAtown[townRowNumber,], weight = 1,
+      addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
+                  label= ~townName, layerId = ~towntractName,
                   fillOpacity = 1, group="selectedTownShp") #%>%
       # addLabelOnlyMarkers(    ## not working, not important
       #   lng = townreac()$lon, lat = townreac()$lat,
