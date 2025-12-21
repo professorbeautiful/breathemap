@@ -12,7 +12,7 @@ function(input, output, session) {
   townreac <- reactive({
     areaFieldName = get_areaFieldName()
     print(paste('townreac: get_areaFieldName = ', areaFieldName))
-    result = PAtown[which(PAtown[[areaFieldName]]==TARGET()),]
+    result = PAtown[which(PAtown[[areaFieldName]]==TARGETstring()),]
     if(nrow(result) > 1) {
       cat('==== townreac   --  duplicates ===== \n')
       print(result)
@@ -69,29 +69,35 @@ function(input, output, session) {
                     fillOpacity = 1,
                     bringToFront = T))
   })
-  TARGET = reactive({
-    TARGET = (input$townSelectorId)
-    print(paste('TARGET (in):', TARGET))
+  TARGETstring = reactive({
+    TARGETstring = (input$townSelectorId)
+    print(paste('TARGETstring (in):', TARGETstring))
     print(get_areaFieldName() )
     if(get_areaFieldName() == 'townName')
-      TARGET = PAtown$townName[PAtown$towntractName == TARGET]
-    print(paste('TARGET (out):', TARGET))
-    TARGET
+      TARGETstring = PAtown$townName[PAtown$towntractName == TARGETstring]
+    print(paste('TARGET (out):', TARGETstring))
+    TARGETstring
+  })
+  TARGETrownumbers = reactive({
+    which(PAtown[['areaField']] == TARGETstring())
+  })
+  TARGETdatarows = reactive({
+    PAtown[['areaField']][TARGETrownumbers()]
   })
   # Map animations and reactive selectors
   observeEvent(c(input$townToggleId, input$townSelectorId), {
 
-    print(paste('townreac', 'areaField', townreac()[['areaField']] ))
-    print(paste('townreac', 'townName', townreac()$townName) )
+    # print(paste('townreac', 'areaField', townreac()[['areaField']] ))
+    # print(paste('townreac', 'townName', townreac()$townName) )
     print(paste('input$townSelectorId', input$townSelectorId) )
     print(paste('input$townToggleId', input$townToggleId) )
     # if(is.null(input$townToggleId)) {
     #   updateRadioButtons(inputId='townToggleId'
     #                      , selected = 'towns with tracts') # or towns with tracts.
     # }
-    print(paste('TARGET', TARGET() ) )
+    print(paste('TARGETstring', TARGETstring() ) )
 
-    areaRowNumbers = which(PAtown[['areaField']] == TARGET())
+    areaRowNumbers = TARGETrownumbers()
 
     print(paste('areaRowNumbers', paste(collapse=',', areaRowNumbers)))
     #townRowNumber = which(PAtown$NAME==townreac()$NAME) [1]  # [1] for now.
@@ -215,13 +221,13 @@ function(input, output, session) {
 
   output$histTitle = renderUI( {
     thisFeature = as.numeric(PAtown[[input$idFeature]])
-    thisTownFeature = thisFeature[which(PAtown$areaField==TARGET())]
+    thisTownFeature = thisFeature[which(PAtown$areaField==TARGETstring())]
     div(hr(),
         span(strong(switch(input$townToggleId=='towns',
                            "Selected town:", "Selected town/tract:")),
              span(
           style='color:green',
-          paste(TARGET()))),
+          paste(TARGETstring()))),
         br(),
         span(strong("Selected feature: "),
              span(
