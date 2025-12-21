@@ -221,14 +221,14 @@ function(input, output, session) {
   #   "WARNING: columnchartdata is not available"
   # })
 
-  thisTownFeature = reactive({
+  thisAreaFeature = reactive({
     thisFeature = as.numeric(PAtown[[input$idFeature]])
     return(thisFeature[TARGETrownumbers()])
   })
-  thisTownFeatureSummary = reactive({
+  thisAreaFeatureSummary = reactive({
     featureSummaryFunction = mean
     ### for now.  May also be popWeightedMean or sum
-    return(featureSummaryFunction(thisTownFeature(), na.rm=TRUE))
+    return(featureSummaryFunction(thisAreaFeature(), na.rm=TRUE))
   })
 
   output$histTitle = renderUI( {
@@ -237,9 +237,9 @@ function(input, output, session) {
 
     thisFeature = as.numeric(PAtown[[input$idFeature]])
 
-    print(paste('histTitle:', 'feature values', paste(collapse=',', thisTownFeature())))
+    print(paste('histTitle:', 'feature values', paste(collapse=',', thisAreaFeature())))
     print(paste('histTitle:', 'feature summary',
-                paste(collapse=',', thisTownFeatureSummary())))
+                paste(collapse=',', thisAreaFeatureSummary())))
 
     div(hr(),
         span(strong(switch(get_areaFieldName()=='townName',
@@ -252,7 +252,7 @@ function(input, output, session) {
              span(
                style='color:green', input$idFeature, ' = ',
              signif(digits=3,
-                    thisTownFeatureSummary() ) )
+                    thisAreaFeatureSummary() ) )
              #### TODO: which features do we sum, which do we mean?
              ### population is char for some reason.
         ),
@@ -266,7 +266,7 @@ function(input, output, session) {
     print(paste('proportion_smaller:', 'distribution of idFeature'))
     print(summary(PAtown[[input$idFeature]]))
     howManyLess = try({
-      PAtown[[input$idFeature]] < thisTownFeatureSummary()
+      PAtown[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
@@ -276,16 +276,16 @@ function(input, output, session) {
 
   output$featurePlot <- renderPlot({
     thisFeature = as.numeric(PAtown[[input$idFeature]])
-    thisTownFeature = thisTownFeatureSummary()
+    thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
     hist(thisFeature,
          xlab=xlab, ylab = 'count',
          main = '')
-    abline(v=thisTownFeatureSummary(),
+    abline(v=thisAreaFeatureSummary(),
                         lwd=3, col='green')
-    arrows(x0 = thisTownFeatureSummary(), y0 = 0,
-           x1 = thisTownFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
+    arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
+           x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
            col='green', lwd=3)
 
   })
