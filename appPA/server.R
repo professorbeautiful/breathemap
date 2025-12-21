@@ -99,7 +99,7 @@ function(input, output, session) {
       clearGroup("selectedTownShp") %>%
       addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~townName, layerId = ~towntractName,
+                  label= ~townName, #layerId = ~towntractName,
                   fillOpacity = 1, group="selectedTownShp") #%>%
       # addLabelOnlyMarkers(    ## not working, not important
       #   lng = townreac()$lon, lat = townreac()$lat,
