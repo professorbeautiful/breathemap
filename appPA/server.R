@@ -32,7 +32,7 @@ function(input, output, session) {
  # clicking updates selectInput
   observe({
     click <- input$map_shape_click
-    ### TODO  keep an eye on this.
+    ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
       #updateSelectInput(session, "townSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "townSelectorId", selected = PAtown[['towntractName']] [1])
@@ -147,8 +147,12 @@ function(input, output, session) {
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", TARGETstring(), "approximately",
-                                        "was TARGETdatarows()$`Cancer Deaths`", "people die due to cancers caused by air pollution every year."))
+      output$hotext <- renderText(paste(
+        "*All estimates are based on annual air pollution predictions. "))
+      # For example, in", TARGETstring(), "approximately",
+      #                                   "was ",
+      #                                   signif(digits=3, sum(TARGETdatarows()$`Cancer Deaths`)),
+      #                                    " people die due to cancers caused by air pollution every year."))
     }
   )
 
