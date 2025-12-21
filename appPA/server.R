@@ -79,7 +79,9 @@ function(input, output, session) {
     TARGETstring
   })
   TARGETrownumbers = reactive({
-    which(PAtown[['areaField']] == TARGETstring())
+    print(paste('TARGETrownumbers:', TARGETstring()))
+    #which(PAtown[['areaField']] == TARGETstring())
+    which(PAtown[[get_areaFieldName()]] == TARGETstring())
   })
   TARGETdatarows = reactive({
     PAtown[TARGETrownumbers(), ]
