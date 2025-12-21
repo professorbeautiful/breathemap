@@ -131,20 +131,19 @@ function(input, output, session) {
                          "All Cause Deaths, Di Estimate",
                          "Low Birth Weight Babies", "Preterm Births", "Stillbirths" )
     output$tabledemog <- DT::renderDataTable(
-      t(PAtown[PAtown$NAME==TARGETdatarows()$NAME,
-                   featureList]),
+      t(TARGETdatarows() [featureList]),
       caption = demogcaption,
       options = list(
         dom="t",
         columnDefs = list(list(className = 'dt-right', targets = 1)),
         headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$tableest <- DT::renderDataTable(t(PAtown[PAtown$NAME==TARGETdatarows()$NAME,
+      output$tableest <- DT::renderDataTable(t(TARGETdatarows()[
                                                           columns.tableest]),
                                              caption = estcaption,
                                              options = list(dom="t",
                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-      output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", TARGETdatarows()$NAME, "approximately",
+      output$hotext <- renderText(paste("*All estimates are based on annual air pollution predictions. For example, in", TARGETstring(), "approximately",
                                         "was TARGETdatarows()$`Cancer Deaths`", "people die due to cancers caused by air pollution every year."))
     }
   )
