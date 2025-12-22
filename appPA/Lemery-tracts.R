@@ -36,6 +36,8 @@ setcompare(tractsLemery$tracts, gsub('Census Tract ', '', tracts_with_towns$NAME
 missing_towns = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$NAME)), ]
 
 
+#### "see City of Pittsburgh under Local Census Tract Numbers"
+#### We will replace this entry by our tractsLemeryPgh
 tractsLemeryPgh = read.csv(header = F, '/Users/rogerday/Google Drive/Documents/Fireman Breathe Project/appPA/Pittsburgh_Census_Tracts_1940-2020.csv')
 names(tractsLemeryPgh) = c('towns', 'year', 'tracts')
 tractsLemeryPgh = tractsLemeryPgh %>% subset(year=='2020')
