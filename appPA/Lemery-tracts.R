@@ -11,7 +11,14 @@ tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
 )
 # [185] "see City of Pittsburgh under Local Census Tract Numbers"
 
-#  conmpare with
+tractsLemeryPgh = read.csv(header = F, '/Users/rogerday/Google Drive/Documents/Fireman Breathe Project/appPA/Pittsburgh_Census_Tracts_1940-2020.csv')
+names(tractsLemeryPgh) = c('towns', 'year', 'tracts')
+tractsLemeryPgh = tractsLemeryPgh %>% subset(year=='2020')
+tractsLemeryPgh = tractsLemeryPgh[c('towns', 'tracts')]
+save(tractsLemeryPgh, file='tractsLemeryPgh.Rd')
+# ln ../tractsLemeryPgh.Rd .    into appPA.
+
+#  compare with
 dim(tracts_with_towns)
 #[1] 739   9
 dim(tractsLemery)   #### so we have many more tracts than lemery does.
