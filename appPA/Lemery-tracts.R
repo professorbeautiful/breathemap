@@ -35,7 +35,6 @@ setcompare(tractsLemery$tracts, gsub('Census Tract ', '', tracts_with_towns$NAME
 #        253      13     479
 missing_towns = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$NAME)), ]
 
-# [185] "see City of Pittsburgh under Local Census Tract Numbers"
 
 tractsLemeryPgh = read.csv(header = F, '/Users/rogerday/Google Drive/Documents/Fireman Breathe Project/appPA/Pittsburgh_Census_Tracts_1940-2020.csv')
 names(tractsLemeryPgh) = c('towns', 'year', 'tracts')
@@ -48,7 +47,7 @@ tractsLemeryPgh = data.frame(
     sapply(seq(along=tractsLemeryPgh$towns),
            function(t) rep(tractsLemeryPgh$towns[t],
                            length(longtracts[[t]])))),
-                           tracts=unlist(longtracts))   ##OK
+  tracts=unlist(longtracts))   ##OK
 save(tractsLemeryPgh, file='tractsLemeryPgh.Rd')
 dim(tractsLemeryPgh)   #146 in Pittsburgh
 # ln ../tractsLemeryPgh.Rd .    into appPA.
@@ -73,6 +72,19 @@ match(missing_boroughs$tracts, pa_tracts$NAME)
 pmatch(missing_boroughs$towns, pa_places$NAME)  # only 2 partial matches.
 missing_boroughs$towns[!is.na(pmatch(missing_boroughs$towns, pa_places$NAME)  )]
 #[1] "Arlington" "Hays"
+
+tractsLemery[
+  (match(
+              "see City of Pittsburgh under Local Census Tract Numbers",
+              tractsLemery$tracts)) #185
+, ]
+tractsLemery = tractsLemery [
+  - match(
+    "see City of Pittsburgh under Local Census Tract Numbers",
+    tractsLemery$tracts) , ]
+tractsLemeryPgh$towns = gsub('Pittsburgh', '(Pittsburgh)', tractsLemeryPgh$towns )
+tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '(Pittsburgh)')
+tractsLemery = rbind(tractsLemery, tractsLemeryPgh)
 
 
 dim(tracts_with_towns)
