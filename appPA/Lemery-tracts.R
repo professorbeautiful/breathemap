@@ -89,19 +89,3 @@ tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '(Pittsburgh)')
 tractsLemery = rbind(tractsLemery, tractsLemeryPgh)
 
 
-dim(tracts_with_towns)
-#[1] 739   9
-dim(tractsLemery)   #### so we have many more tracts than lemery does.
-#[1] 279   2
-intersect(tractsLemery$tract, gsub('Census Tract ', '', tracts_with_towns$tracts) )
-###  only 8 ???
-str(tractsLemery$tract)
-str(gsub('Census Tract ', '', tracts_with_towns$tracts))
-head(sort(tractsLemery$tract))
-head(sort(gsub('Census Tract ', '', tracts_with_towns$tracts)) )
-head(sort(PAtowndata$NAMELSAD))
-lemeryTowns = tractsLemery$town[
-  match(tractsLemery$tract,
-        gsub('Census Tract ', '', tracts_with_towns$tracts)
-)]
-cbind(lemeryTowns, tracts_with_towns$towns, tractsLemery$tract)
