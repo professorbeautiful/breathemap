@@ -5,11 +5,11 @@
 tractsLemery.csv = read.csv('Allegheny_County_Municipalities_Census_Tracts_2000-2020.csv')
 tractsLemerySplit = strsplit(tractsLemery.csv$X2020.Census.Tracts, split=', *')
 tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
-                                 function(n)rep(tractsLemery.csv$Municipality[n],
-                                   each=length(tractsLemerySplit[[n]])))),
+                                              function(n)rep(tractsLemery.csv$Municipality[n],
+                                                             each=length(tractsLemerySplit[[n]])))),
                           tracts=unlist(tractsLemerySplit)
 )
-
+### 279, but some duplicate tracts. No duplicated names.
 ##   compare the sets of tracts
 setcompare = function(x,y, countsonly=TRUE) {
   both=intersect(x,y)
