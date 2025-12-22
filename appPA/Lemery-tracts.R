@@ -19,6 +19,12 @@ setcompare = function(x,y, countsonly=TRUE) {
     return(c(both=length(both), x_not_y=length(x_not_y), y_not_x=length(y_not_x)))
   else return(list(both=(both), x_not_y=(x_not_y), y_not_x=(y_not_x)))
 }
+table((!duplicated(tractsLemery$tracts)))   ## 13 duplicated
+duplicatedTracks = which(duplicated(tractsLemery$tracts))   ## 13 duplicated
+tractsDuplicated = tractsLemery$tracts[which(duplicated(tractsLemery$tracts))]
+tractsDuplicatedData = tractsLemery[tractsLemery$tracts %in% tractsDuplicated, ]
+tractsDuplicatedData = tractsDuplicatedData[order(tractsDuplicatedData$tracts), ]
+dim(tractsDuplicatedData)  ### 21 duplicated tracts. No duplicated town names.
 
 
 # [185] "see City of Pittsburgh under Local Census Tract Numbers"
