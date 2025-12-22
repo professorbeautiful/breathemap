@@ -94,7 +94,6 @@ tractsLemery = tractsLemery [
   - match(
     "see City of Pittsburgh under Local Census Tract Numbers",
     tractsLemery$tracts) , ]
-tractsLemeryPgh$towns = gsub('Pittsburgh', '(Pittsburgh)', tractsLemeryPgh$towns )
 tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '(Pittsburgh)')
 tractsLemery = rbind(tractsLemery, tractsLemeryPgh)
 
