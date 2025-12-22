@@ -63,6 +63,8 @@ tractsLemeryPgh$towns[which(tractsLemeryPgh$tracts %in% PAtown$NAME)] #120
 # solution: just select the first name... doesn't matter.
 
 tractsLemeryPgh = tractsLemeryPgh[which(!duplicated(tractsLemeryPgh$tracts)), ]
+tractsLemeryPgh$towns[tractsLemeryPgh$tracts=='2620'] =
+  'Spring Hill City View'  ## a stray character \x96
 ### OK, 125 distinct tracts in Pittsburgh.  109 of them are in PAtown.
 
 # names of missing boroughs:  (16)
