@@ -26,6 +26,14 @@ tractsDuplicatedData = tractsLemery[tractsLemery$tracts %in% tractsDuplicated, ]
 tractsDuplicatedData = tractsDuplicatedData[order(tractsDuplicatedData$tracts), ]
 dim(tractsDuplicatedData)  ### 21 duplicated tracts. No duplicated town names.
 
+dim(tracts_with_towns)
+#[1] 739   9
+dim(tractsLemery)   #### so we have many more tracts than lemery does.
+#[1] 279   2
+setcompare(tractsLemery$tracts, gsub('Census Tract ', '', tracts_with_towns$NAMELSAD) )
+###     both x_not_y y_not_x
+#        253      13     479
+missing_towns = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$NAME)), ]
 
 # [185] "see City of Pittsburgh under Local Census Tract Numbers"
 
