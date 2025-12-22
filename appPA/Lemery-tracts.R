@@ -10,6 +10,12 @@ tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
                           tracts=unlist(tractsLemerySplit)
 )
 ### 279, but some duplicate tracts. No duplicated names.
+
+tractsLemery$towns[which(tractsLemery$tracts=='2620')] =
+'Spring Hill City View'  ## a stray character \x96
+
+
+
 ##   compare the sets of tracts
 setcompare = function(x,y, countsonly=TRUE) {
   both=intersect(x,y)
