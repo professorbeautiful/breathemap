@@ -4,10 +4,10 @@
 # clemery@pitt.edu Christopher Lemery
 tractsLemery.csv = read.csv('Allegheny_County_Municipalities_Census_Tracts_2000-2020.csv')
 tractsLemerySplit = strsplit(tractsLemery.csv$X2020.Census.Tracts, split=', *')
-tractsLemery = data.frame(town=unlist(sapply(1:nrow(tractsLemery.csv),
+tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
                                  function(n)rep(tractsLemery.csv$Municipality[n],
                                    each=length(tractsLemerySplit[[n]])))),
-                          tract=unlist(tractsLemerySplit)
+                          tracts=unlist(tractsLemerySplit)
 )
 # [185] "see City of Pittsburgh under Local Census Tract Numbers"
 
