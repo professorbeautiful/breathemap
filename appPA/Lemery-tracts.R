@@ -35,6 +35,14 @@ setcompare(tractsLemery$tracts, gsub('Census Tract ', '', tracts_with_towns$NAME
 #        253      13     479
 missing_towns = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$NAME)), ]
 
+head(sort(tractsLemery$tract))
+head(sort(gsub('Census Tract ', '', tracts_with_towns$tracts)) )
+head(sort(PAtowndata$NAMELSAD))
+lemeryTowns = tractsLemery$town[
+  match(tractsLemery$tract,
+        gsub('Census Tract ', '', tracts_with_towns$tracts)
+  )]
+cbind(lemeryTowns, tracts_with_towns$towns, tractsLemery$tract)
 
 #### "see City of Pittsburgh under Local Census Tract Numbers"
 #### We will replace this entry by our tractsLemeryPgh
