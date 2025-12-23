@@ -10,11 +10,11 @@ library(dplyr)
 options(tigris_use_cache = TRUE)
 
 # Download Pennsylvania census tracts
-pa_tracts <- tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
+pa_tracts <- tigris::tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
 dim(pa_tracts)    # 3446 rows
 names(pa_tracts)
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
-pa_places <- places(state = "PA", year = 2020, class = "sf")   ### '.y'
+pa_places <- tigris::places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa_places)
 names(pa_places)  #Only 1888 rows
 table(pa_places$NAMELSAD %in% pa_tracts$NAMELSAD )
@@ -41,18 +41,83 @@ head(sort(pa_places_latlon))
 intersect(y=pa_tracts_latlon , pa_places_latlon)  ### only 256 the same.
 intersect(y=pa_tracts$latlon , pa_places$latlon)  ### only 256 the same.
 
-tracts_with_towns =  st_join(pa_tracts %>% select(c('lat', 'lon','latlon', 'tracts')),
-                             pa_places %>% select(c('lat', 'lon','latlon', 'towns')),
-                             join=st_intersects
-)
+# this has been superseded by tt5... see below
+#     st_contains
+# tracts_with_towns =  st_join(pa_tracts %>% select(c('lat', 'lon','latlon', 'tracts')),
+#                              pa_places %>% select(c('lat', 'lon','latlon', 'towns')),
+#                              join=st_intersects
+# )
+### write out for input into the app.
+#save(tracts_with_towns, file='tracts_with_towns.Rd')
+
 #### vastly faster computation than copilot's join.
 # plot(tracts_with_towns$lat.x, tracts_with_towns$lat.y)
 # plot(tracts_with_towns$lon.x, tracts_with_towns$lon.y)
 #### OK.  close, NOT exact.  No wonder copilot code broke.
 
-### write out for input into the app.
-save(tracts_with_towns, file='tracts_with_towns.Rd')
 
+
+
+#https://github.com/r-spatial/sf/issues/578
+require(tidytable)
+require(tidyfast)
+require(purrr)
+
+# st_intersects_most <- function(x, y){
+#   ints <- st_intersects(x,y)
+#
+#   tibble(
+#     ROW_ID = imap(ints, ~rep(.y, times = length(.x))) %>% flatten_chr(),
+#     INTERSECT_DF = flatten_int(ints) %>% map(~y[.x,] %>% st_drop_geometry), # note: see the reprex for st_drop_geometry's definition
+#     INTERSECT_AREA = st_intersection(x,y) %>% st_area %>% map_dbl(1)
+#   ) %>%
+#     unnest %>%
+#     mutate(geometry = st_geometry(x[ROW_ID,])) %>%
+#     st_as_sf
+# }
+# pa_intersects_most = st_intersects_most(pa_tracts, pa_places)
+# Error: Can't coerce from an integer to a string.
+# Called from: flatten_chr(.)
+
+tt1=st_join(pa_tracts,
+pa_places ,
+join=st_contains
+)
+names(tt1)
+dim(tt1)
+dim(tracts_with_towns)
+tt1[tt1$towns=="Murrysville", ]
+head(tt1)
+head(tt1[c('tracts', 'towns')])
+table(is.na(tt1$towns))
+tt2 = tt1[!is.na(tt1$towns) ,]
+dim(tt2)
+View(tt2[c('tracts', 'towns')])
+names(tt1)
+View(tt2[c('tracts', 'towns','COUNTYFP')])
+head(tt2)
+countymap
+tt3 = tt2[tt2$COUNTYFP %in% countymap$COUNTYFP, ]
+dim(tt3)
+tt3$county = countymap$county[match(tt3$COUNTYFP, countymap$COUNTYFP)]
+table (tt3$county)
+grep('Phila',tt3$towns)
+grep('Pitt',tt3$towns)   ### only 2 hits. not good.
+
+tt4=st_join(pa_places ,pa_tracts,
+            join=st_contains
+)
+names(tt4)
+dim(tt4)
+grep('Pitts',tt4$towns)  #  89 hits
+tt5 = tt4[tt4$COUNTYFP %in% countymap$COUNTYFP, ]
+dim(tt5)   ###  156
+tt5$county = countymap$county[match(tt5$COUNTYFP, countymap$COUNTYFP)]
+table (tt5$county)
+head(tt5)
+### includes no tracts without towns
+#### sourced in the app.
+save(tt5, file='tracts_with_towns.Rd')
 
 
 

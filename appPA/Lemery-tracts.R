@@ -104,6 +104,7 @@ tractsLemery = rbind(tractsLemery, tractsLemeryPgh)
 setcompare(tractsLemery$tracts, tt6.sw$GEOID.x)  ### 360 in both
 # both x_not_y y_not_x
 # 360      30     323
-# for the 30, we will not have geometry.
+# for the 30, we will not have geometry.  So drop them.
+tractsLemery = tractsLemery[tractsLemery$tracts %in% tt6.sw$GEOID.x , ]
 setcompare(tractsLemeryPgh$tracts, tt6.sw$GEOID.x)  ### 108 in both
 
