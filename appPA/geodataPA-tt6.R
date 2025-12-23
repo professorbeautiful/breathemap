@@ -123,9 +123,9 @@ dim(tt6.sw)  #683!
 tracts_with_towns = tt6.sw
 save(tracts_with_towns, file='tracts_with_towns.Rd')
 
-tt6.sw$GEOID.x[ tt6.sw$NAME.y=='Murrysville']
+tt6.sw$GEOID.x[ which(tt6.sw$NAME.y=='Murrysville')]
 
-tt6.sw$GEOID.x[ tt6.sw$NAME.y=='Brownsville']
+tt6.sw$GEOID.x[ which(tt6.sw$NAME.y=='Brownsville')]
 
 leaflet::leaflet() %>% addTiles() %>%
   addPolygons(
@@ -140,42 +140,11 @@ which(PAtowndata$GEOID=='42003271600')
 ### So no data for this empty tract along the ohio.
 
 # ## RD code correction... copilot doesn't know about the .x .y copies maintained.
-#
-# sort(names(tracts_with_towns))
-#
-# ### sf:::select.sf()  keeps the field geometry apparently.
-# tracts_with_towns.x = tracts_with_towns %>% select(ends_with(".x"))
-# tracts_with_towns.x = tracts_with_towns.x [order(tracts_with_towns.x$NAMELSAD.x), ]
-# dim(tracts_with_towns.x)
-# head(tracts_with_towns.x)
-# #names(tracts_with_towns.x) = gsub(".x$", '', names(tracts_with_towns.x))
-#
-# tracts_with_towns.y = tracts_with_towns %>% select(ends_with(".y"))
-# tracts_with_towns.y = tracts_with_towns.y [order(tracts_with_towns.y$NAMELSAD.y), ]
-# dim(tracts_with_towns.y)
-# #names(tracts_with_towns.y) = gsub(".y$", '', names(tracts_with_towns.y))
-#
-# head(tracts_with_towns[c("GEOID.x", "GEOID.y" )])### no match: must sort.
-#
-#
-# ### to be continued..
-#
-#
-#
-# # Select mapping of tract GEOID to town NAME
-# mapping <- tracts_with_towns %>%
-#   select(TRACT_GEOID = GEOID, TOWN_NAME = NAME) %>%
-#   distinct()
-#
-# # View mapping
-# print(mapping)
-#
-# # Notes:
-# #
-# #   TRACT_GEOID is the census tract identifier.
-# # TOWN_NAME comes from the places layer (cities/boroughs/towns).
-# # The result assigns each census tract the town it overlaps with most.
-# # This operation uses sf for spatial processing. In practice, some tracts may cross town boundaries, so rules may differ by project (e.g., only assign where overlap is significant).
-# # You can export mapping to CSV:
-# #   R
-# write.csv(mapping, "pa_tract_to_town_mapping.csv", row.names = FALSE)
+
+#####  add Lemery information
+tt6.sw.l = tt6.sw
+tt6.sw.l$lem.towns = tractsLemery$towns[
+  match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
+tt6.sw.l$lem.tracts = tractsLemery$tracts[
+  match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
+tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)
