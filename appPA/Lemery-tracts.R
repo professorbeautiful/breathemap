@@ -11,7 +11,10 @@ tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
 )
 ### 279, but some duplicate tracts. No duplicated names.  See below.
 
-tractsLemery$towns[which(tractsLemery$tracts=='2620')] =
+# FAIL  grep(v=T,'Spring ', tractsLemery$towns)
+tractsLemery[343,]  #cheating...
+tractsLemery[343, 'towns']  ### you can print it but nothing else. "Spring Hill \x96 City View"
+tractsLemery[343, 'towns']  =
 'Spring Hill City View'  ## a stray character \x96
 
 match(  "see City of Pittsburgh under Local Census Tract Numbers",
