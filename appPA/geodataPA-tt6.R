@@ -183,3 +183,8 @@ tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)
 
 #### Time for sensible var names
 tt6.sw.l$towns.tt6 = tt6.sw.l$towns  ### to safekeeping.
+table( is.na(tt6.sw.l$towns.tt6))    #140 missing names, so..
+tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
+  tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
+table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
+
