@@ -1,5 +1,6 @@
 library(shiny)
 State = 'PA'
+#State = 'MA'
 wd = getwd()
 appname = paste0('app', State)
 if( ! (basename(wd) == appname) ){
