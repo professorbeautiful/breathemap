@@ -23,6 +23,7 @@ function(input, output, session) {
   #   })
   #needs Town, lat, lon
 
+  # This is ok, because only used for centering map at the start.
   medianLON= median(as.numeric(pa_tracts$INTPTLON[
     pa_tracts$tracts %in% PAtown$NAMELSAD]))
   medianLAT= median(as.numeric(pa_tracts$INTPTLAT[

@@ -19,7 +19,8 @@ library(shinyDebuggingPanel)
 # tracts_with_towns = tt5  ## 156 entries
 
 load('tracts_with_towns.Rd')   ### tt6.sw.l southwest PA with Lemery
-load('PAtown.Rd')
+load('PAtown.Rd')   ## 26 fields only
+load('PAtowndata.Rd' )
 
 st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
