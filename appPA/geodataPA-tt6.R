@@ -145,7 +145,7 @@ which(PAtowndata$GEOID=='42003271600')
 
 #####  add Lemery information
 tt6.sw.l = tt6.sw
-dim(tt6.sw)
+dim(tt6.sw.l)
 
 tt6.sw.l$lem.towns = tractsLemery$towns[
   match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
@@ -162,24 +162,34 @@ table(is.na(tt6.sw.l$NAME.y), is.na(tt6.sw.l$lem.towns) )
 #       FALSE TRUE
 # FALSE   283  260    543
 # TRUE     77   63    140
-##   so of the 140 that tt6 did not have town names for, 77 are provided by Lemery!
+##   so of the 140 that tt6 did not have town names for, 77 are provided by Lemery
+## 283 both are not missing!
+
+names_are_Pittsburgh = which(    # 111
+  #(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns) &
+      (tt6.sw.l$NAME.y == 'Pittsburgh') )
 
 table(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns, exclude=NULL)
 # FALSE  TRUE  <NA>
 #   145   138   400
-## what are the differences?
+names_are_same = which(
+  (tt6.sw.l$NAME.y == tt6.sw.l$lem.towns) &
+    #  (tt6.sw.l$NAME.y!='Pittsburgh') &
+    (!is.na(tt6.sw.l$NAME.y) ) )
+## what are the differences? when not Pittsburgh, &  not NA.
 names_are_different = which(
   (tt6.sw.l$NAME.y != tt6.sw.l$lem.towns) &
- (tt6.sw.l$NAME.y!='Pittsburgh') &
+ #  (tt6.sw.l$NAME.y!='Pittsburgh') &  # leave Pittsburgh out of this part.
  (!is.na(tt6.sw.l$NAME.y) ) )
-cbind(tt6.sw.l$NAME.y, tt6.sw.l$lem.towns) [names_are_different, ]
-tt6.sw.l.different_names =
-  tt6.sw.l.comparison [names_are_different, ]
-dim(tt6.sw.l.different_names)   ## 37
+theDifferentNames = cbind(tt6.sw.l$NAME.y, tt6.sw.l$lem.towns
+                          ) [names_are_different, ]
+dim(theDifferentNames)   ## 37,  plus 43 say 'Pittsburgh'
 # spot check looks ok, e.g. West Deer Twp contains  Curtisville  on google maps.
+#  and "Bakerstown"   "Richland Twp"   are the same.
 
-tt6.sw.l$names_are_different = names_are_different
-tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)
+tt6.sw.l$names_are_different = TRUE
+tt6.sw.l$names_are_different[ - names_are_same] = FALSE
+tt6.sw.l$lem.nb = (1:nrow(tt6.sw.l)) %in% grep("(Pittsburgh)", tt6.sw.l$lem.towns)
 
 #### Time for sensible var names
 tt6.sw.l$towns.tt6 = tt6.sw.l$towns  ### to safekeeping.
@@ -198,9 +208,12 @@ moveColumn = function(d, col, wh=1) {
 }
 tt6.sw.l = moveColumn(
   tt6.sw.l,
-  c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'GEOID.y', 'tracts', 'lem.tracts', 'GEOID.x')
+  c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', 'GEOID.x')
   )
 head(tt6.sw.l[1:8])
+table( ! is.na(tt6.sw.l$towns))  ###yes, 63 missing town names.
 save(tt6.sw.l, file='tt6.sw.l.Rd')
+tracts_with_towns =  tt6.sw.l
+save(tracts_with_towns, file='tracts_with_towns.Rd')
 
 
