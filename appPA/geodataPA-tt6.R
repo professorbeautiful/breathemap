@@ -184,6 +184,7 @@ tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)
 #### Time for sensible var names
 tt6.sw.l$towns.tt6 = tt6.sw.l$towns  ### to safekeeping.
 table( is.na(tt6.sw.l$towns.tt6))    #140 missing names, so..
+### use lem.towns to replace the missing.
 tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
   tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
 table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
@@ -195,3 +196,10 @@ moveColumn = function(d, col, wh=1) {
       d [names(d) [ c(col, (1:length(d))[-col]  ) ] ]
   )
 }
+tt6.sw.l = moveColumn(
+  tt6.sw.l,
+  c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'GEOID.y', 'tracts', 'lem.tracts', 'GEOID.x')
+  )
+head(tt6.sw.l[1:8])
+
+
