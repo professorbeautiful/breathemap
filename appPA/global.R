@@ -15,12 +15,12 @@ library(shinyDebuggingPanel)
 # loads data required for app
 
 # source('geodataPA-tt5.R', local=TRUE)
-# load('tt5.Rd')
+# load('tt6.Rd')
 # tracts_with_towns = tt5  ## 156 entries
 
-load('tracts_with_towns.Rd')   ### tt6.sw southwest PA
-
+load('tracts_with_towns.Rd')   ### tt6.sw.l southwest PA with Lemery
 load('PAtown.Rd')
+
 st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
 # Warning: sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
