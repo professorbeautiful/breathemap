@@ -188,3 +188,10 @@ tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
   tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
 table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
 
+moveColumn = function(d, col, wh=1) {
+  if(is.character(col))
+    col = match(col, names(d))
+  return(
+      d [names(d) [ c(col, (1:length(d))[-col]  ) ] ]
+  )
+}
