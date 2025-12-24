@@ -143,8 +143,34 @@ which(PAtowndata$GEOID=='42003271600')
 
 #####  add Lemery information
 tt6.sw.l = tt6.sw
+dim(tt6.sw)
+
 tt6.sw.l$lem.towns = tractsLemery$towns[
   match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
+
 tt6.sw.l$lem.tracts = tractsLemery$tracts[
   match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
+tt6.sw.l.comparison = as.data.frame(tt6.sw.l[c('lem.towns', 'NAME.y', 'GEOID.x')])
+tt6.sw.l.comparison = tt6.sw.l.comparison[ !is.na(tt6.sw.l.comparison$lem.towns ), ]
+head(tt6.sw.l.comparison)
+table(is.na(tt6.sw$NAME.y))
+# FALSE  TRUE
+# 543   140
+table(is.na(tt6.sw.l$NAME.y), is.na(tt6.sw.l$lem.towns) )
+#       FALSE TRUE
+# FALSE   283  260    543
+# TRUE     77   63    140
+##   so of the 140 that tt6 did not have town names for, 77 are provided by Lemery!
+
+table(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns, exclude=NULL)
+# FALSE  TRUE  <NA>
+#   145   138   400
+## what are the differences?
+tt6.sw.l.different_names =
+  tt6.sw.l.comparison [(tt6.sw.l.comparison$NAME.y != tt6.sw.l.comparison$lem.towns)
+                       & tt6.sw.l.comparison$NAME.y!='Pittsburgh'
+                       & !is.na(tt6.sw.l.comparison$NAME.y), ]
+dim(tt6.sw.l.different_names)   ## 37
+# spot check looks ok, e.g. West Deer Twp contains  Curtisville  on google maps.
+
 tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)

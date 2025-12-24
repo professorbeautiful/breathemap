@@ -4,13 +4,22 @@ library(leaflet)
 library(DT)
 library(ggplot2)
 library(data.table)
+library(tigris)
+library(sf)
+library(dplyr)
+
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 library(shinyDebuggingPanel)
 
 # loads data required for app
 
-source('geodataPA.R', local=TRUE)
+# source('geodataPA-tt5.R', local=TRUE)
+# load('tt5.Rd')
+# tracts_with_towns = tt5  ## 156 entries
+
+load('tracts_with_towns.Rd')   ### tt6.sw southwest PA
+
 load('PAtown.Rd')
 st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
@@ -25,6 +34,7 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Krewski Estimate') ])
 load('tracts_with_towns.Rd')  ### should be in the folder appPA
+
 tracts = PAtowndata$NAMELSAD
 towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
 townOrder = order(towns, na.last=TRUE)
