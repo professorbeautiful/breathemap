@@ -201,5 +201,6 @@ tt6.sw.l = moveColumn(
   c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'GEOID.y', 'tracts', 'lem.tracts', 'GEOID.x')
   )
 head(tt6.sw.l[1:8])
+save(tt6.sw.l, file='tt6.sw.l.Rd')
 
 
