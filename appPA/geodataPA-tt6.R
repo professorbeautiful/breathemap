@@ -112,8 +112,10 @@ dim(tt6)
 names(tt6)
 tt6.allPA = tt6
 
-###   GEOID.x is for tract (long form, 42051261200), GEOID.y is for town.
-# NAME.y is the town name. NAME.x is the 4-number tract... too small!
+###   GEOID.x is for tract (long form, 42051261200),
+#     GEOID.y is for town.
+#     NAME.y is the town name.
+#     NAME.x is the 4-number tract... too small!
 ### You can only have one geometry.    it must be tracts.
 
 # For tract name, use paste(COUNTYFP, GEOID.x/100
