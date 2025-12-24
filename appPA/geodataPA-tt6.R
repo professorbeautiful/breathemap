@@ -168,11 +168,18 @@ table(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns, exclude=NULL)
 # FALSE  TRUE  <NA>
 #   145   138   400
 ## what are the differences?
+names_are_different = which(
+  (tt6.sw.l$NAME.y != tt6.sw.l$lem.towns) &
+ (tt6.sw.l$NAME.y!='Pittsburgh') &
+ (!is.na(tt6.sw.l$NAME.y) ) )
+cbind(tt6.sw.l$NAME.y, tt6.sw.l$lem.towns) [names_are_different, ]
 tt6.sw.l.different_names =
-  tt6.sw.l.comparison [(tt6.sw.l.comparison$NAME.y != tt6.sw.l.comparison$lem.towns)
-                       & tt6.sw.l.comparison$NAME.y!='Pittsburgh'
-                       & !is.na(tt6.sw.l.comparison$NAME.y), ]
+  tt6.sw.l.comparison [names_are_different, ]
 dim(tt6.sw.l.different_names)   ## 37
 # spot check looks ok, e.g. West Deer Twp contains  Curtisville  on google maps.
 
+tt6.sw.l$names_are_different = names_are_different
 tt6.sw.l$lem.nb = grep("(Pittsburgh)", tt6.sw.l$lem.towns)
+
+#### Time for sensible var names
+tt6.sw.l$towns.tt6 = tt6.sw.l$towns  ### to safekeeping.
