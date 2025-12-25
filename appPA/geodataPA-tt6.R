@@ -16,9 +16,10 @@ names(pa_tracts)
 View(pa_tracts)
 pa_tracts$tracts = pa_tracts$GEOID
 pa_tracts$tracts.short = pa_tracts$NAME
+pa_tracts$county.tracts = pa_tracts$COUNTYFP
 pa_tracts$lat.tracts = pa_tracts$INTPTLAT
 pa_tracts$lon.tracts = pa_tracts$INTPTLON
-pa_tracts.names = c('tracts', 'tracts.short', 'lat.tracts', 'lon.tracts')
+pa_tracts.names = c('tracts', 'tracts.short', 'lat.tracts', 'lon.tracts', 'county.tracts')
 pa_tracts = moveColumns(pa_tracts, pa_tracts.names)
 pa_tracts = pa_tracts %>% dplyr::select(all_of(pa_tracts.names))
     #  "all_of" suggested in warning if omitted.
@@ -27,36 +28,89 @@ pa_tracts = pa_tracts %>% dplyr::select(all_of(pa_tracts.names))
 pa_places <- tigris::places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa_places)
 names(pa_places)  #Only 1888 rows
-tail(sort(pa_places$NAMELSAD))   ### these are town names
-pa_tracts$tracts = pa_tracts$NAMELSAD
-pa_places$towns = pa_places$NAMELSAD
-##### so do NOT merge by them.
-pa_places$towns = pa_places$NAME  ### better;  leave out 'borough' etc
+View(pa_places)
+pa_places$towns = pa_places$NAME
+pa_places$places = pa_places$NAME
+pa_places$lat.places = pa_places$INTPTLAT
+pa_places$lon.places = pa_places$INTPTLON
+### no county info.
+pa_places.names = c('places', 'towns', 'lat.places', 'lon.places')
+pa_places = moveColumns(pa_places, pa_places.names)
+pa_places = pa_places %>% dplyr::select(all_of(pa_places.names))
 
-tail(sort(pa_tracts$GEOID))   ### "42133024002"
-tail(sort(pa_places$GEOID))   ### "4287320"dim
-pa_tracts$lat = pa_tracts$INTPTLAT
-pa_tracts$lon = pa_tracts$INTPTLON
-pa_places$lat = pa_places$INTPTLAT
-pa_places$lon = pa_places$INTPTLON
+pa_tracts_sw = pa_tracts[pa_tracts$county.tracts %in% countymap$COUNTYFP, ]  # 752
 
-pa_tracts$latlon = pa_tracts_latlon = apply(X = cbind(pa_tracts$INTPTLAT,pa_tracts$INTPTLON),
-                                            MARGIN = 1, paste, collapse=',')
-pa_places$latlon = pa_places_latlon = apply(X = cbind(pa_places$INTPTLAT,pa_places$INTPTLON),
-                                            MARGIN = 1, paste, collapse=',')
-head(sort(pa_tracts_latlon))
-head(sort(pa_places_latlon))
-intersect(y=pa_tracts_latlon , pa_places_latlon)  ### only 256 the same.
-intersect(y=pa_tracts$latlon , pa_places$latlon)  ### only 256 the same.
+tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) # 1942
+dim(tt1.sw) # many more places than tracts!  but map is many to many.
+View(tt1.sw)
+paste0(collapse=', ', names(tt1.sw))
+tt1.sw.names = c("tracts", "tracts.short", "lat.tracts", "lon.tracts", "county.tracts", "places", "towns", "lat.places", "lon.places", "geometry")
+tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short", "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
+tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
+tract_counts = table(tt1.sw$tracts)
+tract_counts_table = table(tract_counts)
+sum(tract_counts_table)  #752
+sum(tract_counts_table * as.numeric(names(tract_counts_table)))  #1942
 
-# this has been superseded by tt5... see below
+tt1.sw.save = tt1.sw
+tt1.sw.save$tract_count = tract_counts[match(tt1.sw.save$tracts, names(tract_counts))]
+tt1.sw.save %>% subset(tract_count ==13) %>% select(places)
+(tt1.sw.save %>% subset(tract_count ==13) %>% select(tracts)  ) [1,1]
+#wow  13 places for 42125784000
+tt1.sw.save.1.1 = tt1.sw.save[tt1.sw.save$tract_count == 1 , ]
+
+place_counts = table(tt1.sw.save$places)
+place_counts_table = table(place_counts)
+sum(place_counts_table)  #398
+sum(place_counts_table * as.numeric(names(place_counts_table)))  #1911
+tt1.sw.save$place_count = place_counts[match(tt1.sw.save$places, names(place_counts))]
+(tt1.sw.save %>% subset(place_count == max(as.numeric(names(place_counts_table)))) %>% select(places)
+  )   ### 180 Pittsburgh.  correct.
+
+#### since our feature data is based on tracts, we need the tract geometry.
+### When there are multiple towns for a tract, pick the first one, or else paste.
+### When there are multiple tracts for a  town... not our problem.
+table(tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID) # 1797
+table(unique(tt1.sw.save$tracts) %in% PAtowndata.lukedata$GEOID) # we have data for 683 tracts
+table(PAtowndata.lukedata$GEOID %in% unique(tt1.sw.save$tracts)) # also 683.
+## therefore, restrict tt1.sw to the 683 tracts.
+tt1.sw = tt1.sw.save[tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID, ]
+dim(tt1.sw)   ### 1797
+place_counts = table(tt1.sw$places, exclude=NULL)  ### 25 missing places
+place_counts_table = table(place_counts)
+sum(place_counts_table)  #391
+sum(place_counts_table * as.numeric(names(place_counts_table)))  #1772 + 25
+tt1.sw$place_count = place_counts[match(tt1.sw$places, names(place_counts))]
+# don't worry about tract count. tt1.sw$tract_count = tract_counts[match(tt1.sw$tracts, names(tract_counts))]
+tt1.sw %>% subset(tract_count ==13 ) %>% select(places)  ### still 13
+(tt1.sw %>% subset(tract_count ==13) %>% select(tracts)  ) [1,1] #42125784000
+# Greensburg has 9 tracts.  Check the geom.
+tt1.sw[1, ]
+st_area(print(tt1.sw[1, 'geometry']))  ### 1013591
+st_area(print(pa_places [ pa_places$places=='Greensburg', 'geometry'])) #10491674
+# so the area of Greensburg is bigger...  should the tracts add? This is about 1/10.
+#  tracts could intersect multiple places, so we don't know for sure.
+sum(st_area(print(tt1.sw[tt1.sw$places=='Greensburg', 'geometry']))  ### 1013591
+) # 74843515.   No the tracts must overlap other places.  Probably ok.
+
+tt_intersections = st_intersects(pa_tracts_sw$geometry, pa_tracts_sw$geometry)
+View(as.data.frame(tt_intersections))
+# (tt_intersections)   list 1752 × 7521 (S3: sgbp, list List of length 752
+
+tt1.sw.reverse = st_join(pa_places, pa_tracts_sw, left=TRUE) # 3401
+tt1.sw.reverse.tt = tt1.sw.reverse[c('places', 'tracts')]
+tt1.sw.tt = tt1.sw[c('places', 'tracts')]
+#do they at least agree on the 1 to 1 cases?  Probably not.
+
+
+
 #     st_contains
-tt1 =  st_join(pa_tracts[ , c('lat', 'lon','latlon', 'tracts')],
-                             pa_places[ , c('lat', 'lon','latlon', 'towns')],
-                              join=st_intersects
- )
+# tt1 =  st_join(pa_tracts[ , c('lat', 'lon','latlon', 'tracts')],
+#                              pa_places[ , c('lat', 'lon','latlon', 'towns')],
+#                               join=st_intersects
+#  )
+### this was garbage.  Here' where phildelphia jumped in.
 ### write out for input into the app.
-#save(tracts_with_towns, file='tracts_with_towns.Rd')
 
 #### vastly faster computation than copilot's join.
 # plot(tracts_with_towns$lat.x, tracts_with_towns$lat.y)
@@ -64,25 +118,6 @@ tt1 =  st_join(pa_tracts[ , c('lat', 'lon','latlon', 'tracts')],
 #### OK.  close, NOT exact.  No wonder copilot code broke.
 
 
-
-
-#https://github.com/r-spatial/sf/issues/578
-require(tidytable)
-require(tidyfast)
-require(purrr)
-
-# st_intersects_most <- function(x, y){
-#   ints <- st_intersects(x,y)
-#
-#   tibble(
-#     ROW_ID = imap(ints, ~rep(.y, times = length(.x))) %>% flatten_chr(),
-#     INTERSECT_DF = flatten_int(ints) %>% map(~y[.x,] %>% st_drop_geometry), # note: see the reprex for st_drop_geometry's definition
-#     INTERSECT_AREA = st_intersection(x,y) %>% st_area %>% map_dbl(1)
-#   ) %>%
-#     unnest %>%
-#     mutate(geometry = st_geometry(x[ROW_ID,])) %>%
-#     st_as_sf
-# }
 # pa_intersects_most = st_intersects_most(pa_tracts, pa_places)
 # Error: Can't coerce from an integer to a string.
 # Called from: flatten_chr(.)
@@ -114,11 +149,12 @@ names(PAtown)
 # DEAD END.  crap from copilot.  SEE ABOVE
 # Spatial join: assign each tract to the town it intersects most with
 
-## this takes several minutes.
-tt6 <- tracts_with_towns <- st_join(pa_tracts, pa_places, join = st_intersects, largest = TRUE)
-dim(tt6)
-names(tt6)
-tt6.allPA = tt6
+## this takes several minutes. NOT NEEDED
+
+# tt6.sw <-  st_join(pa_tracts_sw, pa_places_sw, join = st_intersects, largest = TRUE)
+# dim(tt6)
+# names(tt6)
+#tt6.allPA = tt6
 
 ###   GEOID.x is for tract (long form, 42051261200),
 #     GEOID.y is for town.
@@ -139,8 +175,8 @@ tt6.sw$GEOID.x[ which(tt6.sw$NAME.y=='Brownsville')]
 
 leaflet::leaflet() %>% addTiles() %>%
   addPolygons(
-              data=tt6.sw,
-              label = ~NAME.y )
+              data=tt1.sw,
+              label = ~tracts )
 
 tt6$NAME.y[ tt6$GEOID.x=='42003271600']   ###  Pittsburgh
 #but...
@@ -207,7 +243,7 @@ tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
   tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
 table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
 
-moveColumn = function(d, col, wh=1) {
+moveColumns = function(d, col, wh=1) {
   if(is.character(col))
     col = match(col, names(d))
   return(
