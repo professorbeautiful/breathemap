@@ -13,6 +13,16 @@ options(tigris_use_cache = TRUE)
 pa_tracts <- tigris::tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
 dim(pa_tracts)    # 3446 rows
 names(pa_tracts)
+View(pa_tracts)
+pa_tracts$tracts = pa_tracts$GEOID
+pa_tracts$tracts.short = pa_tracts$NAME
+pa_tracts$lat.tracts = pa_tracts$INTPTLAT
+pa_tracts$lon.tracts = pa_tracts$INTPTLON
+pa_tracts.names = c('tracts', 'tracts.short', 'lat.tracts', 'lon.tracts')
+pa_tracts = moveColumns(pa_tracts, pa_tracts.names)
+pa_tracts = pa_tracts %>% dplyr::select(all_of(pa_tracts.names))
+    #  "all_of" suggested in warning if omitted.
+
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
 pa_places <- tigris::places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa_places)
