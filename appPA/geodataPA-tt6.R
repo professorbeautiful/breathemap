@@ -90,14 +90,18 @@ tt1.sw$place_count = place_counts[match(tt1.sw$places, names(place_counts))]
 # don't worry about tract count. tt1.sw$tract_count = tract_counts[match(tt1.sw$tracts, names(tract_counts))]
 tt1.sw %>% subset(tract_count ==13 ) %>% select(places)  ### still 13
 (tt1.sw %>% subset(tract_count ==13) %>% select(tracts)  ) [1,1] #42125784000
-# Greensburg has 9 tracts.  Check the geom.
+
+# Check geometry:  Greensburg has 9 tracts.  Check the geom places vs tracts
 tt1.sw[1, ]
 st_area(print(tt1.sw[1, 'geometry']))  ### 1013591
 st_area(print(pa_places [ pa_places$places=='Greensburg', 'geometry'])) #10491674
 # so the area of Greensburg is bigger...  should the tracts add? This is about 1/10.
+1013591/10491674
 #  tracts could intersect multiple places, so we don't know for sure.
 sum(st_area(print(tt1.sw[tt1.sw$places=='Greensburg', 'geometry']))  ### 1013591
 ) # 74843515.   No the tracts must overlap other places.  Probably ok.
+
+10491674/74843515  ## 14% all Greensburg still smaller than the union of all the tracts.
 
 tt_intersections = st_intersects(pa_tracts_sw$geometry, pa_tracts_sw$geometry)
 View(as.data.frame(tt_intersections))
