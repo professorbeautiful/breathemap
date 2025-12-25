@@ -25,9 +25,9 @@ function(input, output, session) {
 
   # This is ok, because only used for centering map at the start.
   medianLON= median(as.numeric(pa_tracts$INTPTLON[
-    pa_tracts$tracts %in% PAtown$NAMELSAD]))
+    pa_tracts$NAMELSAD %in% PAtown$NAMELSAD]))
   medianLAT= median(as.numeric(pa_tracts$INTPTLAT[
-    pa_tracts$tracts %in% PAtown$NAMELSAD]))
+    pa_tracts$NAMELSAD %in% PAtown$NAMELSAD]))
 
 
  # clicking updates selectInput
