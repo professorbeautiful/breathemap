@@ -61,18 +61,21 @@ fluidPage({
                 fluidRow(
                   column(7,
                          fluidRow(
-                           column(8,
+                           column(7,
                                   div(style='color:yellow; background-color:green',
                                       selectInput("areaSelectorId", "Select a town or area by clicking it or typing it in here: ",
                                                   PAtownnames,
                                                   selected = PAtownnames[1]))),
-                           column(4, div(style='color:yellow; background-color:green',
-                                radioButtons("townToggleId", "Show by:",
-                                             choiceNames=c('towns', 'tracts'),
-                                             choiceValues=c('townName', 'towntractName'),
-                                             selected='towns', inline=TRUE)
-                                ))),
-                  leafletOutput("map", height = 450), br(),
+                           column(5,
+                                  div(style='color:yellow; background-color:green',
+                                      radioButtons("townToggleId", "Show by:",
+                                                   choiceNames=c('towns', 'tracts'),
+                                                   choiceValues=c('townName', 'towntractName'),
+                                                   selected='towns', inline=TRUE)
+                                  ),
+                                  checkboxInput('IdNbhds', 'Pgh nbhds?'))
+                         ),
+                         leafletOutput("map", height = 450), br(),
                           fluidRow(
                             column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
                             column(width = 2, offset = 0.5, downloadButton("downloadData", "Export Data"), br(), br()))),
