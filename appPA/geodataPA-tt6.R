@@ -27,8 +27,6 @@ pa_tracts = pa_tracts %>% dplyr::select(all_of(pa_tracts.names))
 pa_places <- tigris::places(state = "PA", year = 2020, class = "sf")   ### '.y'
 dim(pa_places)
 names(pa_places)  #Only 1888 rows
-table(pa_places$NAMELSAD %in% pa_tracts$NAMELSAD )
-tail(sort(pa_tracts$NAMELSAD))   ### these are census tracts
 tail(sort(pa_places$NAMELSAD))   ### these are town names
 pa_tracts$tracts = pa_tracts$NAMELSAD
 pa_places$towns = pa_places$NAMELSAD
