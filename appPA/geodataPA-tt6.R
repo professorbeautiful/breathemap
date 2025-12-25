@@ -8,7 +8,13 @@ library(sf)
 library(dplyr)
 
 options(tigris_use_cache = TRUE)
-
+moveColumns = function(d, col, wh=1) {
+  if(is.character(col))
+    col = match(col, names(d))
+  return(
+      d [names(d) [ c(col, (1:length(d))[-col]  ) ] ]
+  )
+}
 # Download Pennsylvania census tracts
 pa_tracts <- tigris::tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
 dim(pa_tracts)    # 3446 rows
@@ -243,13 +249,7 @@ tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
   tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
 table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
 
-moveColumns = function(d, col, wh=1) {
-  if(is.character(col))
-    col = match(col, names(d))
-  return(
-      d [names(d) [ c(col, (1:length(d))[-col]  ) ] ]
-  )
-}
+
 tt6.sw.l = moveColumn(
   tt6.sw.l,
   c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', 'GEOID.x')
