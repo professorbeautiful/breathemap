@@ -132,25 +132,6 @@ tt1.sw.tt = tt1.sw[c('places', 'tracts')]
 # Error: Can't coerce from an integer to a string.
 # Called from: flatten_chr(.)
 
-tt4=st_join(pa_places ,pa_tracts, ### order matters!
-            join=st_contains
-)
-names(tt4)
-dim(tt4)
-grep('Pitts',tt4$towns)  #  89 hits
-tt5 = tt4[tt4$COUNTYFP %in% countymap$COUNTYFP, ]
-dim(tt5)   ###  156
-tt5$county = countymap$county[match(tt5$COUNTYFP, countymap$COUNTYFP)]
-table (tt5$county)
-head(tt5)
-### includes no tracts without towns
-#### sourced in the app.
-grep('Kane', tt5$towns)   ### tract 4211
-grep('4211', PAtown$NAME)   ### 433
-grep('4211', tt5$tracts)   ### not there.
-
-save(tt5, file='tracts_with_towns.Rd')
-
 #3139855 Nov 13 17:23 PAtown.Rd
 dim(PAtown)   ## 739
 names(PAtown)
@@ -166,102 +147,92 @@ names(PAtown)
 # names(tt6)
 #tt6.allPA = tt6
 
-###   GEOID.x is for tract (long form, 42051261200),
-#     GEOID.y is for town.
-#     NAME.y is the town name.
-#     NAME.x is the 4-number tract... too small!
-### You can only have one geometry.    it must be tracts.
-
-# For tract name, use paste(COUNTYFP, GEOID.x/100
-table(tt6$COUNTYFP)
-tt6.sw = tt6 %>% subset(GEOID.x %in% PAtown$GEOID)
-dim(tt6.sw)  #683!
-tracts_with_towns = tt6.sw
-save(tracts_with_towns, file='tracts_with_towns.Rd')
-
-tt6.sw$GEOID.x[ which(tt6.sw$NAME.y=='Murrysville')]
-
-tt6.sw$GEOID.x[ which(tt6.sw$NAME.y=='Brownsville')]
-
 leaflet::leaflet() %>% addTiles() %>%
   addPolygons(
               data=tt1.sw,
               label = ~tracts )
 
-tt6$NAME.y[ tt6$GEOID.x=='42003271600']   ###  Pittsburgh
-#but...
-tt6.sw$NAME.y[ tt6.sw$GEOID.x=='42003271600']
-which(PAtown$GEOID=='42003271600')
-which(PAtowndata$GEOID=='42003271600')
-### So no data for this empty tract along the ohio.
+PAtowndata.lukedata %>% filter(GEOID == '42003010300')  # it's there, but not in map
+pa_tracts %>% filter(tracts == '42003010300')  ## missing.
+tt1.sw %>% filter(tracts == '42003010300')  ## missing.
+tractsLemeryPgh %>% filter(tracts == '42003010300')  ## missing.
+grep('420030103', tractsLemeryPgh$tracts)  ## missing.
+### so, we have no geometry for these tracts!
 
 # ## RD code correction... copilot doesn't know about the .x .y copies maintained.
 
 #####  add Lemery information
-tt6.sw.l = tt6.sw
-dim(tt6.sw.l)
+tt1.sw.l = tt1.sw
+dim(tt1.sw.l)
 
-tt6.sw.l$lem.towns = tractsLemery$towns[
-  match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
+tt1.sw.l$lem.towns = NA
+tt1.sw.l$lem.towns = tractsLemery$towns[
+  match(tt1.sw.l$tracts, tractsLemery$tracts)]
 
-tt6.sw.l$lem.tracts = tractsLemery$tracts[
-  match(tt6.sw.l$GEOID.x, tractsLemery$tracts)]
-tt6.sw.l.comparison = as.data.frame(tt6.sw.l[c('lem.towns', 'NAME.y', 'GEOID.x')])
-tt6.sw.l.comparison = tt6.sw.l.comparison[ !is.na(tt6.sw.l.comparison$lem.towns ), ]
-head(tt6.sw.l.comparison)
-table(is.na(tt6.sw$NAME.y))
+tt1.sw.l$lem.tracts = tractsLemery$tracts[
+  match(tt1.sw.l$tracts, tractsLemery$tracts)]  ### found for 909 out of 1797
+tt1.sw.l.comparison = as.data.frame(tt1.sw.l[c('lem.towns', 'places', 'tracts')])
+tt1.sw.l.comparison = tt1.sw.l.comparison[ !is.na(tt1.sw.l.comparison$lem.towns ), ]
+head(tt1.sw.l.comparison)
+table(is.na(tt1.sw$places))
 # FALSE  TRUE
-# 543   140
-table(is.na(tt6.sw.l$NAME.y), is.na(tt6.sw.l$lem.towns) )
-#       FALSE TRUE
-# FALSE   283  260    543
-# TRUE     77   63    140
-##   so of the 140 that tt6 did not have town names for, 77 are provided by Lemery
-## 283 both are not missing!
+# 1772   25
+table(is.na(tt1.sw.l$places), is.na(tt1.sw.l$lem.towns) , dnn = c('places', 'lem.towns'))
+#          lem.towns
+# places  FALSE TRUE
+#   FALSE   878  894
+#   TRUE     10   15
+##   so of the 25 that tt1 did not have places(town names) for,
+##   10 are provided by Lemery
+##   15 both are still missing!
+cq = function(s, split=' ') strsplit(split=split, s)[[1]]
+as.data.frame(
+  tt1.sw.l[is.na(tt1.sw.l$places), ] %>%
+    select(cq('tracts places county.tracts lem.towns'))
+)   ### these are the 10 new names from Lemery
 
-names_are_Pittsburgh = which(    # 111
-  #(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns) &
-      (tt6.sw.l$NAME.y == 'Pittsburgh') )
+names_are_Pittsburgh = which(    # 162
+      (tt1.sw.l$places == 'Pittsburgh') )
 
-table(tt6.sw.l$NAME.y == tt6.sw.l$lem.towns, exclude=NULL)
+table(tt1.sw.l$places == tt1.sw.l$lem.towns, exclude=NULL)
 # FALSE  TRUE  <NA>
-#   145   138   400
+#   738   140   919
 names_are_same = which(
-  (tt6.sw.l$NAME.y == tt6.sw.l$lem.towns) &
-    #  (tt6.sw.l$NAME.y!='Pittsburgh') &
-    (!is.na(tt6.sw.l$NAME.y) ) )
+  (tt1.sw.l$NAME.y == tt1.sw.l$lem.towns) &
+    #  (tt1.sw.l$NAME.y!='Pittsburgh') &
+    (!is.na(tt1.sw.l$NAME.y) ) )
 ## what are the differences? when not Pittsburgh, &  not NA.
 names_are_different = which(
-  (tt6.sw.l$NAME.y != tt6.sw.l$lem.towns) &
- #  (tt6.sw.l$NAME.y!='Pittsburgh') &  # leave Pittsburgh out of this part.
- (!is.na(tt6.sw.l$NAME.y) ) )
-theDifferentNames = cbind(tt6.sw.l$NAME.y, tt6.sw.l$lem.towns
+  (tt1.sw.l$NAME.y != tt1.sw.l$lem.towns) &
+ #  (tt1.sw.l$NAME.y!='Pittsburgh') &  # leave Pittsburgh out of this part.
+ (!is.na(tt1.sw.l$NAME.y) ) )
+theDifferentNames = cbind(tt1.sw.l$NAME.y, tt1.sw.l$lem.towns
                           ) [names_are_different, ]
 dim(theDifferentNames)   ## 37,  plus 43 say 'Pittsburgh'
 # spot check looks ok, e.g. West Deer Twp contains  Curtisville  on google maps.
 #  and "Bakerstown"   "Richland Twp"   are the same.
 
-tt6.sw.l$names_are_different = TRUE
-tt6.sw.l$names_are_different[ - names_are_same] = FALSE
-tt6.sw.l$lem.nb = (1:nrow(tt6.sw.l)) %in% grep("(Pittsburgh)", tt6.sw.l$lem.towns)
+tt1.sw.l$names_are_different = TRUE
+tt1.sw.l$names_are_different[ - names_are_same] = FALSE
+tt1.sw.l$lem.nb = (1:nrow(tt1.sw.l)) %in% grep("(Pittsburgh)", tt1.sw.l$lem.towns)
 
 #### Time for sensible var names
-tt6.sw.l$towns.tt6 = tt6.sw.l$towns  ### to safekeeping.
-table( is.na(tt6.sw.l$towns.tt6))    #140 missing names, so..
+tt1.sw.l$towns.tt1 = tt1.sw.l$towns  ### to safekeeping.
+table( is.na(tt1.sw.l$towns))    #140 missing names, so..
 ### use lem.towns to replace the missing.
-tt6.sw.l$towns[ is.na(tt6.sw.l$towns.tt6) ] =
-  tt6.sw.l$lem.towns[ is.na(tt6.sw.l$towns.tt6) ]
-table( is.na(tt6.sw.l$towns))    #63 missing names, still. 10%
+tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
+  tt1.sw.l$lem.towns[ is.na(tt1.sw.l$towns.tt1) ]
+table( is.na(tt1.sw.l$towns))    #25 missing names, still
 
 
-tt6.sw.l = moveColumn(
-  tt6.sw.l,
-  c('towns', 'lem.towns', 'lem.nb', 'towns.tt6', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', 'GEOID.x')
+tt1.sw.l = moveColumn(
+  tt1.sw.l,
+  c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', 'GEOID.x')
   )
-head(tt6.sw.l[1:8])
-table( ! is.na(tt6.sw.l$towns))  ###yes, 63 missing town names.
-save(tt6.sw.l, file='tt6.sw.l.Rd')
-tracts_with_towns =  tt6.sw.l
+head(tt1.sw.l[1:8])
+table( ! is.na(tt1.sw.l$towns))  ###yes, 25 missing town names.
+save(tt1.sw.l, file='tt1.sw.l.Rd')
+tracts_with_towns =  tt1.sw.l
 save(tracts_with_towns, file='tracts_with_towns.Rd')
 
 
