@@ -45,8 +45,10 @@ pa_places = moveColumns(pa_places, pa_places.names)
 pa_places = pa_places %>% dplyr::select(all_of(pa_places.names))
 
 pa_tracts_sw = pa_tracts[pa_tracts$county.tracts %in% countymap$COUNTYFP, ]  # 752
+source("~/Google Drive/Documents/Fireman Breathe Project/appPA/fixing missing fields - towns, geom.R")
+pa_tracts_sw = pa_tracts_sw.new
 
-tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) # 1942
+tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) # 2082... was 1942
 dim(tt1.sw) # many more places than tracts!  but map is many to many.
 View(tt1.sw)
 paste0(collapse=', ', names(tt1.sw))
@@ -74,6 +76,7 @@ tt1.sw.save$place_count = place_counts[match(tt1.sw.save$places, names(place_cou
   )   ### 180 Pittsburgh.  correct.
 
 #### since our feature data is based on tracts, we need the tract geometry.
+
 ### When there are multiple towns for a tract, pick the first one, or else paste.
 ### When there are multiple tracts for a  town... not our problem.
 table(tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID) # 1797
