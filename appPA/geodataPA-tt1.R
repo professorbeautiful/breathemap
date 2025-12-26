@@ -180,11 +180,11 @@ tt1.sw.l.comparison = tt1.sw.l.comparison[ !is.na(tt1.sw.l.comparison$lem.towns 
 head(tt1.sw.l.comparison)
 table(is.na(tt1.sw$places))
 # FALSE  TRUE
-# 1772   25
+# 1912   25
 table(is.na(tt1.sw.l$places), is.na(tt1.sw.l$lem.towns) , dnn = c('places', 'lem.towns'))
 #          lem.towns
 # places  FALSE TRUE
-#   FALSE   878  894
+#   FALSE   878  1034
 #   TRUE     10   15
 ##   so of the 25 that tt1 did not have places(town names) for,
 ##   10 are provided by Lemery
@@ -200,7 +200,7 @@ names_are_Pittsburgh = which(    # 162
 
 table(tt1.sw.l$places == tt1.sw.l$lem.towns, exclude=NULL)
 # FALSE  TRUE  <NA>
-#   738   140   919
+#   738   140   1059
 names_are_same = which(
   (tt1.sw.l$NAME.y == tt1.sw.l$lem.towns) &
     #  (tt1.sw.l$NAME.y!='Pittsburgh') &
@@ -222,11 +222,12 @@ tt1.sw.l$lem.nb = (1:nrow(tt1.sw.l)) %in% grep("(Pittsburgh)", tt1.sw.l$lem.town
 
 #### Time for sensible var names
 tt1.sw.l$towns.tt1 = tt1.sw.l$towns  ### to safekeeping.
-table( is.na(tt1.sw.l$towns))    #140 missing names, so..
+table( is.na(tt1.sw.l$towns))    #25 missing names, so..
 ### use lem.towns to replace the missing.
 tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
   tt1.sw.l$lem.towns[ is.na(tt1.sw.l$towns.tt1) ]
-table( is.na(tt1.sw.l$towns))    #25 missing names, still
+table( is.na(tt1.sw.l$towns))
+#25 missing names, still. We have to copy tt1.sw.l$lem.towns to get the extra 10.
 
 
 tt1.sw.l = moveColumn(
