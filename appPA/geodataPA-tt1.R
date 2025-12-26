@@ -158,11 +158,10 @@ leaflet::leaflet() %>% addTiles() %>%
               label = ~tracts )
 
 PAtowndata.lukedata %>% filter(GEOID == '42003010300')  # it's there, but not in map
-pa_tracts %>% filter(tracts == '42003010300')  ## missing.
-tt1.sw %>% filter(tracts == '42003010300')  ## missing.
-tractsLemeryPgh %>% filter(tracts == '42003010300')  ## missing.
-grep('420030103', tractsLemeryPgh$tracts)  ## missing.
-### so, we have no geometry for these tracts!
+pa_tracts_sw %>% filter(tracts == '42003010300')  ## here it is finally!
+tt1.sw %>% filter(tracts == '42003010300')  ## here it is finally!  towns = Pittsburgh
+tractsLemeryPgh %>% filter(tracts == '42003010300')  ## not here though. that's ok.
+###
 
 # ## RD code correction... copilot doesn't know about the .x .y copies maintained.
 
