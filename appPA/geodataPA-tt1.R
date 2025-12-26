@@ -52,43 +52,45 @@ tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) # 2082... was 1942
 dim(tt1.sw) # many more places than tracts!  but map is many to many.
 View(tt1.sw)
 paste0(collapse=', ', names(tt1.sw))
-tt1.sw.names = c("tracts", "tracts.short", "lat.tracts", "lon.tracts", "county.tracts", "places", "towns", "lat.places", "lon.places", "geometry")
-tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short", "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
+tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
+                 "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
 tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
 tract_counts = table(tt1.sw$tracts)
 tract_counts_table = table(tract_counts)
-sum(tract_counts_table)  #752
-sum(tract_counts_table * as.numeric(names(tract_counts_table)))  #1942
+sum(tract_counts_table)  #808, was 752
+sum(tract_counts_table * as.numeric(names(tract_counts_table)))  #2082, was 1942
 
 tt1.sw.save = tt1.sw
 tt1.sw.save$tract_count = tract_counts[match(tt1.sw.save$tracts, names(tract_counts))]
-tt1.sw.save %>% subset(tract_count ==13) %>% select(places)
-(tt1.sw.save %>% subset(tract_count ==13) %>% select(tracts)  ) [1,1]
+mostPlacesForATract = max(as.numeric(names(tract_counts_table)))   #13
+tt1.sw.save %>% subset(tract_count == mostPlacesForATract) %>% select(places)
+(tt1.sw.save %>% subset(tract_count == mostPlacesForATract) %>% select(tracts)  ) [1,1]
 #wow  13 places for 42125784000
 tt1.sw.save.1.1 = tt1.sw.save[tt1.sw.save$tract_count == 1 , ]
 
 place_counts = table(tt1.sw.save$places)
 place_counts_table = table(place_counts)
 sum(place_counts_table)  #398
-sum(place_counts_table * as.numeric(names(place_counts_table)))  #1911
+sum(place_counts_table * as.numeric(names(place_counts_table)))  #2051 was 1911
 tt1.sw.save$place_count = place_counts[match(tt1.sw.save$places, names(place_counts))]
-(tt1.sw.save %>% subset(place_count == max(as.numeric(names(place_counts_table)))) %>% select(places)
-  )   ### 180 Pittsburgh.  correct.
+dim(tt1.sw.save %>% subset(place_count == max(as.numeric(names(place_counts_table)))) %>% select(places)
+  )   ### 208 rows now  Pittsburgh.  Was 180.  correct.
 
 #### since our feature data is based on tracts, we need the tract geometry.
 
 ### When there are multiple towns for a tract, pick the first one, or else paste.
 ### When there are multiple tracts for a  town... not our problem.
-table(tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID) # 1797
-table(unique(tt1.sw.save$tracts) %in% PAtowndata.lukedata$GEOID) # we have data for 683 tracts
-table(PAtowndata.lukedata$GEOID %in% unique(tt1.sw.save$tracts)) # also 683.
-## therefore, restrict tt1.sw to the 683 tracts.
+table(tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID) # 1937 was 1797
+table(unique(tt1.sw.save$tracts) %in% PAtowndata.lukedata$GEOID) # we have data for 739, was 683 tracts
+table(PAtowndata.lukedata$GEOID %in% unique(tt1.sw.save$tracts)) # also 739.
+## therefore, restrict tt1.sw to the 739 tracts.
 tt1.sw = tt1.sw.save[tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID, ]
-dim(tt1.sw)   ### 1797
-place_counts = table(tt1.sw$places, exclude=NULL)  ### 25 missing places
+dim(tt1.sw)   ### 1937
+
+place_counts = table(tt1.sw$places, exclude=NULL)  ### still 25 missing places
 place_counts_table = table(place_counts)
-sum(place_counts_table)  #391
-sum(place_counts_table * as.numeric(names(place_counts_table)))  #1772 + 25
+sum(place_counts_table)  #399
+sum(place_counts_table * as.numeric(names(place_counts_table)))  #1937, was 1772 + 25
 tt1.sw$place_count = place_counts[match(tt1.sw$places, names(place_counts))]
 # don't worry about tract count. tt1.sw$tract_count = tract_counts[match(tt1.sw$tracts, names(tract_counts))]
 tt1.sw %>% subset(tract_count ==13 ) %>% select(places)  ### still 13
