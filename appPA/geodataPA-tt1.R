@@ -7,54 +7,39 @@ library(tigris)
 library(sf)
 library(dplyr)
 
+### assuming in project folder.  This should NOT be done by the app, so that's ok.
+
 options(tigris_use_cache = TRUE)
-moveColumns = function(d, col, wh=1) {
-  if(is.character(col))
-    col = match(col, names(d))
-  return(
-      d [names(d) [ c(col, (1:length(d))[-col]  ) ] ]
-  )
-}
+source('appPA/moveColumns.R', local = T)
+
 # Download Pennsylvania census tracts
-pa_tracts <- tigris::tracts(state = "PA", year = 2020, class = "sf")   ###  '.x'
-dim(pa_tracts)    # 3446 rows
-names(pa_tracts)
-View(pa_tracts)
-pa_tracts$tracts = pa_tracts$GEOID
-pa_tracts$tracts.short = pa_tracts$NAME
-pa_tracts$county.tracts = pa_tracts$COUNTYFP
-pa_tracts$lat.tracts = pa_tracts$INTPTLAT
-pa_tracts$lon.tracts = pa_tracts$INTPTLON
-pa_tracts.names = c('tracts', 'tracts.short', 'lat.tracts', 'lon.tracts', 'county.tracts')
-pa_tracts = moveColumns(pa_tracts, pa_tracts.names)
-pa_tracts = pa_tracts %>% dplyr::select(all_of(pa_tracts.names))
-    #  "all_of" suggested in warning if omitted.
+source('appPA/get_pa_tracts_sw.R', local = T)
+# Creates pa_tracts_sw.   752 rows.  Tracts are unique.
+length(unique(pa_tracts_sw$tracts))
+
+pa_tracts_sw.pre_luke <- pa_tracts_sw
+source('appPA/addLukeTracts.R', local = T)
+# Creates pa_tracts_sw.luke_extended,  adds 56 new tracts.  Now 808.
+pa_tracts_sw <- pa_tracts_sw.luke_extended
 
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
-pa_places <- tigris::places(state = "PA", year = 2020, class = "sf")   ### '.y'
-dim(pa_places)
-names(pa_places)  #Only 1888 rows
-View(pa_places)
-pa_places$towns = pa_places$NAME
-pa_places$places = pa_places$NAME
-pa_places$lat.places = pa_places$INTPTLAT
-pa_places$lon.places = pa_places$INTPTLON
-### no county info.
-pa_places.names = c('places', 'towns', 'lat.places', 'lon.places')
-pa_places = moveColumns(pa_places, pa_places.names)
-pa_places = pa_places %>% dplyr::select(all_of(pa_places.names))
+source('appPA/get_pa_places.R', local = T)
+# Creates pa_places.
 
-pa_tracts_sw = pa_tracts[pa_tracts$county.tracts %in% countymap$COUNTYFP, ]  # 752
-source("~/Google Drive/Documents/Fireman Breathe Project/appPA/fixing missing fields - towns, geom.R")
-pa_tracts_sw = pa_tracts_sw.new
-
-tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) # 2082... was 1942
+####  st_join ####
+tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) #  1942 initially. Luke adds 140 -> 2082.
 dim(tt1.sw) # many more places than tracts!  but map is many to many.
-View(tt1.sw)
+# View(tt1.sw)
 paste0(collapse=', ', names(tt1.sw))
 tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
                  "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
 tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
+tt1.sw.save = tt1.sw   ## View(tt1.sw)
+
+####   addLemeryPlaces  ####
+source('appPA/addLemeryPlaces.R', local = T)
+
+
 tract_counts = table(tt1.sw$tracts)
 tract_counts_table = table(tract_counts)
 sum(tract_counts_table)  #808, was 752
