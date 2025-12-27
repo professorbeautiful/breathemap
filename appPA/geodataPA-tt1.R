@@ -40,31 +40,40 @@ tt1.sw.save = tt1.sw   ## View(tt1.sw)
 source('appPA/addLemeryPlaces.R', local = T)
 
 
+#### summarize tract_counts ####
 tract_counts = table(tt1.sw$tracts)
 tract_counts_table = table(tract_counts)
-sum(tract_counts_table)  #808, was 752
-sum(tract_counts_table * as.numeric(names(tract_counts_table)))  #2082, was 1942
+sum(tract_counts_table)  # 752
+sum(tract_counts_table * as.numeric(names(tract_counts_table)))   ## 1942
 
-tt1.sw.save = tt1.sw
 tt1.sw.save$tract_count = tract_counts[match(tt1.sw.save$tracts, names(tract_counts))]
 mostPlacesForATract = max(as.numeric(names(tract_counts_table)))   #13
 tt1.sw.save %>% subset(tract_count == mostPlacesForATract) %>% select(places)
-(tt1.sw.save %>% subset(tract_count == mostPlacesForATract) %>% select(tracts)  ) [1,1]
-#wow  13 places for 42125784000
-tt1.sw.save.1.1 = tt1.sw.save[tt1.sw.save$tract_count == 1 , ]
+(tt1.sw.save %>% subset(tract_count == mostPlacesForATract) %>% select(tracts)  )$tracts[1]
+#  13 places for 42125784000.
+#  I checked these places at the DEHE map. Roughly corresponding, not perfect.
 
+#### these places have only one tract ####
+tt1.sw.save.1tract = tt1.sw.save[tt1.sw.save$tract_count == 1 , ]
+### 250,  the same as tract_counts_table[1]
+
+#### summarizeplace_counts ####
 place_counts = table(tt1.sw.save$places)
 place_counts_table = table(place_counts)
 sum(place_counts_table)  #398
-sum(place_counts_table * as.numeric(names(place_counts_table)))  #2051 was 1911
+sum(place_counts_table * as.numeric(names(place_counts_table)))  #1911 -> 2051
 tt1.sw.save$place_count = place_counts[match(tt1.sw.save$places, names(place_counts))]
-dim(tt1.sw.save %>% subset(place_count == max(as.numeric(names(place_counts_table)))) %>% select(places)
+dim(tt1.sw.save %>% subset(place_count == max(as.numeric(names(place_counts_table)))) %>%
+      select(places)
   )   ### 208 rows now  Pittsburgh.  Was 180.  correct.
 
-#### since our feature data is based on tracts, we need the tract geometry.
 
-### When there are multiple towns for a tract, pick the first one, or else paste.
-### When there are multiple tracts for a  town... not our problem.
+### When there are multiple towns for a tract, pick the first one, or else paste. ####
+### When there are multiple tracts for a  town... not our problem. ####
+#### since our feature data is based on tracts, we need the tract geometry. ####
+
+#### Add tracts from PAtowndata.lukedata ####
+
 table(tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID) # 1937 was 1797
 table(unique(tt1.sw.save$tracts) %in% PAtowndata.lukedata$GEOID) # we have data for 739, was 683 tracts
 table(PAtowndata.lukedata$GEOID %in% unique(tt1.sw.save$tracts)) # also 739.
@@ -73,7 +82,7 @@ tt1.sw = tt1.sw.save[tt1.sw.save$tracts %in% PAtowndata.lukedata$GEOID, ]
 dim(tt1.sw)   ### 1937
 
 place_counts = table(tt1.sw$places, exclude=NULL)  ### still 25 missing places
-place_counts_table = table(place_counts)
+place_counts_table = table(place_counts, exclude=NULL)
 sum(place_counts_table)  #399
 sum(place_counts_table * as.numeric(names(place_counts_table)))  #1937, was 1772 + 25
 tt1.sw$place_count = place_counts[match(tt1.sw$places, names(place_counts))]
@@ -180,30 +189,19 @@ as.data.frame(
     select(cq('tracts places county.tracts lem.towns'))
 )   ### these are the 10 new names from Lemery
 
-names_are_Pittsburgh = which(    # 162
-      (tt1.sw.l$places == 'Pittsburgh') )
-
 table(tt1.sw.l$places == tt1.sw.l$lem.towns, exclude=NULL)
 # FALSE  TRUE  <NA>
 #   738   140   1059
-names_are_same = which(
-  (tt1.sw.l$NAME.y == tt1.sw.l$lem.towns) &
-    #  (tt1.sw.l$NAME.y!='Pittsburgh') &
-    (!is.na(tt1.sw.l$NAME.y) ) )
-## what are the differences? when not Pittsburgh, &  not NA.
-names_are_different = which(
-  (tt1.sw.l$NAME.y != tt1.sw.l$lem.towns) &
- #  (tt1.sw.l$NAME.y!='Pittsburgh') &  # leave Pittsburgh out of this part.
- (!is.na(tt1.sw.l$NAME.y) ) )
-theDifferentNames = cbind(tt1.sw.l$NAME.y, tt1.sw.l$lem.towns
-                          ) [names_are_different, ]
+
+theDifferentNames = cbind(tt1.sw.l$places, tt1.sw.l$lem.towns
+                          ) [which(tt1.sw.l$places != tt1.sw.l$lem.towns), ]
 dim(theDifferentNames)   ## 37,  plus 43 say 'Pittsburgh'
 # spot check looks ok, e.g. West Deer Twp contains  Curtisville  on google maps.
 #  and "Bakerstown"   "Richland Twp"   are the same.
 
 tt1.sw.l$names_are_different = TRUE
 tt1.sw.l$names_are_different[ - names_are_same] = FALSE
-tt1.sw.l$lem.nb = (1:nrow(tt1.sw.l)) %in% grep("(Pittsburgh)", tt1.sw.l$lem.towns)
+tt1.sw.l$lem.neighborhood = (1:nrow(tt1.sw.l)) %in% grep("(Pittsburgh)", tt1.sw.l$lem.towns)
 
 #### Time for sensible var names
 tt1.sw.l$towns.tt1 = tt1.sw.l$towns  ### to safekeeping.
@@ -212,15 +210,15 @@ table( is.na(tt1.sw.l$towns))    #25 missing names, so..
 tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
   tt1.sw.l$lem.towns[ is.na(tt1.sw.l$towns.tt1) ]
 table( is.na(tt1.sw.l$towns))
-#25 missing names, still. We have to copy tt1.sw.l$lem.towns to get the extra 10.
-
+# just 15 missing names, now.
 
 tt1.sw.l = moveColumn(
   tt1.sw.l,
-  c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', 'GEOID.x')
+  c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', )
   )
 head(tt1.sw.l[1:8])
 table( ! is.na(tt1.sw.l$towns))  ###yes, 25 missing town names.
+
 save(tt1.sw.l, file='tt1.sw.l.Rd')
 tracts_with_towns =  tt1.sw.l
 save(tracts_with_towns, file='tracts_with_towns.Rd')
