@@ -3,6 +3,13 @@
 # https://pitt.libguides.com/uscensus/alleghenycotracts
 # clemery@pitt.edu Christopher Lemery
 tractsLemery.csv = read.csv('Allegheny_County_Municipalities_Census_Tracts_2000-2020.csv')
+## for fun... how did the tracts change over decades?
+table(tractsLemery.csv$X2000.Census.Tracts == tractsLemery.csv$X2010.Census.Tracts) #27 changed
+table(tractsLemery.csv$X2020.Census.Tracts == tractsLemery.csv$X2010.Census.Tracts) #7 changed
+## we use 2020
+
+#grep(',  ', tractsLemery.csv$X2020.Census.Tracts)
+#grep(', [45]', tractsLemery.csv$X2020.Census.Tracts)
 tractsLemerySplit = strsplit(tractsLemery.csv$X2020.Census.Tracts, split=', *')
 tractsLemery = data.frame(towns=unlist(sapply(1:nrow(tractsLemery.csv),
                                               function(n)rep(tractsLemery.csv$Municipality[n],
@@ -30,30 +37,37 @@ tractsLemery$tracts =
   as.character(as.numeric(tractsLemery$tracts) * 100
                + 42003000000)
 
+table((!duplicated(tractsLemery$towns)))   ## 148 duplicated, 130 not
+table(table(tractsLemery$towns))  ##
+sort(table(tractsLemery$towns))  ### Penn Hills has 10 tracts
+# of course, some towns have multiple tracts.  Not a problem.
 
 table((!duplicated(tractsLemery$tracts)))   ## 13 duplicated
 tractsDuplicated = tractsLemery$tracts[which(duplicated(tractsLemery$tracts))]
 tractsDuplicatedData = tractsLemery[tractsLemery$tracts %in% tractsDuplicated, ]
 dim(tractsDuplicatedData)  ### 21 duplicated tracts. No duplicated town names.
 table(tractsDuplicatedData$tracts)   #just 2 except 7 for 5638.
+tractsLemery$towns[tractsLemery$tracts=='42003563800']   # 2 of the 7 are Osborne
+tractsLemery$towns[tractsLemery$tracts %in% names(table(tractsDuplicatedData$tracts))]   # 2 of the 7 are Osborne
 
 #### let's back-burner for now.
-#### remove all duplicates. only the 1st will appear. (alternative wd be to string them along.)
-dim(tractsLemery)   #### so we have many more tracts than lemery does.
+#### remove all duplicates. only the 1st town name will appear.
+#(alternative wd be to string the place names together.)
+dim(tractsLemery)   #### tt1.sw has many more tracts  (808) than lemery does.
 #[1] 278   2
 #### remove duplicated, what's left is just one per tract
 tractsLemery =  tractsLemery [ - which(duplicated(tractsLemery$tracts)), ]
 dim(tractsLemery)   #### so we have many more tracts than lemery does.
 #[1] 265   2
 
-setcompare(tractsLemery$tracts, tt6.sw$GEOID.x )
+setcompare(tractsLemery$tracts, tt1.sw$tracts )
 ###     both x_not_y y_not_x
 #        252      13     431
 missing_towns = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$GEOID)), ]
-dim(missing_towns)  ### 13 missing towns. No data in PAtown.  That's ok.
+dim(missing_towns)  ### 13 Lemery towns have no data in PAtown.  That's ok.
 
 ####  tractsLemeryPgh  #############
-tractsLemeryPgh = read.csv(header = F, '/Users/rogerday/Google Drive/Documents/Fireman Breathe Project/appPA/Pittsburgh_Census_Tracts_1940-2020.csv')
+tractsLemeryPgh = read.csv(header = F, 'appPA/Pittsburgh_Census_Tracts_1940-2020.csv')
 names(tractsLemeryPgh) = c('towns', 'year', 'tracts')
 tractsLemeryPgh = tractsLemeryPgh %>% subset(year=='2020')
 tractsLemeryPgh = tractsLemeryPgh[c('towns', 'tracts')]
