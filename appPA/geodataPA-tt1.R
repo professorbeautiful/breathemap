@@ -33,8 +33,11 @@ dim(tt1.sw) # many more places than tracts!  but map is many to many.
 paste0(collapse=', ', names(tt1.sw))
 tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
                  "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
-tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
+tt1.sw = moveColumns(tt1.sw, tt1.sw.names)   ### 2082 entries
+table(tt1.sw$county.tracts)
 tt1.sw.save = tt1.sw   ## View(tt1.sw)
+table(tt1.sw$tracts %in% PAtown$GEOID)
+#  1937 tracts.  Pick up some more from Lemery?
 
 ####   addLemeryPlaces  ####
 source('appPA/addLemeryPlaces.R', local = T)
