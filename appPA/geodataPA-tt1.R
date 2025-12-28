@@ -59,14 +59,16 @@ tt1.sw$towns.intersects = tt1.sw.towns.pasted$towns[
 tt1.sw$towns.intersects.first = gsub(',.*', '', tt1.sw$towns.intersects)
 
 #### Use town string or first town to fill holes ####
+
 townHoles = is.na(tt1.sw$towns)
 tt1.sw$towns[townHoles] = tt1.sw$towns.intersects[townHoles]
 #  Use firsttown:    tt1.sw$towns[townHoles] = tt1.sw$towns.intersects.first[townHoles]
 ## We leave "places" untouched.
 View(tt1.sw)
-table(is.na(tt1.sw$towns))
+table(is.na(tt1.sw$towns))   ##  31 still missing. None in Luke
 table( is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('townsNA luke'))
 table( is.na(tt1.sw$places), tt1.sw$onlyLuke, dnn = cq('placesNA luke'))
+### We leave "places" alone.
 
 #### TODO - ONLY if needed: latitudes and longitudes ####
 # Add latitudes and longitudes for Luke tracts
@@ -83,12 +85,12 @@ tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
 table(tt1.sw$county.tracts)
 tt1.sw.save = tt1.sw   ## SAVE a copy
 
-#### Back to 739 tracts. Both data and 'towns' for each. ####
+#### Keep only the 739 tracts. Both data and 'towns' for each. ####
 table(tt1.sw.save$tracts %in% PAtown$GEOID, tt1.sw.save$onlyLuke,
       dnn=cq('we_have_data onlyLuke'))   ###739  are in our  data
 #  739 tracts out of 808 are in our PAdata. 69 we have no data to show.
 tt1.sw = tt1.sw.save[tt1.sw.save$tracts %in% PAtown$GEOID, ]
-table(is.na(tt1.sw$towns))  ## no HOLES now.
+table(is.na(tt1.sw$towns))  ## 25 HOLES.
 
 ####   addLemeryPlaces  ####
 #  Pick up better names from Lemery
