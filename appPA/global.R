@@ -83,7 +83,8 @@ names(tracts_with_towns.wide)
 
 tracts_with_towns.wide$areaField = tracts_with_towns.wide$towns
 ### for other fields to use for label, we will copy onto areaField.
-
+#### finally, copy back to tracts_with_fields
+tracts_with_towns = tracts_with_towns.wide
 
 # PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
 # PAtown$towntractName = PAtowndata$TOWN
