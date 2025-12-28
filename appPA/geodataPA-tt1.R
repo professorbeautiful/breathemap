@@ -12,13 +12,13 @@ library(dplyr)
 options(tigris_use_cache = TRUE)
 source('appPA/moveColumns.R', local = T)
 
-# Download Pennsylvania census tracts
+#### Download Pennsylvania census tracts ####
 source('appPA/get_pa_tracts_sw.R', local = T)
 # Creates pa_tracts_sw.   752 rows.  Tracts are unique.
 length(unique(pa_tracts_sw$tracts))
 
+#### Add Luke tracts ####
 pa_tracts_sw.pre_luke <- pa_tracts_sw  #752
-
 source('appPA/addLukeTracts.R', local = T)
 # Creates pa_tracts_sw.luke_extended,  adds 56 new tracts.  Now 808.
 pa_tracts_sw <- pa_tracts_sw.luke_extended
@@ -32,35 +32,66 @@ table(is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('no_town onlyluke'))
 # TRUE    355   32
 #   So 32 new names were found.
 
-# Download Pennsylvania towns/places (cities, boroughs, etc.)
+#### Download Pennsylvania towns/places (cities, boroughs, etc.) ####
 source('appPA/get_pa_places.R', local = T)
 # Creates pa_places.
 
-####  st_join ####
-tt1.sw = st_join(pa_tracts_sw, pa_places, join=st_covered_by, left=TRUE)
-     #   it's 808!!!
-dim(tt1.sw) #  but map is many to many? NOT ANY MORE.
-table(is.na(tt1.sw$towns))  #  421 matched.  387 still missing.
+
+####  STRICT st_join ####
+tt1.sw.covered_by = st_join(pa_tracts_sw, pa_places, join=st_covered_by, left=TRUE)
+dim(tt1.sw.covered_by) #  #  808.  One per tract.
+table(is.na(tt1.sw.covered_by$towns))  #  421 matched.  387 still missing holes.
+
+####  GENEROUS (sloppy; default) st_join ####
+tt1.sw.intersect = st_join(pa_tracts_sw, pa_places, join=st_intersects, left=TRUE)
+dim(tt1.sw.intersect) #  2082 The mapping is many to many
+tt1.sw.default = st_join(pa_tracts_sw, pa_places, left=TRUE)
+dim(tt1.sw.default) #2082
+identical(tt1.sw.intersect, tt1.sw.default)
+# tt1.sw.intersection = st_join(pa_tracts_sw, pa_places, join=st_intersection, left=TRUE)
+# dim(tt1.sw.intersection) #  #  takes a long time!!!  Then FAILS.
+
+#### Use tt1.sw.intersect (generous) to fill in the holes.  ####
+tt1.sw = tt1.sw.covered_by
+tt1.sw.towns.pasted = towns.pasted(tt1.sw.intersect)
+tt1.sw$towns.intersects = tt1.sw.towns.pasted$towns[
+  match(tt1.sw.towns.pasted$tracts,  tt1.sw$tracts)]
+tt1.sw$towns.intersects.first = gsub(',.*', '', tt1.sw$towns.intersects)
+
+#### Use town string or first town to fill holes ####
+townHoles = is.na(tt1.sw$towns)
+tt1.sw$towns[townHoles] = tt1.sw$towns.intersects[townHoles]
+#  Use firsttown:    tt1.sw$towns[townHoles] = tt1.sw$towns.intersects.first[townHoles]
+## We leave "places" untouched.
+View(tt1.sw)
+table(is.na(tt1.sw$towns))
 table( is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('townsNA luke'))
-# View(tt1.sw)
-# paste0(collapse=', ', names(tt1.sw))
-tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
+table( is.na(tt1.sw$places), tt1.sw$onlyLuke, dnn = cq('placesNA luke'))
+
+#### TODO - ONLY if needed: latitudes and longitudes ####
+# Add latitudes and longitudes for Luke tracts
+# Add latitudes and longitudes for town from towns.intersects.first
+
+
+names(tt1.sw)
+tt1.sw.names = c("tracts", "towns", "towns.intersects"
+                 , "towns.intersects.first", "places", "county.tracts",  "tracts.short",
                  "onlyLuke",
-                 "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
+                 "lat.tracts", "lon.tracts", "lat.places", "lon.places",
+                 "geometry")
 tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
 table(tt1.sw$county.tracts)
-tt1.sw.save = tt1.sw   ## View(tt1.sw)
-table(tt1.sw$tracts %in% PAtown$GEOID)   ###739
-#  739 tracts out of 808 are in our PAdata.
-table(PAtown$GEOID %in% tt1.sw$tracts )   ###739
-table(is.na(tt1.sw$towns))
-# FALSE  TRUE
-# 421   387
-### still missing places for 387.
+tt1.sw.save = tt1.sw   ## SAVE a copy
 
-#  Pick up some more from Lemery?
+#### Back to 739 tracts. Both data and 'towns' for each. ####
+table(tt1.sw.save$tracts %in% PAtown$GEOID, tt1.sw.save$onlyLuke,
+      dnn=cq('we_have_data onlyLuke'))   ###739  are in our  data
+#  739 tracts out of 808 are in our PAdata. 69 we have no data to show.
+tt1.sw = tt1.sw.save[tt1.sw.save$tracts %in% PAtown$GEOID, ]
+table(is.na(tt1.sw$towns))  ## no HOLES now.
 
 ####   addLemeryPlaces  ####
+#  Pick up better names from Lemery
 source('appPA/addLemeryPlaces.R', local = T)
 
 #### summarize tract_counts ####
