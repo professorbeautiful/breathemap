@@ -11,6 +11,7 @@ library(dplyr)
 
 options(tigris_use_cache = TRUE)
 source('appPA/moveColumns.R', local = T)
+source('appPA/cq.R', local = T)
 
 #### Download Pennsylvania census tracts ####
 source('appPA/get_pa_tracts_sw.R', local = T)
@@ -65,7 +66,7 @@ tt1.sw$towns[townHoles] = tt1.sw$towns.intersects[townHoles]
 #  Use firsttown:    tt1.sw$towns[townHoles] = tt1.sw$towns.intersects.first[townHoles]
 ## We leave "places" untouched.
 View(tt1.sw)
-table(is.na(tt1.sw$towns))   ##  31 still missing. None in Luke
+table(is.na(tt1.sw$towns))   ##  25 still missing. None in Luke
 table( is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('townsNA luke'))
 table( is.na(tt1.sw$places), tt1.sw$onlyLuke, dnn = cq('placesNA luke'))
 ### We leave "places" alone.
@@ -239,7 +240,6 @@ table(is.na(tt1.sw.l$places), is.na(tt1.sw.l$lem.towns) , dnn = c('places', 'lem
 ##   so of the 25 that tt1 did not have places(town names) for,
 ##   10 are provided by Lemery
 ##   15 both are still missing!
-cq = function(s, split=' ') strsplit(split=split, s)[[1]]
 as.data.frame(
   tt1.sw.l[is.na(tt1.sw.l$places), ] %>%
     select(cq('tracts places county.tracts lem.towns'))
