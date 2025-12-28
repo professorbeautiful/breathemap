@@ -62,8 +62,8 @@ dim(tractsLemery)   #### so we have many more tracts than lemery does.
 
 setcompare(tractsLemery$tracts, tt1.sw$tracts )
 ###     both x_not_y y_not_x
-#        252      13     431
-setcompare(tractsLemery$tracts,  PAtown$GEOID)
+#        252      13     487
+setcompare(tractsLemery$tracts,  PAtown$GEOID)  ### the same
 missing_tracts = tractsLemery[which(! (tractsLemery$tracts %in% PAtown$GEOID)), ]
 dim(missing_tracts)
 ### 13 Lemery tracts have no data in PAtown (& PAtowndata).
@@ -78,9 +78,6 @@ tractsLemeryPgh = tractsLemeryPgh[c('towns', 'tracts')]
 #### 90 rows, but some multiple
 dim(tractsLemeryPgh)
 ### fix for Spring Hill   (2620)  NOT needed anymore;  fixed in spreadsheet
-# tractsLemeryPgh = tractsLemeryPgh[ - match('2620', tractsLemeryPgh$tracts) , ]
-dim(tractsLemeryPgh)  #90
-#
 
 longtracts = (strsplit(split=', ', tractsLemeryPgh$tracts))  #146
 tractsLemeryPgh = data.frame(
@@ -104,31 +101,24 @@ setcompare(tractsLemeryPgh$tracts, PAtown$GEOID)
 # Before saving, we will take them out, since no geometry available:
 dim(tractsLemeryPgh[tractsLemeryPgh$tracts %in% PAtown$GEOID, ])
 ## 118 though some duplicate tracts.  See below.
+#### Removing those with no data.
 tractsLemeryPgh  = tractsLemeryPgh[tractsLemeryPgh$tracts %in% PAtown$GEOID, ]
 setcompare(tractsLemeryPgh$tracts, PAtown$GEOID)
 # Pittsburgh boroughs:
 # setcompare(tractsLemeryPgh$tracts, PAtown$GEOID, countsonly = F) [1:2]
 
-# names of overlapping boroughs:
+
 tractsLemeryPgh$towns[which(tractsLemeryPgh$tracts %in% PAtown$GEOID)]
+
+dim(tractsLemeryPgh)  ## 118
+tractsLemeryPgh = towns.pasted(tractsLemeryPgh)
+dim(tractsLemeryPgh)  ### 108
+
 #118  towns,  108 tracts.   Ten tracts appear more than once
 ##Aha.  a few tracts are duplicated in tractsLemeryPgh
 which(duplicated(tractsLemeryPgh$tracts))
 table(table(tractsLemeryPgh$tracts))
 #  8 have 2 towns, one has 3 towns.
-
-temp = tractsLemeryPgh[tractsLemeryPgh$tracts %in%
-                  tractsLemeryPgh$tracts[duplicated(tractsLemeryPgh$tracts)], ]
-temp[order(temp$tracts),]
-length((temp$tracts))  ## 19  names sharing tracts.
-length(unique(temp$tracts))  ## 9 tracts have multiple towns
-
-#  We can use towns.pasted()  later if desired.
-# OR: just select the first name...
-#tractsLemeryPgh = tractsLemeryPgh[which(!duplicated(tractsLemeryPgh$tracts)), ]
-#  doesn't matter which.  As above, 'back burner'.
-dim(tractsLemeryPgh)
-
 
 #sanity check
 oakland = tractsLemeryPgh[grep('Oakland', tractsLemeryPgh$towns) , ]
@@ -136,13 +126,14 @@ leaflet::leaflet() %>% addTiles() %>%
   addPolygons(
     data=PAtown[PAtown$GEOID %in% oakland$tracts, ],
     label = ~GEOID )
-### looks ok.
+### looks ok.  One hole.
 
 ## This (Pittsburgh) tag will signal when it's a Pittsburgh neighborhood name.
 tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '(Pittsburgh)')
 table(table(tractsLemeryPgh$towns))
 #  1  2  3  4  5
-# 37 13  6  3  3
+# 45 14  6  3  3
+table(table(tractsLemeryPgh$tracts))
 
 save(tractsLemeryPgh, file='tractsLemeryPgh.Rd')
 # In terminal, appPA,    ln ../tractsLemeryPgh.Rd .    into appPA.
