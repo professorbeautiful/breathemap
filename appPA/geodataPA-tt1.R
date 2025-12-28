@@ -154,9 +154,9 @@ tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
 table( is.na(tt1.sw.l$towns))
 # just 15 missing names, now.
 
-tt1.sw.l = moveColumn(
+tt1.sw.l = moveColumns(
   tt1.sw.l,
-  c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts', )
+  c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts')
   )
 head(tt1.sw.l[1:8])
 table( ! is.na(tt1.sw.l$towns))  ###yes, 25 missing town names.
