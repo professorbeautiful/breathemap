@@ -19,11 +19,18 @@ length(unique(pa_tracts_sw$tracts))
 
 pa_tracts_sw.pre_luke <- pa_tracts_sw  #752
 
-
 source('appPA/addLukeTracts.R', local = T)
 # Creates pa_tracts_sw.luke_extended,  adds 56 new tracts.  Now 808.
 pa_tracts_sw <- pa_tracts_sw.luke_extended
-dim(pa_tracts_sw)  #808 tracts
+table(pa_tracts_sw$onlyLuke)
+dim(pa_tracts_sw)  #808 tracts.   added 56
+table(is.na(tt1.sw$towns))
+table(is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('no_town onlyluke'))
+#         onlyluke
+# no_town FALSE TRUE
+# FALSE   397   24
+# TRUE    355   32
+#   So 32 new names were found.
 
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
 source('appPA/get_pa_places.R', local = T)
@@ -31,13 +38,16 @@ source('appPA/get_pa_places.R', local = T)
 
 ####  st_join ####
 tt1.sw = st_join(pa_tracts_sw, pa_places, join=st_covered_by, left=TRUE)
-     #  1942 initially. Now it's 808!!!
-dim(tt1.sw) # many more places than tracts!  but map is many to many. NOT ANY MORE.
+     #   it's 808!!!
+dim(tt1.sw) #  but map is many to many? NOT ANY MORE.
+table(is.na(tt1.sw$towns))  #  421 matched.  387 still missing.
+table( is.na(tt1.sw$towns), tt1.sw$onlyLuke, dnn = cq('townsNA luke'))
 # View(tt1.sw)
 # paste0(collapse=', ', names(tt1.sw))
 tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
+                 "onlyLuke",
                  "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
-tt1.sw = moveColumns(tt1.sw, tt1.sw.names)   ### 2082 entries
+tt1.sw = moveColumns(tt1.sw, tt1.sw.names)
 table(tt1.sw$county.tracts)
 tt1.sw.save = tt1.sw   ## View(tt1.sw)
 table(tt1.sw$tracts %in% PAtown$GEOID)   ###739
@@ -52,7 +62,6 @@ table(is.na(tt1.sw$towns))
 
 ####   addLemeryPlaces  ####
 source('appPA/addLemeryPlaces.R', local = T)
-
 
 #### summarize tract_counts ####
 tract_counts = table(tt1.sw$tracts)
