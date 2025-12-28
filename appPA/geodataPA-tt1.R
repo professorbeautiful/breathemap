@@ -17,27 +17,38 @@ source('appPA/get_pa_tracts_sw.R', local = T)
 # Creates pa_tracts_sw.   752 rows.  Tracts are unique.
 length(unique(pa_tracts_sw$tracts))
 
-pa_tracts_sw.pre_luke <- pa_tracts_sw
+pa_tracts_sw.pre_luke <- pa_tracts_sw  #752
+
+
 source('appPA/addLukeTracts.R', local = T)
 # Creates pa_tracts_sw.luke_extended,  adds 56 new tracts.  Now 808.
 pa_tracts_sw <- pa_tracts_sw.luke_extended
+dim(pa_tracts_sw)  #808 tracts
 
 # Download Pennsylvania towns/places (cities, boroughs, etc.)
 source('appPA/get_pa_places.R', local = T)
 # Creates pa_places.
 
 ####  st_join ####
-tt1.sw = st_join(pa_tracts_sw, pa_places, left=TRUE) #  1942 initially. Luke adds 140 -> 2082.
-dim(tt1.sw) # many more places than tracts!  but map is many to many.
+tt1.sw = st_join(pa_tracts_sw, pa_places, join=st_covered_by, left=TRUE)
+     #  1942 initially. Now it's 808!!!
+dim(tt1.sw) # many more places than tracts!  but map is many to many. NOT ANY MORE.
 # View(tt1.sw)
-paste0(collapse=', ', names(tt1.sw))
+# paste0(collapse=', ', names(tt1.sw))
 tt1.sw.names = c("tracts", "places", "towns", "county.tracts",  "tracts.short",
                  "lat.tracts", "lon.tracts", "lat.places", "lon.places", "geometry")
 tt1.sw = moveColumns(tt1.sw, tt1.sw.names)   ### 2082 entries
 table(tt1.sw$county.tracts)
 tt1.sw.save = tt1.sw   ## View(tt1.sw)
-table(tt1.sw$tracts %in% PAtown$GEOID)
-#  1937 tracts.  Pick up some more from Lemery?
+table(tt1.sw$tracts %in% PAtown$GEOID)   ###739
+#  739 tracts out of 808 are in our PAdata.
+table(PAtown$GEOID %in% tt1.sw$tracts )   ###739
+table(is.na(tt1.sw$towns))
+# FALSE  TRUE
+# 421   387
+### still missing places for 387.
+
+#  Pick up some more from Lemery?
 
 ####   addLemeryPlaces  ####
 source('appPA/addLemeryPlaces.R', local = T)
@@ -46,8 +57,8 @@ source('appPA/addLemeryPlaces.R', local = T)
 #### summarize tract_counts ####
 tract_counts = table(tt1.sw$tracts)
 tract_counts_table = table(tract_counts)
-sum(tract_counts_table)  # 752
-sum(tract_counts_table * as.numeric(names(tract_counts_table)))   ## 1942
+sum(tract_counts_table)  # 808 now
+sum(tract_counts_table * as.numeric(names(tract_counts_table)))   ## 1942 -> 2082 now
 
 tt1.sw.save$tract_count = tract_counts[match(tt1.sw.save$tracts, names(tract_counts))]
 mostPlacesForATract = max(as.numeric(names(tract_counts_table)))   #13
