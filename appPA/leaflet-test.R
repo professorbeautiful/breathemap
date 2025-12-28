@@ -11,6 +11,7 @@ showTowns = function(towns, tt=tt1.sw,
     towns = grep(towns, tt$towns, v=T)
 
   tt = tt[tt$towns %in% towns, ]
+  tt$label = paste(tt$towns, tt$tracts)
   lng = mean(as.numeric(tt$lon.places), na.rm=T)
   lat = mean(as.numeric(tt$lat.places), na.rm=T)
   leaflet() %>%
@@ -24,7 +25,7 @@ showTowns = function(towns, tt=tt1.sw,
               fillOpacity = 0.3,
               # label is the label shown
               #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-              label = ~towns, #PAtown[['NAME']] = PAtown[['areaField']]
+              label = ~label, #PAtown[['NAME']] = PAtown[['areaField']]
               #layerId = ~towntractName, ## initially.
               highlight = highlightOptions(
                 fillColor = "green",
