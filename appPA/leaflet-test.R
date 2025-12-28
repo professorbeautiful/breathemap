@@ -1,5 +1,5 @@
 # doesn't work.
-showTowns = function(towns, tt=tt1.sw,
+showTownsInLeaflet = function(towns, tt=tt1.sw,
                      townsField = c('towns', 'towns.intersects', 'towns.intersects.first')
                      [1], perfect=TRUE, zoom=9) {
   if(is.numeric(towns))
@@ -16,7 +16,7 @@ showTowns = function(towns, tt=tt1.sw,
   lat = mean(as.numeric(tt$lat.places), na.rm=T)
   leaflet() %>%
   addProviderTiles("CartoDB.PositronNoLabels",
-                   options = tileOptions(minZoom = 5, maxZoom = 11)) %>%
+                   options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
   setView(lng = lng, lat = lat, zoom=zoom)  %>%
   addPolygons(data = tt,
               weight = 1,
