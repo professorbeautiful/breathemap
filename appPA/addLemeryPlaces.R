@@ -11,26 +11,23 @@ tt1.sw.l$lem.towns = tractsLemery$towns[
 
 tt1.sw.l$lem.tracts = NA
 tt1.sw.l$lem.tracts = tractsLemery$tracts[
-  match(tt1.sw.l$tracts, tractsLemery$tracts)]  ### 808
+  match(tt1.sw.l$tracts, tractsLemery$tracts)]
 
-tt1.sw.l.comparison = as.data.frame(tt1.sw.l[c('lem.towns', 'places', 'tracts')])
+tt1.sw.l.comparison = as.data.frame(tt1.sw.l[c('lem.towns', 'towns', 'tracts')])
 tt1.sw.l.comparison = tt1.sw.l.comparison[ !is.na(tt1.sw.l.comparison$lem.towns ), ]
 head(tt1.sw.l.comparison)
+###  Kennedy, towns=NA,  tracts=42003460001
+#### confused me because I hadn't fixed the "NA" problem in towns.pasted() yet.
 
-table(is.na(tt1.sw$places))
-# FALSE  TRUE
-# 1912   25    #### but why now suddenly 1911    31 ?
-tt1.sw$tracts[is.na(tt1.sw$places)]
-
-table(is.na(tt1.sw.l$places), is.na(tt1.sw.l$lem.towns) , dnn = c('places', 'lem.towns'))
+table(is.na(tt1.sw.l$towns), is.na(tt1.sw.l$lem.towns) ,
+      dnn = c('towns', 'lem.towns'))
 #          lem.towns
-# places  FALSE TRUE
-#   FALSE   878  1034
+# towns   FALSE TRUE
+#   FALSE   350  364
 #   TRUE     10   15
 ##   so of the 25 that tt1 did not have places(town names) for,
 ##   10 are provided by Lemery
 ##   15 both are still missing!
-cq = function(s, split=' ') strsplit(split=split, s)[[1]]
 as.data.frame(
   tt1.sw.l[is.na(tt1.sw.l$places), ] %>%
     select(cq('tracts places county.tracts lem.towns'))
