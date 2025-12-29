@@ -34,13 +34,13 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
 
 # tracts = PAtowndata$NAMELSAD
 # towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
-towns = tracts_with_towns$towns
-townOrder = order(towns, na.last=TRUE)  ###
-# sort everything by towns
-tracts_with_towns = tracts_with_towns[townOrder, ]
-towns = towns[townOrder]
-PAtown = PAtown[townOrder, ]
-PAtowndata = PAtowndata[townOrder, ]
+# towns = tracts_with_towns$towns
+# townOrder = order(towns, na.last=TRUE)  ###
+# # sort everything by towns
+# tracts_with_towns = tracts_with_towns[townOrder, ]
+# towns = towns[townOrder]
+# PAtown = PAtown[townOrder, ]
+# PAtowndata = PAtowndata[townOrder, ]
 
 ####   15 are missing still. ####
 table(is.na(towns ))
@@ -98,7 +98,15 @@ tracts_with_towns = moveColumns(tracts_with_towns, 'areaField')
 tracts_with_towns = tracts_with_towns[ order(tracts_with_towns$twt) ,  ]
 twt = tracts_with_towns   ##### So twt$twt
 class(twt)  #sf
+names(twt)
+head(twt$areaField)
 
+#### move '___' to the end, ####
+which___ = (grep('___', twt$areaField))   ### 1 to 15
+twt = twt[c(16:nrow(twt),  1:15), ]
+
+####and create twtFirst ?   no, rely on towns field ####
+# twt$twtFirst = paste(twt$towns.intersects.first, twt$tracts)
 # PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
 # PAtown$towntractName = PAtowndata$TOWN
 # PAtown$noTown = PAtown$townName == '___'
