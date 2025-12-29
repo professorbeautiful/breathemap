@@ -70,8 +70,8 @@ fluidPage({
                                   div(style='color:yellow; background-color:green',
                                       radioButtons("townToggleId", "Show by:",
                                                    choiceNames=c('towns', 'tracts'),
-                                                   choiceValues=c('townName', 'towntractName'),
-                                                   selected='towns', inline=TRUE)
+                                                   choiceValues=c('towns', 'twt'),
+                                                   selected='twt', inline=TRUE)
                                   ),
                                   checkboxInput('IdNbhds', 'Pgh nbhds?'))
                          ),
