@@ -74,8 +74,10 @@ function(input, output, session) {
   })
   TARGETstring = reactive({
     TARGETstring = (input$areaSelectorId)
-    # print(paste('TARGETstring (in):', TARGETstring))
-    print(get_areaFieldName() )
+    areaFieldName = get_areaFieldName()
+    if(areaFieldName == 'towns')
+      TARGETstring = twt$towns[match(TARGETstring, twt$twt)]
+      # print(paste('TARGETstring (in):', TARGETstring))
     print(paste('TARGET (out):', TARGETstring))
     TARGETstring
   })
