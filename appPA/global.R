@@ -12,10 +12,7 @@ if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 library(shinyDebuggingPanel)
 
-# loads data required for app
-
-
-load('tracts_with_towns.Rd')
+load('tracts_with_towns.Rd')   ## of type sf
 load('patown1.Rd')   ## 26 fields only
 PAtown = patown1
 load('patowndata2.Rd' )   # same as
@@ -25,7 +22,7 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Krewski Estimate') ])
 
-st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
+#st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
 # Warning: sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
 # Need '+proj=longlat +datum=WGS84'
@@ -38,12 +35,19 @@ st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 # tracts = PAtowndata$NAMELSAD
 # towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
 towns = tracts_with_towns$towns
-townOrder = order(towns, na.last=TRUE)
+townOrder = order(towns, na.last=TRUE)  ###
+# sort everything by towns
+tracts_with_towns = tracts_with_towns[townOrder, ]
+towns = towns[townOrder]
+PAtown = PAtown[townOrder, ]
+PAtowndata = PAtowndata[townOrder, ]
 
-####   15 are missing still.
-towns [ is.na(towns )] = '___'
-tracts_with_towns$towns [ is.na(tracts_with_towns$towns )] = '___'
+####   15 are missing still. ####
+table(is.na(towns ))
+towns [ which(is.na(towns )) ] = '___'
+tracts_with_towns$towns [ which(is.na(tracts_with_towns$towns) )] = '___'
 townIs___ =  (towns == '___')
+### if '___' copy lat and lon from tracts to places
 tracts_with_towns$lat.places[townIs___ ] =  tracts_with_towns$lat.tracts[townIs___ ]
 tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs___ ]
 # PAtownnames = paste(towns, tracts, sep= ', ')
@@ -57,10 +61,7 @@ tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs_
 #  these lat and lon do seem to locate correctly.  checking against https://data.jsonline.com/census/total-population/ and US census.
 # But needs more checking.
 
-
-# sort everything by
-tracts_with_towns = tracts_with_towns[townOrder, ]
-towns = towns[townOrder]
+#### featureList ####
 names(PAtowndata)
 featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
                # "All Cause Deaths, Laden Estimate"  ,
@@ -70,21 +71,33 @@ featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease 
                "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
                "Total Population (2019)", "PM2.5 average")
 
-#### Bring in featureList.  Careful PM_avg
+#### Bring in featureList.  Careful: renamed PM_avg  ####
 PAtowndata$tracts = PAtowndata$GEOID
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
-tracts_with_towns.wide = merge(tracts_with_towns, PAtowndata[c('tracts', 'Tract Name', featureList)])
+
+tracts_with_towns.wide = merge(
+  PAtowndata[c('tracts', 'Tract Name', featureList)],
+  tracts_with_towns, by='tracts' )
+
 names(tracts_with_towns.wide) = gsub(' ', '__', names(tracts_with_towns.wide))
 tracts_with_towns.wide = (tracts_with_towns.wide %>%
                             select(c(tracts:towns.tt1, Tract__Name:geometry)))
 names(tracts_with_towns.wide)
 names(tracts_with_towns.wide) = gsub('__', ' ', names(tracts_with_towns.wide))
 names(tracts_with_towns.wide)
+#### Must be a "sf" object. ####
+tracts_with_towns.wide = st_as_sf(tracts_with_towns.wide)
+class(tracts_with_towns.wide)
 
-tracts_with_towns.wide$areaField = tracts_with_towns.wide$towns
 ### for other fields to use for label, we will copy onto areaField.
-#### finally, copy back to tracts_with_fields
+#### finally, copy back to tracts_with_fields ####
 tracts_with_towns = tracts_with_towns.wide
+tracts_with_towns$twt =  paste(twt$towns, twt$tracts)
+tracts_with_towns$areaField = tracts_with_towns$twt
+tracts_with_towns = moveColumns(tracts_with_towns, 'areaField')
+tracts_with_towns = tracts_with_towns[ order(tracts_with_towns$twt) ,  ]
+twt = tracts_with_towns   ##### So twt$twt
+class(twt)  #sf
 
 # PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
 # PAtown$towntractName = PAtowndata$TOWN
