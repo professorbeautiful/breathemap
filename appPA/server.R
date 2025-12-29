@@ -64,7 +64,7 @@ function(input, output, session) {
                   # label is the label shown
                   #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
                   label = ~twt,
-                  #layerId = ~twt, ## initially.
+                  layerId = ~twt, ## initially.
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",
@@ -112,7 +112,7 @@ function(input, output, session) {
       clearGroup("selectedTownShp") %>%
       addPolygons(data=twt[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~areaField, #layerId = ~areaField,
+                  label= ~areaField, layerId = ~areaField,
                   fillOpacity = 1, group="selectedTownShp") #%>%
 
     #### default before area is selected ####
