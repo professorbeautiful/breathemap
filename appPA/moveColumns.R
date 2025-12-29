@@ -2,7 +2,7 @@ moveColumns = function(d, col, wh=1) {
   if(is.character(col))
     col = match(col, names(d))
   if(any(is.na(col))) {
-    print(paste('moveColumns: ', sys.call()))
+    print(paste('moveColumns: ', paste(collapse=' ', sys.call())))
     print(str(col))
     return(d)
   }
