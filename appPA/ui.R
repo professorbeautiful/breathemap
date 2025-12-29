@@ -63,9 +63,9 @@ fluidPage({
                          fluidRow(
                            column(7,
                                   div(style='color:yellow; background-color:green',
-                                      selectInput("areaSelectorId", "Select a town or area by clicking it or typing it in here: ",
-                                                  PAtownnames,
-                                                  selected = PAtownnames[1]))),
+                                      selectInput("areaSelectorId", "Search an area: click, <delete> and type: ",
+                                                  twt$areaField,
+                                                  selected = twt$areaField[1]))),
                            column(5,
                                   div(style='color:yellow; background-color:green',
                                       radioButtons("townToggleId", "Show by:",
