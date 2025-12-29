@@ -59,7 +59,7 @@ table( is.na(tt1.sw.l$towns))    #276 missing names,
 tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
   tt1.sw.l$lem.towns[ is.na(tt1.sw.l$towns.tt1) ]
 names(tt1.sw.l)
-tt1.sw.l = moveColumn(
+tt1.sw.l = moveColumns(
   tt1.sw.l,
   c('towns', 'lem.towns', 'lem.neighborhood', 'towns.tt1', 'names_are_different',
     'tracts', 'lem.tracts', 'onlyLuke' )
