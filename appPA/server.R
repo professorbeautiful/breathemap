@@ -146,9 +146,9 @@ function(input, output, session) {
 #       #                                   "was ",
 #       #                                   signif(digits=3, sum(TARGETdatarows()$`Cancer Deaths`)),
 #       #                                    " people die due to cancers caused by air pollution every year."))
-#     }
-#   )
-#
+    }
+  )
+
   # export button
   output$downloadData <- downloadHandler(
     filename = "Air-Pollution-PA.csv",
