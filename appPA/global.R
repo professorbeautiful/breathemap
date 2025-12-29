@@ -14,7 +14,9 @@ library(shinyDebuggingPanel)
 
 load('tracts_with_towns.Rd')   ## of type sf
 load('patown1.Rd')   ## 26 fields only
+patown1 = st_transform(patown1, 'WGS84')
 PAtown = patown1
+
 load('patowndata2.Rd' )   # same as
 load('PAtowndata.lukedata.Rd')
 PAtowndata = PAtowndata.lukedata
@@ -22,6 +24,7 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Krewski Estimate') ])
 
+PAtown = st_transform(PAtown, "WGS84")
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
 # Warning: sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
@@ -142,6 +145,7 @@ IQcaption <- htmltools::tags$caption(
   'Estimated IQ Loss')
 
 #st_crs(twt) <- "WGS84"
-st_transform(twt, "WGS84")
-st_crs(twt) <- 4326
+twt = st_transform(twt, "WGS84")
+#st_crs(twt) <- 4326
+
 
