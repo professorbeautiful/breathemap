@@ -260,7 +260,7 @@ function(input, output, session) {
   })
   output$proportion_smaller <- renderText({
     print(paste('proportion_smaller:', 'distribution of idFeature'))
-    print(summary(twt[[input$idFeature]]))
+    print(capture.output(summary(twt[[input$idFeature]])))
     howManyLess = try({
       twt[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
