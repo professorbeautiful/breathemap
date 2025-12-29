@@ -24,10 +24,8 @@ function(input, output, session) {
   #needs Town, lat, lon
 
   # This is ok, because only used for centering map at the start.
-  medianLON= median(as.numeric(pa_tracts$INTPTLON[
-    pa_tracts$NAMELSAD %in% PAtown$NAMELSAD]))
-  medianLAT= median(as.numeric(pa_tracts$INTPTLAT[
-    pa_tracts$NAMELSAD %in% PAtown$NAMELSAD]))
+  medianLON= median(as.numeric(twt$lon.tracts))
+  medianLAT= median(as.numeric(twt$lat.tracts))
 
 
  # clicking updates selectInput
@@ -36,35 +34,37 @@ function(input, output, session) {
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
-      updateSelectInput(session, "areaSelectorId", selected = PAtown[['towntractName']] [1])
+      updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else
       updateSelectInput(session, "areaSelectorId", selected = click$id)
   })
+
+  areaFieldName = 'twt'  ## towns with tracts
 
   get_areaFieldName = reactive({
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
     else
-      areaFieldName = 'townName'
+      areaFieldName = 'twt'
     print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
-    PAtown[['areaField']] <<-PAtown[[areaFieldName]]
+    twt[['areaField']] <<-twt[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
     # updateSelectInput(session, "areaSelectorId", choices = PAtown)
   })
  # leaflet map
   output$map <- renderLeaflet({
     leaflet() %>%
-      addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 11)) %>%
+      addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
       setView(lng = medianLON, lat = medianLAT, zoom = 7)  %>%
-      addPolygons(data = PAtown,
+      addPolygons(data = twt,
                   weight = 1,
                   color = "Black",
                   fillColor = "blue",
                   fillOpacity = 0.3,
                   # label is the label shown
                   #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-                  label = ~towntractName, #PAtown[['NAME']] = PAtown[['areaField']]
-                  layerId = ~towntractName, ## initially.
+                  label = ~twt,
+                  #layerId = ~twt, ## initially.
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",
@@ -74,22 +74,25 @@ function(input, output, session) {
   })
   TARGETstring = reactive({
     TARGETstring = (input$areaSelectorId)
-    print(paste('TARGETstring (in):', TARGETstring))
+    # print(paste('TARGETstring (in):', TARGETstring))
     print(get_areaFieldName() )
-    if(get_areaFieldName() == 'townName')
-      TARGETstring = PAtown$townName[PAtown$towntractName == TARGETstring]
     print(paste('TARGET (out):', TARGETstring))
     TARGETstring
   })
   TARGETrownumbers = reactive({
-    print(paste('TARGETrownumbers:', TARGETstring()))
+    print(paste('TARGETrownumbers:',
+                TARGETstring() , ' in areaField ', get_areaFieldName()
+                ))
     #which(PAtown[['areaField']] == TARGETstring())
-    which(PAtown[[get_areaFieldName()]] == TARGETstring())
+    rownumbers = which(twt[['areaField']] == TARGETstring())
+    print(paste('TARGETrownumbers: ', paste(collapse=' ', rownumbers)))
+    return(rownumbers)
   })
   TARGETdatarows = reactive({
-    PAtown[TARGETrownumbers(), ]
+    twt[TARGETrownumbers(), ]
   })
-  # Map animations and reactive selectors
+
+  ##### mapObserver:  leafletProxy: Map animation  ####
   mapObserver = observeEvent(c(input$townToggleId, input$areaSelectorId), {
 
     print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
@@ -100,17 +103,21 @@ function(input, output, session) {
 
     print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
     #townRowNumber = which(PAtown$NAME==TARGETdatarows()$NAME) [1]  # [1] for now.
-
+  #### leafletProxy ####
     leafletProxy("map", session) %>%
-      flyTo(lng = TARGETdatarows()$lon[1], lat = TARGETdatarows()$lat[1], zoom=10) %>%
+      flyTo(lng = TARGETdatarows()$lon.places[1],
+            lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
       clearGroup("selectedTownShp") %>%
-      addPolygons(data=PAtown[areaRowNumbers,], weight = 1,
+      addPolygons(data=twt[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~towntractName, #layerId = ~towntractName,
+                  label= ~areaField, #layerId = ~areaField,
                   fillOpacity = 1, group="selectedTownShp") #%>%
-    default_town = PAtown[["areaField"]] [1]
+
+    #### default before area is selected ####
     if (input$areaSelectorId == " ")
-      updateSelectInput(inputId='areaSelectorId', selected = default_town)
+      updateSelectInput(inputId='areaSelectorId', selected = 1)
+
+
     columns.tabledemog = c("Total Population (2019)", "PM_avg")
         # columns for tabledemog  are: c("NAME", "Total Population (2019)", "PM_avg")  (was 1,5,4)
         # columns for tableest  were c(9:12,8,15,16)
@@ -208,7 +215,7 @@ function(input, output, session) {
   # })
 
   thisAreaFeature = reactive({
-    thisFeature = as.numeric(PAtown[[input$idFeature]])
+    thisFeature = as.numeric(twt[[input$idFeature]])
     return(thisFeature[TARGETrownumbers()])
   })
   thisAreaFeatureSummary = reactive({
@@ -219,16 +226,17 @@ function(input, output, session) {
 
   output$histTitle = renderUI( {
     print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
-    print(paste('histTitle:', 'input$idFeature', input$idFeature))
+    print(paste('histTitle:', 'input$idFeature=', input$idFeature))
 
-    thisFeature = as.numeric(PAtown[[input$idFeature]])
+    thisFeature = as.numeric(twt[[input$idFeature]])
 
-    print(paste('histTitle:', 'feature values', paste(collapse=',', thisAreaFeature())))
+    print(paste('histTitle:', 'feature values',
+                paste(collapse=',', thisAreaFeature())))
     print(paste('histTitle:', 'feature summary',
                 paste(collapse=',', thisAreaFeatureSummary())))
 
     div(hr(),
-        span(strong(switch(get_areaFieldName()=='townName',
+        span(strong(switch(get_areaFieldName()=='towns',
                            "Selected town:", "Selected town/tract:")),
              span(
           style='color:green',
@@ -250,9 +258,9 @@ function(input, output, session) {
   })
   output$proportion_smaller <- renderText({
     print(paste('proportion_smaller:', 'distribution of idFeature'))
-    print(summary(PAtown[[input$idFeature]]))
+    print(summary(twt[[input$idFeature]]))
     howManyLess = try({
-      PAtown[[input$idFeature]] < thisAreaFeatureSummary()
+      twt[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
@@ -261,7 +269,7 @@ function(input, output, session) {
   })
 
   output$featurePlot <- renderPlot({
-    thisFeature = as.numeric(PAtown[[input$idFeature]])
+    thisFeature = as.numeric(twt[[input$idFeature]])
     thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
