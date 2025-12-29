@@ -24,8 +24,8 @@ function(input, output, session) {
   #needs Town, lat, lon
 
   # This is ok, because only used for centering map at the start.
-  medianLON= median(as.numeric(twt$lon.tracts))
-  medianLAT= median(as.numeric(twt$lat.tracts))
+  medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
+  medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
 
  # clicking updates selectInput
