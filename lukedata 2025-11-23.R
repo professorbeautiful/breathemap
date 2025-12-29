@@ -19,7 +19,7 @@ rm(list=
    )
 ls(env=lukedata)
 ###DONE
-s
+
 #' copy lukedata PA objects to .GlobalEnv and reprocess.
 #
 sapply(ls(env=lukedata), function(o)
@@ -28,28 +28,40 @@ ls(patt='^PA*')
 names(PAtown)
 names(PAtowndata)
 PAtowndata.lukedata = get('PAtowndata', env=lukedata)
-setdiff(names(PAtowndata),
-        names(PAtowndata.lukedata))
-# [1] "Lung Cancer Deaths, Ghardibvand Estimate"
-# [2] "Lung Cancer Deaths, Laden Estimate"
-# [3] "TOWN"
-# [4] "lat"
-# [5] "lon"
-setdiff(y=names(PAtowndata),
-        names(get('PAtowndata', env=lukedata)))
-# [1] "PM_avg"                  "Tract Name"
-# [3] "Low Birth Weight Babies" "Preterm Births"
-# [5] "Stillbirths"
-intersect(names(PAtowndata),
-        names(get('PAtowndata', env=lukedata)))###
+identical(PAtowndata.lukedata, PAtowndata)
+
+# these setdiff are from earlier era!
+# setdiff(names(PAtowndata),
+#         names(PAtowndata.lukedata))
+# # [1] "Lung Cancer Deaths, Ghardibvand Estimate"
+# # [2] "Lung Cancer Deaths, Laden Estimate"
+# # [3] "TOWN"
+# # [4] "lat"
+# # [5] "lon"
+# setdiff(y=names(PAtowndata),
+#         names(get('PAtowndata', env=lukedata)))
+# # [1] "PM_avg"                  "Tract Name"
+# # [3] "Low Birth Weight Babies" "Preterm Births"
+# # [5] "Stillbirths"
+# intersect(names(PAtowndata),
+#         names(get('PAtowndata', env=lukedata)))###
 #'  Merging new fields ...
 length(get('PAtowndata')$NAMELSAD)   #739
 length(get('PAtowndata', env=lukedata)$NAMELSAD)   #739
-setdiff(y=get('PAtowndata')$NAMELSAD,
-        get('PAtowndata', env=lukedata)$NAMELSAD)
+setcompare(y=get('PAtowndata')$GEOID,
+        get('PAtowndata', env=lukedata)$GEOID)
 ### identical. so we can just merge.
-PAtowndata.merged = merge(PAtowndata, get('PAtowndata', env=lukedata),
-                           by='NAMELSAD')
+#######NOOOOOOO!!!
+
+PAtowndata[grep (' 103', PAtowndata$NAMELSAD), ] #### GEOID is what we want.
+PAtown[grep (' 103', PAtowndata$NAMELSAD), ] #### GEOID is what we want.
+
+PAtowndata.joined =   ### no can do
+  st_join(PAtown, PAtown, by='GEOID')
+
+
+PAtowndata.merged = merge(PAtowndata, PAtowndata.lukedata, #get('PAtowndata', env=lukedata),
+                           by='GEOID')
 dim(PAtowndata.merged)
 names(PAtowndata.merged)
 dotxNames = grep('.x$', names(PAtowndata.merged), v=T)
@@ -66,22 +78,16 @@ names(PAtowndata.merged)[dotxNums] =
   gsub('.x', '', dotxNames)
 names(PAtowndata.merged)
 ## OK, done.
-dim(PAtowndata.merged)   ## 753  26    #Why not 739?
+dim(PAtowndata.merged)   ## 739  21
 
-setdiff(x=PAtowndata$NAMELSAD,
-        PAtowndata.merged$NAMELSAD)  ### no difference.  Duplicates?
-which(duplicated(PAtowndata$NAMELSAD))
+which(duplicated(PAtowndata$GEOID))
+### none. !!!!!  finally rid of the tract mess!
+# which(duplicated(PAtowndata$NAMELSAD))
 # [1] 128 130 175 549 550 565 610
-PAtowndata[which(PAtowndata$NAMELSAD == PAtowndata$NAMELSAD[128] ) , ]
 
-duplicatedNAMELSAD = PAtowndata.lukedata$NAMELSAD [
-  which(duplicated(PAtowndata.lukedata$NAMELSAD))]
+# duplicatedNAMELSAD = PAtowndata.lukedata$NAMELSAD [
+#   which(duplicated(PAtowndata.lukedata$NAMELSAD))]
 #     306 580 724 725 726 728 730
 
-
-duplicatedNAMELSAD.rows = PAtowndata.lukedata[ PAtowndata.lukedata$NAMELSAD %in% duplicatedNAMELSAD, ]
-duplicatedNAMELSAD.rows [order(duplicatedNAMELSAD.rows$NAMELSAD), ]
-
-## REMEMBER to save PAtowndata.Rd in appPA.
-
-save(PAtowndata.lukedata, file = 'appPA/PAtowndata.lukedata.Rd')
+## the geom data is in PAtown, not PAtowndata or PAtowndata.merged!!
+save(PAtowndata.merged, file = 'appPA/PAtowndata.merged.Rd')
