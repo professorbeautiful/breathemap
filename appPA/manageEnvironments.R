@@ -9,15 +9,27 @@ envNames =  names(
       )
     )
   )   ### includes thisSession
-
-not_envNames =  names(
-  which(
-    sapply(ls(),
-           FUN = function(o)
-            ! is.environment(get(o,pos = 1))
+envNames.f = function() {
+  names(
+    which(
+      sapply(ls(pos=1),
+             FUN = function(o)
+               is.environment(get(o,pos = 1))
+      )
     )
   )
-)
+}
+
+not_envNames.f = function() {
+  names(
+    which(
+      sapply(ls(pos=1),
+             FUN = function(o)
+               ! is.environment(get(o,pos = 1))
+      )
+    )
+  )
+}
 sapply(ls(),
        FUN = function(o)
          if( ! is.environment(get(o))) {
@@ -26,6 +38,14 @@ sapply(ls(),
          }
 )
 ls(envir = env.2025_12_29)
-rm(list = not_envNames)
+rmNotEnv = function(){
+  toRemove = not_envNames.f()
+  toRemove = setdiff(toRemove,
+                     c('rmNotEnv', 'not_envNames.f', 'envNames.f',
+                       'cq', 'moveColumns', 'showTownsInLeaflet'))
+  print(toRemove)
+  rm(list = toRemove, pos=1)
+}
+rmNotEnv()
 ls()  #### only environments left
 rm(thisSession)
