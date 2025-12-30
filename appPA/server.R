@@ -102,7 +102,6 @@ function(input, output, session) {
   TARGETdatarows = reactive({
     twt[TARGETrownumbers(), ]
   })
-
  # leaflet map
   output$map <- renderLeaflet({
 
@@ -128,23 +127,22 @@ function(input, output, session) {
 
   ##### mapObserver:  leafletProxy: Map animation  ####
   mapObserver = observeEvent(c(input$townToggleId, input$areaSelectorId), {
-
     print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('mapObserver: input$townToggleId', input$townToggleId) )
     print(paste('mapObserver: TARGETstring', TARGETstring() ) )
 
     areaRowNumbers = TARGETrownumbers()
-
     print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
-  #### leafletProxy ####
+    #### leafletProxy ####
+
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon.places[1],
             lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
       clearGroup("selectedTownShp") %>%
       addPolygons(data=twt[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~twt, layerId = ~twt,
-                  fillOpacity = 1, group="selectedTownShp") #%>%
+                  #label= ~twt, layerId = ~twt,
+                  fillOpacity = 1, group="selectedTownShp")
 
     #### default before area is selected ####
     if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
