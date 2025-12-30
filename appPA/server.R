@@ -42,12 +42,12 @@ function(input, output, session) {
   areaFieldName = 'twt'  ## towns with tracts
 
   #### input$townToggleId ####
-  observeEvent(input$townToggleId, {
-    twt$areaField = twt$towns
-    updateSelectInput(inputId='areaSelectorId',
-                      choices = twt[[input$townToggleId]])
-
-  })
+  # observeEvent(input$townToggleId, {
+  #   twt$areaField = twt$towns
+  #   updateSelectInput(inputId='areaSelectorId',
+  #                     choices = twt[[input$townToggleId]])
+  #
+  # })
   get_areaFieldName = reactive({
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
@@ -83,34 +83,35 @@ function(input, output, session) {
   TARGETstring = reactive({
      return(input$areaSelectorId)
   })
+  getATownFromThisTract = function(twtTractString=TARGETstring()){
+    townsForThisTract = strsplit(split = ',',
+                                 gsub(' 42.*', '',
+                                      twtTractString ) ) [[1]]
+    print(paste('getATownFromThisTract: townsForThisTract:',
+                paste(collapse='+', townsForThisTract)))
+    ### for now, pick the first town.  Later, pop up to pick a town.
+    selectedTown = townsForThisTract[1]
+    return(selectedTown)
+  }
+  getRownumbersForTown = function(selectedTown=getATownFromThisTract(TARGETstring())) {
+    print(paste('selectedTown: ', selectedTown))
+    TARGETrownumbers = grep(selectedTown, twt$twt)
+    print(paste('getRownumbersForTown: ', paste(collapse='+', TARGETrownumbers)))
+    return(TARGETrownumbers)
+  }
   TARGETrownumbers = reactive({
     areaFieldName = get_areaFieldName()
     print(paste('TARGETstring (in):', TARGETstring()))
-
-    if(areaFieldName == 'towns') {
-      townsForThisTract = strsplit(split = ',',
-                                   gsub(' 42.*', '',
-                                   TARGETstring() ) ) [[1]]
-      print(paste(collapse='+', 'townsForThisTract: ', townsForThisTract))
-      ### for now, pick the first town.  Later, pop up to pick a town.
-      selectedTown = townsForThisTract[1]
-      TARGETrownumbers = which(grep(selectedTown, twt$twt))
-      #TARGETstring = twt$towns[match(TARGETstring, twt$twt)]
-    }
+    if(areaFieldName == 'towns')
+      rownumbers = getRownumbersForTown()
     else if(areaFieldName == 'twt')   # towns with tracts
-      TARGETrownumbers = match(TARGETstring(), twt$twt)
+      rownumbers = match(TARGETstring(), twt$twt)
     else {
       print(paste('areaFieldName? ', areaFieldName))
       browser(text = 'what areaFieldName?')
     }
-    print(paste(collapse = '+', 'TARGET (out):', TARGETrownumbers))
-    # print(paste('TARGETrownumbers:',
-    #             TARGETstring() , ' in areaField ', get_areaFieldName()
-    #             ))
-    # #which(PAtown[['areaField']] == TARGETstring())
-    # rownumbers = which(twt[['areaField']] == TARGETstring())
-    # print(paste('TARGETrownumbers: ', paste(collapse=' ', rownumbers)))
-    return(TARGETrownumbers)
+    print(paste('TARGETrownumbers', paste(collapse = '+', 'TARGET (out):', rownumbers)))
+    return(rownumbers)
   })
   TARGETdatarows = reactive({
     twt[TARGETrownumbers(), ]
@@ -126,7 +127,6 @@ function(input, output, session) {
     areaRowNumbers = TARGETrownumbers()
 
     print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
-    #townRowNumber = which(PAtown$NAME==TARGETdatarows()$NAME) [1]  # [1] for now.
   #### leafletProxy ####
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon.places[1],
