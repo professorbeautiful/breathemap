@@ -79,23 +79,38 @@ function(input, output, session) {
                     fillOpacity = 1,
                     bringToFront = T))
   })
+
   TARGETstring = reactive({
-    TARGETstring = (input$areaSelectorId)
-    areaFieldName = get_areaFieldName()
-    if(areaFieldName == 'towns')
-      TARGETstring = twt$towns[match(TARGETstring, twt$twt)]
-      # print(paste('TARGETstring (in):', TARGETstring))
-    print(paste('TARGET (out):', TARGETstring))
-    TARGETstring
+     return(input$areaSelectorId)
   })
   TARGETrownumbers = reactive({
-    print(paste('TARGETrownumbers:',
-                TARGETstring() , ' in areaField ', get_areaFieldName()
-                ))
-    #which(PAtown[['areaField']] == TARGETstring())
-    rownumbers = which(twt[['areaField']] == TARGETstring())
-    print(paste('TARGETrownumbers: ', paste(collapse=' ', rownumbers)))
-    return(rownumbers)
+    areaFieldName = get_areaFieldName()
+    print(paste('TARGETstring (in):', TARGETstring()))
+
+    if(areaFieldName == 'towns') {
+      townsForThisTract = strsplit(split = ',',
+                                   gsub(' 42.*', '',
+                                   TARGETstring() ) ) [[1]]
+      print(paste(collapse='+', 'townsForThisTract: ', townsForThisTract))
+      ### for now, pick the first town.  Later, pop up to pick a town.
+      selectedTown = townsForThisTract[1]
+      TARGETrownumbers = which(grep(selectedTown, twt$twt))
+      #TARGETstring = twt$towns[match(TARGETstring, twt$twt)]
+    }
+    else if(areaFieldName == 'twt')   # towns with tracts
+      TARGETrownumbers = match(TARGETstring(), twt$twt)
+    else {
+      print(paste('areaFieldName? ', areaFieldName))
+      browser(text = 'what areaFieldName?')
+    }
+    print(paste(collapse = '+', 'TARGET (out):', TARGETrownumbers))
+    # print(paste('TARGETrownumbers:',
+    #             TARGETstring() , ' in areaField ', get_areaFieldName()
+    #             ))
+    # #which(PAtown[['areaField']] == TARGETstring())
+    # rownumbers = which(twt[['areaField']] == TARGETstring())
+    # print(paste('TARGETrownumbers: ', paste(collapse=' ', rownumbers)))
+    return(TARGETrownumbers)
   })
   TARGETdatarows = reactive({
     twt[TARGETrownumbers(), ]
@@ -119,7 +134,7 @@ function(input, output, session) {
       clearGroup("selectedTownShp") %>%
       addPolygons(data=twt[areaRowNumbers,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~areaField, layerId = ~areaField,
+                  label= ~twt, layerId = ~twt,
                   fillOpacity = 1, group="selectedTownShp") #%>%
 
     #### default before area is selected ####
