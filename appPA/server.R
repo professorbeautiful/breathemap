@@ -58,30 +58,9 @@ function(input, output, session) {
     return(areaFieldName)   ## get_areaFieldName
     # updateSelectInput(session, "areaSelectorId", choices = PAtown)
   })
- # leaflet map
-  output$map <- renderLeaflet({
-    leaflet() %>%
-      addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
-      setView(lng = medianLON, lat = medianLAT, zoom = 7)  %>%
-      addPolygons(data = twt,
-                  weight = 1,
-                  color = "Black",
-                  fillColor = "blue",
-                  fillOpacity = 0.3,
-                  # label is the label shown
-                  #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-                  label = ~twt,
-                  layerId = ~twt, ## initially.
-                  highlight = highlightOptions(
-                    fillColor = "green",
-                    color = "red",
-                    weight = 2,
-                    fillOpacity = 1,
-                    bringToFront = T))
-  })
 
   TARGETstring = reactive({
-     return(input$areaSelectorId)
+    return(input$areaSelectorId)
   })
   SELECTEDstring = reactive({
     if(get_areaFieldName() == 'towns')
@@ -122,6 +101,28 @@ function(input, output, session) {
   })
   TARGETdatarows = reactive({
     twt[TARGETrownumbers(), ]
+  })
+
+ # leaflet map
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
+      setView(lng = medianLON, lat = medianLAT, zoom = 7)  %>%
+      addPolygons(data = twt,
+                  weight = 1,
+                  color = "Black",
+                  fillColor = "blue",
+                  fillOpacity = 0.3,
+                  # label is the label shown
+                  #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
+                  label = ~twt,
+                  layerId = ~twt, ## initially.
+                  highlight = highlightOptions(
+                    fillColor = "green",
+                    color = "red",
+                    weight = 2,
+                    fillOpacity = 1,
+                    bringToFront = T))
   })
 
   ##### mapObserver:  leafletProxy: Map animation  ####
