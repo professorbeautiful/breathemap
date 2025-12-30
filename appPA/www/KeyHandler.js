@@ -11,10 +11,14 @@ $(document).on("keyup", function (event) {
     x = event.which || event.keyCode;
     keyVar = x;
     eventSaved = event;
+    //  15 letters from D to S.
     if(x==(68+15) && event.ctrlKey && event.shiftKey) { // control shift s
             ctrlShiftSpressed = ! ctrlShiftSpressed;
             Shiny.onInputChange("ctrlShiftSpressed", ctrlShiftSpressed);
             document.getElementById('downloadAllUserEntries').click();
+    }
+    if(x==13 && event.ctrlKey) { // control returnKey
+      document.getElementById('evalButtonR').click();
     }
     if(x==68 && event.ctrlKey) { // control d
       ctrlDpressed = ! ctrlDpressed;  // toggle
