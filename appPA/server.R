@@ -69,10 +69,15 @@ function(input, output, session) {
       return(TARGETstring())
   })
 
+  getTownsForThisTract = function(twtTractString=TARGETstring())
+    strsplit(split = ',',
+             gsub(' 42.*', '',
+                  twtTractString ) ) [[1]]
+
+  townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
+
   getATownFromThisTract = function(twtTractString=TARGETstring()){
-    townsForThisTract = strsplit(split = ',',
-                                 gsub(' 42.*', '',
-                                      twtTractString ) ) [[1]]
+    townsForThisTract = getTownsForThisTract(twtTractString)
     print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
@@ -81,7 +86,8 @@ function(input, output, session) {
   }
   getRownumbersForTown = function(selectedTown=getATownFromThisTract(TARGETstring())) {
     print(paste('selectedTown: ', selectedTown))
-    TARGETrownumbers = grep(selectedTown, twt$twt)
+    TARGETrownumbers =
+      which(sapply(  townsForAllTracts, function(t) selectedTown %in% t))
     print(paste('getRownumbersForTown: ', paste(collapse='+', TARGETrownumbers)))
     return(TARGETrownumbers)
   }
