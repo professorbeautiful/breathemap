@@ -8,9 +8,16 @@ library(tigris)
 library(sf)
 library(dplyr)
 
+if(basename(getwd()) != 'appPA')
+  setwd('appPA')
+source('moveColumns.R')
+source('cq.R')
+
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 library(shinyDebuggingPanel)
+
+
 
 load('tracts_with_towns.Rd')   ## of type sf
 load('patown1.Rd')   ## 26 fields only
@@ -46,6 +53,8 @@ PAtown = st_transform(PAtown, "WGS84")
 # PAtowndata = PAtowndata[townOrder, ]
 
 ####   15 are missing still. ####
+towns = tracts_with_towns$towns
+
 table(is.na(towns ))
 towns [ which(is.na(towns )) ] = '___'
 tracts_with_towns$towns [ which(is.na(tracts_with_towns$towns) )] = '___'
@@ -95,7 +104,7 @@ class(tracts_with_towns.wide)
 ### for other fields to use for label, we will copy onto areaField.
 #### finally, copy back to tracts_with_fields ####
 tracts_with_towns = tracts_with_towns.wide
-tracts_with_towns$twt =  paste(twt$towns, twt$tracts)
+tracts_with_towns$twt =  paste(tracts_with_towns$towns, tracts_with_towns$tracts)
 tracts_with_towns$areaField = tracts_with_towns$twt
 tracts_with_towns = moveColumns(tracts_with_towns, 'areaField')
 tracts_with_towns = tracts_with_towns[ order(tracts_with_towns$twt) ,  ]
