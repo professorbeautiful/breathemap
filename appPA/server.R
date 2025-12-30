@@ -83,6 +83,13 @@ function(input, output, session) {
   TARGETstring = reactive({
      return(input$areaSelectorId)
   })
+  SELECTEDstring = reactive({
+    if(get_areaFieldName() == 'towns')
+      return(getATownFromThisTract())
+    else
+      return(TARGETstring())
+  })
+
   getATownFromThisTract = function(twtTractString=TARGETstring()){
     townsForThisTract = strsplit(split = ',',
                                  gsub(' 42.*', '',
@@ -260,11 +267,13 @@ function(input, output, session) {
                 paste(collapse=',', thisAreaFeatureSummary())))
 
     div(hr(),
-        span(strong(switch(get_areaFieldName()=='towns',
-                           "Selected town:", "Selected town/tract:")),
+        span(strong(
+          switch(get_areaFieldName(),
+                 towns="Selected town:",
+                 twt="Selected town/tract:")),
              span(
           style='color:green',
-          paste(TARGETstring()))),
+          paste(SELECTEDstring()))),
         br(),
         span(strong("Selected feature: "),
              span(
