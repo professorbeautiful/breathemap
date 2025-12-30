@@ -148,4 +148,6 @@ IQcaption <- htmltools::tags$caption(
 twt = st_transform(twt, "WGS84")
 #st_crs(twt) <- 4326
 
-
+eachTown = sort(unique(unlist(strsplit(twt$towns, split=', *'))))
+#eachTown.isNbhd = match(eachTown, twt$towns)
+#twt$lem.tracts
