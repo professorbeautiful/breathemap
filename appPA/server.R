@@ -41,6 +41,13 @@ function(input, output, session) {
 
   areaFieldName = 'twt'  ## towns with tracts
 
+  #### input$townToggleId ####
+  observeEvent(input$townToggleId, {
+    twt$areaField = twt$towns
+    updateSelectInput(inputId='areaSelectorId',
+                      choices = twt[[input$townToggleId]])
+
+  })
   get_areaFieldName = reactive({
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
