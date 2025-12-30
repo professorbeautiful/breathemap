@@ -105,9 +105,10 @@ function(input, output, session) {
 
  # leaflet map
   output$map <- renderLeaflet({
+
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
-      setView(lng = medianLON, lat = medianLAT, zoom = 7)  %>%
+      setView(lng = medianLON, lat = medianLAT, zoom = 10)  %>%
       addPolygons(data = twt,
                   weight = 1,
                   color = "Black",
