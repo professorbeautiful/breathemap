@@ -35,8 +35,11 @@ function(input, output, session) {
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
-    else
+    else {
+      ### so that you can 're-click', i.e. select a different town?  doesn't work probably
+      updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
+    }
   })
 
   #### default before area is selected ####
