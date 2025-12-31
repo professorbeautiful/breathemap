@@ -41,13 +41,14 @@ function(input, output, session) {
 
   areaFieldName = 'twt'  ## towns with tracts
 
-  #### input$townToggleId ####
+  #### NOT USED  observeEvent   input$townToggleId ####
   # observeEvent(input$townToggleId, {
   #   twt$areaField = twt$towns
   #   updateSelectInput(inputId='areaSelectorId',
   #                     choices = twt[[input$townToggleId]])
   #
   # })
+  #### get_areaFieldName ####
   get_areaFieldName = reactive({
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
@@ -63,22 +64,26 @@ function(input, output, session) {
     return(input$areaSelectorId)
   })
   SELECTEDstring = reactive({
+  #### SELECTEDstring reactive  ####
     if(get_areaFieldName() == 'towns')
       return(getATownFromThisTract())
     else
       return(TARGETstring())
   })
 
+  #### getTownsForThisTract ####
   getTownsForThisTract = function(twtTractString=TARGETstring())
     strsplit(split = ',',
              gsub(' 42.*', '',
                   twtTractString ) ) [[1]]
 
+  #### townsForAllTracts ####
   townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
 
   rV = reactiveValues()
 
   getATownFromThisTract = reactive( {
+  ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
     townsForThisTract = getTownsForThisTract(TARGETstring())
     isolate({
       print(paste('getATownFromThisTract: townsForThisTract:',
@@ -110,6 +115,8 @@ function(input, output, session) {
     #print(paste('selectedTown return: ', rV$selectedTown))
     return(rV$selectedTown)
   })
+
+  #### modal OK ####
   observeEvent(input$ok, {
     rV$selectedTownModal = (input$modalId)
     print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
@@ -119,12 +126,14 @@ function(input, output, session) {
   getRownumbersForTown = function() {
     selectedTown=getATownFromThisTract()
     print(paste('getRownumbersForTown  selectedTown: ', selectedTown))
+  #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
     TARGETrownumbers =
       which(sapply(  townsForAllTracts, function(t) selectedTown %in% t))
     print(paste('getRownumbersForTown: selectedTown: ',
                 selectedTown, paste(collapse='+', TARGETrownumbers)))
     return(TARGETrownumbers)
   }
+  #### TARGETrownumbers TARGETstring() ->rV$TARGETrownumbers  ####
   TARGETrownumbers = reactive({
     areaFieldName = get_areaFieldName()
     print(paste('TARGETstring (in):', TARGETstring()))
@@ -139,13 +148,14 @@ function(input, output, session) {
     print(paste('TARGETrownumbers', paste(collapse = '+', 'TARGET (out):', rownumbers)))
     return(rownumbers)
   })
+  #### TARGETdatarows ####
   TARGETdatarows = reactive({
     twt[TARGETrownumbers(), ]
   })
- # leaflet map
+
+ #### leaflet output$map ####
   twt$twt.2 = twt$twt
   output$map <- renderLeaflet({
-
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
       setView(lng = medianLON, lat = medianLAT, zoom = 10)  %>%
