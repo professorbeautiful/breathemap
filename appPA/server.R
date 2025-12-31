@@ -65,8 +65,9 @@ function(input, output, session) {
   })
   #### SELECTEDstring reactive  ####
   SELECTEDstring = reactive( {
-    print(paste(collapse='\n', 'SELECTEDstring',
-                c(TARGETstring(), input$townToggleId) ))
+    print( 'SELECTEDstring: TARGETstring: ',  TARGETstring())
+    print( 'SELECTEDstring:  get_areaFieldName: ',input$townToggleId)
+    print( 'SELECTEDstring:  townToggleId: ',input$townToggleId)
     if(get_areaFieldName() == 'towns')
       return(   getATownFromThisTract(TARGETstring()))#
     else
