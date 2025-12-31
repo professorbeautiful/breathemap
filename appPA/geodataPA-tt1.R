@@ -156,7 +156,7 @@ table( is.na(tt1.sw.l$towns))
 
 ### See 'Shaler Twp.docx'.  Conclusion: used lem.towns even when not missing.
 tt1.sw.l$towns[ !is.na(tt1.sw.l$lem.towns) ] =
-  tt1.sw.l$lem.towns[ is.na(tt1.sw.l$lem.towns) ]
+  tt1.sw.l$lem.towns[ !is.na(tt1.sw.l$lem.towns) ]
 
 tt1.sw.l = moveColumns(
   tt1.sw.l,
