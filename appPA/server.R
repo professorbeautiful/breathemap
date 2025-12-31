@@ -63,10 +63,11 @@ function(input, output, session) {
   TARGETstring = reactive({
     return(input$areaSelectorId)
   })
-  SELECTEDstring = reactive({
   #### SELECTEDstring reactive  ####
+  SELECTEDstring = reactive( {
+    c(TARGETstring(), input$townToggleId)
     if(get_areaFieldName() == 'towns')
-      return(getATownFromThisTract())
+      return(   getATownFromThisTract(TARGETstring()))#
     else
       return(TARGETstring())
   })
@@ -82,9 +83,9 @@ function(input, output, session) {
 
   rV = reactiveValues()
 
-  getATownFromThisTract = reactive( {
   ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
-    townsForThisTract = getTownsForThisTract(TARGETstring())
+  getATownFromThisTract = function(target )  {
+    townsForThisTract = getTownsForThisTract(target)
     isolate({
       print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
@@ -105,16 +106,16 @@ function(input, output, session) {
         footer=actionButton("ok", "OK")
       ))
       #print(paste('selectedTown (modal): ', rV$selectedTown))
-      rV$selectedTown = townsForThisTract[1]
+      #rV$selectedTown = townsForThisTract[1]
     }
     if(!is.null(rV$selectedTownModal)) {
       rV$selectedTown = rV$selectedTownModal
       rV$selectedTownModal = NULL
     }
+    print(paste('selectedTown return: ', rV$selectedTown))
     })
-    #print(paste('selectedTown return: ', rV$selectedTown))
     return(rV$selectedTown)
-  })
+  }
 
   #### modal OK ####
   observeEvent(input$ok, {
@@ -123,34 +124,37 @@ function(input, output, session) {
     removeModal()
   })
 
-  getRownumbersForTown = function() {
-    selectedTown=getATownFromThisTract()
-    print(paste('getRownumbersForTown  selectedTown: ', selectedTown))
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
+  getRownumbersForTown = function( town) {
+    print(paste('getRownumbersForTown  selectedTown: ', town))
     TARGETrownumbers =
-      which(sapply(  townsForAllTracts, function(t) selectedTown %in% t))
+      which(sapply(  townsForAllTracts, function(t) town %in% t))
     print(paste('getRownumbersForTown: selectedTown: ',
-                selectedTown, paste(collapse='+', TARGETrownumbers)))
+                town, paste(collapse='+', TARGETrownumbers)))
+    rV$TARGETrownumbers = TARGETrownumbers
     return(TARGETrownumbers)
   }
+
   #### TARGETrownumbers TARGETstring() ->rV$TARGETrownumbers  ####
-  TARGETrownumbers = reactive({
+  TARGETrownumbers = function(target){
     areaFieldName = get_areaFieldName()
-    print(paste('TARGETstring (in):', TARGETstring()))
+    print(paste('TARGETrownumbers:  areaFieldName :', areaFieldName))
+    print(paste('TARGETrownumbers:  target (in):', target))
     if(areaFieldName == 'towns')
-      rownumbers = getRownumbersForTown()
+      rownumbers = getRownumbersForTown(getATownFromThisTract())
     else if(areaFieldName == 'twt')   # towns with tracts
-      rownumbers = match(TARGETstring(), twt$twt)
+      rownumbers = match(target, twt$twt)
     else {
       print(paste('areaFieldName? ', areaFieldName))
       browser(text = 'what areaFieldName?')
     }
     print(paste('TARGETrownumbers', paste(collapse = '+', 'TARGET (out):', rownumbers)))
     return(rownumbers)
-  })
+  }
+
   #### TARGETdatarows ####
   TARGETdatarows = reactive({
-    twt[TARGETrownumbers(), ]
+    twt[TARGETrownumbers(TARGETstring()), ]
   })
 
  #### leaflet output$map ####
@@ -177,12 +181,12 @@ function(input, output, session) {
   })
 
   ##### mapObserver:  leafletProxy: Map animation  ####
-  mapObserver = observeEvent(c(input$townToggleId, input$areaSelectorId), {
+  mapObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
     print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('mapObserver: input$townToggleId', input$townToggleId) )
     print(paste('mapObserver: TARGETstring', TARGETstring() ) )
 
-    areaRowNumbers = TARGETrownumbers()
+    areaRowNumbers = TARGETrownumbers(target = TARGETstring() )
     print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
     #### leafletProxy ####
     leafletProxy("map", session) %>%
@@ -273,7 +277,7 @@ function(input, output, session) {
 
   thisAreaFeature = reactive({
     thisFeature = as.numeric(twt[[input$idFeature]])
-    return(thisFeature[TARGETrownumbers()])
+    return(thisFeature[TARGETrownumbers(TARGETstring())])
   })
   thisAreaFeatureSummary = reactive({
     featureSummaryFunction = mean
