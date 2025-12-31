@@ -49,7 +49,7 @@ function(input, output, session) {
   #
   # })
   #### get_areaFieldName ####
-  get_areaFieldName = reactive({
+  get_areaFieldName = function(){
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
     else
@@ -58,14 +58,15 @@ function(input, output, session) {
     twt[['areaField']] <<-twt[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
     # updateSelectInput(session, "areaSelectorId", choices = PAtown)
-  })
+  }
 
   TARGETstring = reactive({
     return(input$areaSelectorId)
   })
   #### SELECTEDstring reactive  ####
   SELECTEDstring = reactive( {
-    c(TARGETstring(), input$townToggleId)
+    print(paste(collapse='\n', 'SELECTEDstring',
+                c(TARGETstring(), input$townToggleId) ))
     if(get_areaFieldName() == 'towns')
       return(   getATownFromThisTract(TARGETstring()))#
     else
@@ -84,7 +85,7 @@ function(input, output, session) {
   rV = reactiveValues()
 
   ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
-  getATownFromThisTract = function(target )  {
+  getATownFromThisTract = function(target = TARGETstring())  {
     townsForThisTract = getTownsForThisTract(target)
     isolate({
       print(paste('getATownFromThisTract: townsForThisTract:',
@@ -121,6 +122,7 @@ function(input, output, session) {
   observeEvent(input$ok, {
     rV$selectedTownModal = (input$modalId)
     print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
+    isolate({rV$selectedTown = rV$selectedTownModal})
     removeModal()
   })
 
@@ -153,9 +155,9 @@ function(input, output, session) {
   }
 
   #### TARGETdatarows ####
-  TARGETdatarows = reactive({
-    twt[TARGETrownumbers(TARGETstring()), ]
-  })
+  TARGETdatarows = function(target=TARGETstring()){
+    twt[TARGETrownumbers(target), ]
+  }
 
  #### leaflet output$map ####
   twt$twt.2 = twt$twt
