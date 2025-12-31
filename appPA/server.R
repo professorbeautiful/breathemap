@@ -39,8 +39,11 @@ function(input, output, session) {
       updateSelectInput(session, "areaSelectorId", selected = click$id)
   })
 
-  areaFieldName = 'twt'  ## towns with tracts
-
+  #### default before area is selected ####
+  observe({
+  if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
+    updateSelectInput(inputId='areaSelectorId', selected = 1)
+  })
   #### NOT USED  observeEvent   input$townToggleId ####
   # observeEvent(input$townToggleId, {
   #   twt$areaField = twt$towns
@@ -48,6 +51,9 @@ function(input, output, session) {
   #                     choices = twt[[input$townToggleId]])
   #
   # })
+
+  areaFieldName = 'twt'  ## towns with tracts
+
   #### get_areaFieldName ####
   get_areaFieldName = function(){
     if(length(input$townToggleId) == 1)
