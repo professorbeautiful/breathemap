@@ -76,40 +76,48 @@ function(input, output, session) {
 
   townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
 
-  rV = reactiveValues(selectedTown='Pittsburgh')
+  rV = reactiveValues()
 
   getATownFromThisTract = reactive( {
     townsForThisTract = getTownsForThisTract(TARGETstring())
-    print(paste('getATownFromThisTract: townsForThisTract:',
+    isolate({
+      print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
     if(length(townsForThisTract) == 1 ){
-        rV$selectedTown = townsForThisTract[1]
+      rV$selectedTown = townsForThisTract[1]
       print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
-      print('showModal')
+      townsForThisTract = getTownsForThisTract()
+      townsString = paste(collapse="+", townsForThisTract)
+      print(paste('showModal: townsForThisTract:', townsString))
       showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
-        title = span('select one town:', townsForThisTract),
-        selectInput(inputId = "modalId", label = "modal selector ",
+        title = span('select one town:', townsString),
+        selectInput(inputId = "modalId", label = "select a town ",
                     choices = townsForThisTract
         ),
         footer=actionButton("ok", "OK")
       ))
-      print(paste('selectedTown (modal): ', rV$selectedTown))
+      #print(paste('selectedTown (modal): ', rV$selectedTown))
+      rV$selectedTown = townsForThisTract[1]
     }
-    print(paste('selectedTown return: ', rV$selectedTown))
+    if(!is.null(rV$selectedTownModal)) {
+      rV$selectedTown = rV$selectedTownModal
+      rV$selectedTownModal = NULL
+    }
+    })
+    #print(paste('selectedTown return: ', rV$selectedTown))
     return(rV$selectedTown)
   })
   observeEvent(input$ok, {
-    rV$selectedTown = (input$modalId)
-    print(paste('OK, selectedTownModal: ', rV$selectedTown))
+    rV$selectedTownModal = (input$modalId)
+    print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
     removeModal()
   })
 
-  getRownumbersForTown = function(selectedTown=getATownFromThisTract) {
-    if(missing(selectedTown))
-      selectedTown = rV$selectedTown
+  getRownumbersForTown = function() {
+    selectedTown=getATownFromThisTract()
     print(paste('getRownumbersForTown  selectedTown: ', selectedTown))
     TARGETrownumbers =
       which(sapply(  townsForAllTracts, function(t) selectedTown %in% t))
