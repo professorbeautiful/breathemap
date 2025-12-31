@@ -264,15 +264,15 @@ function(input, output, session) {
   })
 
   output$histTitle = renderUI( {
-    print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
-    print(paste('histTitle:', 'input$idFeature=', input$idFeature))
+    # print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
+    # print(paste('histTitle:', 'input$idFeature=', input$idFeature))
 
     thisFeature = as.numeric(twt[[input$idFeature]])
 
-    print(paste('histTitle:', 'feature values',
-                paste(collapse=',', thisAreaFeature())))
-    print(paste('histTitle:', 'feature summary',
-                paste(collapse=',', thisAreaFeatureSummary())))
+    # print(paste('histTitle:', 'feature values',
+    #             paste(collapse=',', thisAreaFeature())))
+    # print(paste('histTitle:', 'feature summary',
+    #             paste(collapse=',', thisAreaFeatureSummary())))
 
     div(hr(),
         span(strong(
@@ -298,8 +298,8 @@ function(input, output, session) {
           )))
   })
   output$proportion_smaller <- renderText({
-    print(paste('proportion_smaller:', 'distribution of idFeature'))
-    print(capture.output(summary(twt[[input$idFeature]])))
+    #print(paste('proportion_smaller:', 'distribution of idFeature'))
+    #print(capture.output(summary(twt[[input$idFeature]])))
     howManyLess = try({
       twt[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
