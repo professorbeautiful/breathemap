@@ -28,7 +28,7 @@ function(input, output, session) {
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
 
- # clicking updates selectInput
+ #### clicking updates selectInput ####
   observe({
     click <- input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
@@ -36,6 +36,10 @@ function(input, output, session) {
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else {
+      leafletProxy("map", session) %>%
+        clearGroup("selectedTract") %>%
+        clearGroup("selectedTown")
+
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
