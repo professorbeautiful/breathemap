@@ -129,7 +129,7 @@ leaflet::leaflet() %>% addTiles() %>%
 ### looks ok.  One hole.
 
 ## This (Pittsburgh) tag will signal when it's a Pittsburgh neighborhood name.
-tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '(Pittsburgh)')
+tractsLemeryPgh$towns = paste(tractsLemeryPgh$towns, '\\(Pittsburgh)')
 table(table(tractsLemeryPgh$towns))
 #  1  2  3  4  5
 # 45 14  6  3  3

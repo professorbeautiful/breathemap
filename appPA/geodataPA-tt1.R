@@ -143,7 +143,7 @@ dim(theDifferentNames)   ## 37,  plus 43 say 'Pittsburgh'
 
 tt1.sw.l$names_are_different = TRUE
 tt1.sw.l$names_are_different[ - names_are_same] = FALSE
-tt1.sw.l$lem.neighborhood = (1:nrow(tt1.sw.l)) %in% grep("(Pittsburgh)", tt1.sw.l$lem.towns)
+tt1.sw.l$lem.neighborhood = (1:nrow(tt1.sw.l)) %in% grep("\\(Pitt", tt1.sw.l$lem.towns, perl=T)
 
 #### Time for sensible var names
 tt1.sw.l$towns.tt1 = tt1.sw.l$towns  ### to safekeeping.
@@ -154,12 +154,16 @@ tt1.sw.l$towns[ is.na(tt1.sw.l$towns.tt1) ] =
 table( is.na(tt1.sw.l$towns))
 # just 15 missing names, now.
 
+### See 'Shaler Twp.docx'.  Conclusion: used lem.towns even when not missing.
+tt1.sw.l$towns[ !is.na(tt1.sw.l$lem.towns) ] =
+  tt1.sw.l$lem.towns[ is.na(tt1.sw.l$lem.towns) ]
+
 tt1.sw.l = moveColumns(
   tt1.sw.l,
   c('towns', 'lem.towns', 'lem.nb', 'towns.tt1', 'names_are_different', 'GEOID.x', 'tracts', 'lem.tracts')
   )
 head(tt1.sw.l[1:8])
-table( ! is.na(tt1.sw.l$towns))  ###yes, 25 missing town names.
+table( ! is.na(tt1.sw.l$towns))  ### 15 missing town names.
 
 save(tt1.sw.l, file='tt1.sw.l.Rd')
 tracts_with_towns =  tt1.sw.l
