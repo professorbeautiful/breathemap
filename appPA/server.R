@@ -131,16 +131,18 @@ function(input, output, session) {
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
   getRownumbersForTown = function( town) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
-    TARGETrownumbers =
+    rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
     print(paste('getRownumbersForTown: selectedTown: ',
-                town, paste(collapse='+', TARGETrownumbers)))
-    rV$TARGETrownumbers = TARGETrownumbers
-    return(TARGETrownumbers)
+                town, paste(collapse='+', rownumbersForTown)))
+    rV$TARGETrownumbers = rownumbersForTown
+    return(rownumbersForTown)
   }
 
   #### TARGETrownumbers TARGETstring() ->rV$TARGETrownumbers  ####
   TARGETrownumbers = function(target){
+    if(missing(target))
+      target = SELECTEDstring()
     areaFieldName = get_areaFieldName()
     print(paste('TARGETrownumbers:  areaFieldName :', areaFieldName))
     print(paste('TARGETrownumbers:  target (in):', target))
@@ -162,7 +164,8 @@ function(input, output, session) {
   }
 
  #### leaflet output$map ####
-  twt$twt.2 = twt$twt
+  twt$twt.for.tracts = twt$twt
+  twt$twt.for.towns = twt$twt
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
@@ -184,33 +187,51 @@ function(input, output, session) {
                     bringToFront = T))
   })
 
-  ##### mapObserver:  leafletProxy: Map animation  ####
-  mapObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
+  ##### newTractObserver:  leafletProxy: Map animation  ####
+  newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
     print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('mapObserver: input$townToggleId', input$townToggleId) )
     print(paste('mapObserver: TARGETstring', TARGETstring() ) )
 
-    areaRowNumbers = TARGETrownumbers(target = TARGETstring() )
-    print(paste('mapObserver: areaRowNumbers', paste(collapse=',', areaRowNumbers)))
-    #### leafletProxy ####
+    tractRowNumber =TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
+
+    print(paste('mapObserver: tractRowNumber', paste(collapse=',', tractRowNumber)))
+    #### leafletProxy - tracts ####
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon.places[1],
             lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
-      clearGroup("selectedTownShp") %>%
-      addPolygons(data=twt[areaRowNumbers,], weight = 1,
+      clearGroup("selectedTract") %>%
+      addPolygons(data=twt[tractRowNumber,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~twt.2,
+                  label= ~twt.for.tracts,
                   #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTownShp")  #%>%
+                  fillOpacity = 1, group="selectedTract")  #%>%
       # addPolygons(data=twt[areaRowNumbers,], weight = 1,
       #           #  color="Red", fillColor="yellow",
       #             label= ~twt,
       #             layerId = ~twt,
       #             fillOpacity = 1, group="showIds")
+  })
+  newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId), {
+    print(paste('mapObserver: input$areaSelectorId', input$areaSelectorId) )
+    print(paste('mapObserver: input$townToggleId', input$townToggleId) )
+    print(paste('mapObserver: TARGETstring', TARGETstring() ) )
+    if(input$areaSelectorId != 'towns')
+      leafletProxy("map", session) %>%
+        clearGroup("selectedTowns")
+    else {
+    townRowNumbers = getRownumbersForTown(rV$selectedTown)
 
-    #### default before area is selected ####
-    if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
-      updateSelectInput(inputId='areaSelectorId', selected = 1)
+    leafletProxy("map", session) %>%
+      flyTo(lng = TARGETdatarows()$lon.places[1],
+            lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
+      clearGroup("selectedTowns") %>%
+      addPolygons(data=twt[townRowNumbers,], weight = 1,
+                  color="green", #fillColor="yellow",
+                  label= ~twt.for.towns,
+                  #layerId = ~twt,
+                  fillOpacity = 0.5, group="selectedTowns")  #%>%
+    }
     }
   )
 
