@@ -76,19 +76,45 @@ function(input, output, session) {
 
   townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
 
-  getATownFromThisTract = function(twtTractString=TARGETstring()){
-    townsForThisTract = getTownsForThisTract(twtTractString)
+  rV = reactiveValues(selectedTown='Pittsburgh')
+
+  getATownFromThisTract = reactive( {
+    townsForThisTract = getTownsForThisTract(TARGETstring())
     print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
-    selectedTown = townsForThisTract[1]
-    return(selectedTown)
-  }
-  getRownumbersForTown = function(selectedTown=getATownFromThisTract(TARGETstring())) {
-    print(paste('selectedTown: ', selectedTown))
+    if(length(townsForThisTract) == 1 ){
+        rV$selectedTown = townsForThisTract[1]
+      print(paste('selectedTown (1): ', rV$selectedTown))
+    }
+    else {
+      print('showModal')
+      showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
+        title = span('select one town:', townsForThisTract),
+        selectInput(inputId = "modalId", label = "modal selector ",
+                    choices = townsForThisTract
+        ),
+        footer=actionButton("ok", "OK")
+      ))
+      print(paste('selectedTown (modal): ', rV$selectedTown))
+    }
+    print(paste('selectedTown return: ', rV$selectedTown))
+    return(rV$selectedTown)
+  })
+  observeEvent(input$ok, {
+    rV$selectedTown = (input$modalId)
+    print(paste('OK, selectedTownModal: ', rV$selectedTown))
+    removeModal()
+  })
+
+  getRownumbersForTown = function(selectedTown=getATownFromThisTract) {
+    if(missing(selectedTown))
+      selectedTown = rV$selectedTown
+    print(paste('getRownumbersForTown  selectedTown: ', selectedTown))
     TARGETrownumbers =
       which(sapply(  townsForAllTracts, function(t) selectedTown %in% t))
-    print(paste('getRownumbersForTown: ', paste(collapse='+', TARGETrownumbers)))
+    print(paste('getRownumbersForTown: selectedTown: ',
+                selectedTown, paste(collapse='+', TARGETrownumbers)))
     return(TARGETrownumbers)
   }
   TARGETrownumbers = reactive({
