@@ -78,7 +78,7 @@ function(input, output, session) {
   #### getTownsForThisTract ####
   getTownsForThisTract = function(twtTractString=TARGETstring())
     strsplit(split = ',',
-             gsub(' 42.*', '',
+             gsub(' 42.*', '',  #### 42 = Pennsylvania
                   twtTractString ) ) [[1]]
 
   #### townsForAllTracts ####
