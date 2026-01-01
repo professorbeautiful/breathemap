@@ -149,8 +149,8 @@ function(input, output, session) {
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
     #### ah, but what if there aren't any???
-    if (length(rownumbersForTown) == 0)
-      showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
+    # if (length(rownumbersForTown) == 0)
+       # showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
     if (length(rownumbersForTown) == 0 | input$townSharedToggleId == TRUE)
       rownumbersForTown =
         which(sapply(  townsForAllTracts, function(t) town %in% t))
