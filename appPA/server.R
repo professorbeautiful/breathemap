@@ -39,7 +39,6 @@ function(input, output, session) {
       leafletProxy("map", session) %>%
         clearGroup("selectedTract") %>%
         clearGroup("selectedTown")
-
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
@@ -150,7 +149,7 @@ function(input, output, session) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
-    #### ah, but what there aren't any???
+    #### ah, but what if there aren't any???
     if (length(rownumbersForTown) == 0)
       showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
     if (length(rownumbersForTown) == 0 | input$townSharedToggleId == TRUE)
@@ -201,6 +200,14 @@ function(input, output, session) {
       twt$twt = twt$twt.for.towns = gsub( '.* \\(Pittsburgh\\)', 'Pittsburgh',
                             twt$twtSaved )
     }
+    ## refresh the maps
+    #click
+    leafletProxy("map", session) %>%
+      clearGroup("selectedTract") %>%
+      clearGroup("selectedTown")
+    ### so that you can 're-click', i.e. select a different town?  doesn't work probably
+    updateSelectInput(session, "areaSelectorId", selected = NULL)
+    updateSelectInput(session, "areaSelectorId", selected = click$id)
   })
   #### leaflet output$map ####
   output$map <- renderLeaflet({
