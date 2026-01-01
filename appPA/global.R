@@ -73,18 +73,7 @@ tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs_
 # PAtown$lon = lons[match(tracts, PAtown$NAMELSAD)]
 #  these lat and lon do seem to locate correctly.  checking against https://data.jsonline.com/census/total-population/ and US census.
 # But needs more checking.
-
-#### featureList ####
-names(PAtowndata)
-featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
-               # "All Cause Deaths, Laden Estimate"  ,
-               # "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
-               # "All Cause Deaths, Di Estimate",
-               "All-cause deaths", # (avg Krewski, Laden)
-               "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
-               "Total Population (2019)", "PM2.5 average")
-
-#### Bring in featureList.  Careful: renamed PM_avg  ####
+##
 PAtowndata$tracts = PAtowndata$GEOID
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 

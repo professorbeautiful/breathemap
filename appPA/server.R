@@ -378,16 +378,59 @@ function(input, output, session) {
   #   "WARNING: columnchartdata is not available"
   # })
 
-  thisAreaFeature = reactive({
+  #### featureList ####
+
+  featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
+                 # "All Cause Deaths, Laden Estimate"  ,
+                 # "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+                 # "All Cause Deaths, Di Estimate",
+                 "All-cause deaths", # (avg Krewski, Laden)
+                 "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
+                 "Total Population (2019)", "PM2.5 average")
+  #feat.countsPerPerson presumes that feature is in counts of people.
+  feat.countsPerPerson = function() safe.sum(getThisAreaFeature()) /
+    safe.sum(getThisAreaPopulation())
+  #feat.weightedRate presumes that feature is a rate.
+  feat.weightedRate = function()
+    safe.sum(getThisAreaFeature()*getThisAreaPopulation()) /
+    safe.sum(getThisAreaPopulation())
+  feat.sum = function() safe.sum(getThisAreaFeature())
+  safe.sum = function(x) sum(x, na.rm=T)
+  # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
+  featureSummaryFunctionTable = data.frame(
+    feature=featureList,
+    func= c(
+      'feat.countsPerPerson', #"Myocardial Infarctions",
+      'feat.countsPerPerson', #"COPD Deaths",
+      'feat.countsPerPerson', #"Ischemic Heart Disease Deaths",
+      'feat.countsPerPerson', # "All-cause deaths", # (avg Krewski, Laden)
+      'feat.countsPerPerson', # "Low Birth Weight Babies",
+      'feat.countsPerPerson', # "Preterm Births",
+      'feat.countsPerPerson', # "Stillbirths",
+      'feat.sum', # "Total Population (2019)",
+      'feat.countsPerPerson' # "PM2.5 average"
+    ))
+  rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
+
+  #### Bring in featureList.  Careful: renamed PM_avg  ##
+  getThisAreaFeature = reactive({
     thisFeature = as.numeric(twt[[input$idFeature]])
     return(thisFeature[TARGETrownumbers(TARGETstring())])
   })
+  getThisAreaPopulation = reactive({
+    thisFeature = as.numeric(twt[["Total Population (2019)"]])
+    return(thisFeature[TARGETrownumbers(TARGETstring())])
+  })
   thisAreaFeatureSummary = reactive({
-    featureSummaryFunction = mean
+    featureName = input$idFeature
+    featureSummaryFunctionName = featureSummaryFunctionTable[featureName, 'func']
+    featureSummaryFunction = get(featureSummaryFunctionName)
+    print(paste("featureSummaryFunctionName", featureSummaryFunctionName))
     ### for now.  May also be popWeightedMean or sum
-    return(featureSummaryFunction(thisAreaFeature(), na.rm=TRUE))
+    return(featureSummaryFunction())
   })
 
+  addSpaces = function(n) rep('&nbsp;', n)
   output$histTitle = renderUI( {
     # print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
     # print(paste('histTitle:', 'input$idFeature=', input$idFeature))
@@ -415,6 +458,10 @@ function(input, output, session) {
                     thisAreaFeatureSummary() ) )
              #### TODO: which features do we sum, which do we mean?
              ### population is char for some reason.
+        ),
+        br(),
+        span('--------------------',
+             '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
         ),
         br(),
         span(strong("Compared with entire region: "),
