@@ -66,14 +66,18 @@ fluidPage({
                                       selectInput("areaSelectorId", "Search an area: click, <delete> and type: ",
                                                   twt$areaField,
                                                   selected = twt$areaField[1]))),
-                           column(5,
+                           column(2,
                                   div(style='color:yellow; background-color:green',
                                       radioButtons("townToggleId", "Show by:",
-                                                   choiceNames=c('towns', 'tracts'),
+                                                   choiceNames=c('towns ', 'tracts'),
                                                    choiceValues=c('towns', 'twt'),
-                                                   selected='twt', inline=TRUE)
-                                  ),
-                                  checkboxInput('IdNbhds', 'Pgh nbhds?'))
+                                                   selected='twt')
+                                  )),
+                           column(3,
+                                  div(style='color:yellow; background-color:green',
+                                      checkboxInput('IdNbhds', 'Pgh nbhds?'),
+                                      checkboxInput("townSharedToggleId", "Town shares?")
+                                      ))
                          ),
                          leafletOutput("map", height = 450), br(),
                           fluidRow(

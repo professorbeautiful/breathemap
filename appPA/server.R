@@ -97,7 +97,7 @@ function(input, output, session) {
   #### townsForAllTracts ####
   townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
 
-  rV = reactiveValues()
+  rV = reactiveValues(showingModal = FALSE)
 
   ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
   getATownFromThisTract = function(target = TARGETstring())  {
@@ -111,16 +111,20 @@ function(input, output, session) {
       print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
-      townsForThisTract = getTownsForThisTract()
-      townsString = paste(collapse="+", townsForThisTract)
-      print(paste('showModal: townsForThisTract:', townsString))
-      showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
-        title = span('select one town:', townsString),
-        selectInput(inputId = "modalId", label = "select a town ",
-                    choices = townsForThisTract
-        ),
-        footer=actionButton("ok", "OK")
-      ))
+      if(rV$showingModal == FALSE) {
+        rV$savedTract = input$areaSelectorId
+        townsForThisTract = getTownsForThisTract()
+        townsString = paste(collapse="+", townsForThisTract)
+        print(paste('showModal: townsForThisTract:', townsString))
+        showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
+          title = span(rV$savedTract, ' select one town:', townsString),
+          selectInput(inputId = "modalId", label = "select a town ",
+                      choices = townsForThisTract
+          ),
+          footer=actionButton("ok", "OK")
+        ))
+        rV$showingModal = TRUE
+      }
       #print(paste('selectedTown (modal): ', rV$selectedTown))
       #rV$selectedTown = townsForThisTract[1]
     }
@@ -145,7 +149,13 @@ function(input, output, session) {
   getRownumbersForTown = function( town) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
     rownumbersForTown =
-      which(sapply(  townsForAllTracts, function(t) town %in% t))
+      which(sapply(  townsForAllTracts, function(t) identical(town, t)))
+    #### ah, but what there aren't any???
+    if (length(rownumbersForTown) == 0)
+      showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
+    if (length(rownumbersForTown) == 0 | input$townSharedToggleId == TRUE)
+      rownumbersForTown =
+        which(sapply(  townsForAllTracts, function(t) town %in% t))
     print(paste('getRownumbersForTown: selectedTown: ',
                 town, paste(collapse='+', rownumbersForTown)))
     rV$TARGETrownumbers = rownumbersForTown
@@ -181,14 +191,14 @@ function(input, output, session) {
   twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
     gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
                                          twt$twtSaved )
-
+  #    grep('\\(P', twt$twt,perl=T)
   reactive({
     if (input$IdNbhds) {
       twt$twt = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
                                  twt$twtSaved )
     }
     else {
-      twt$twt.for.towns = gsub( '.* \\(Pittsburgh\\)', 'Pittsburgh',
+      twt$twt = twt$twt.for.towns = gsub( '.* \\(Pittsburgh\\)', 'Pittsburgh',
                             twt$twt )
     }
   })
