@@ -65,9 +65,12 @@ fluidPage({
                          fluidRow(
                            column(7,
                                   div(style='color:yellow; background-color:green',
-                                      selectInput("areaSelectorId", "Search an area: click, <delete> and type: ",
-                                                  twt$areaField,
-                                                  selected = twt$areaField[1]))),
+                                      popify(placement = 'right', title = 'Towns and Census Tracts',
+                                             content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
+                                             el =
+                                               selectInput("areaSelectorId", 'Towns and Census Tracts',
+                                                           twt$areaField,
+                                                           selected = twt$areaField[1])))),
                            column(2,
 
                                     div(style='color:yellow; background-color:green',
@@ -78,7 +81,7 @@ fluidPage({
                                                              '<br> you pick a town,<br> ',
                                                              'then we show all tracts  intersecting with that town.'
                                                ),
-                                               radioButtons("townToggleId", "Show by:",
+                                               radioButtons("townToggleId", "Area shown:",
                                                    choiceNames=c('towns ', 'tracts'),
                                                    choiceValues=c('towns', 'twt'),
                                                    selected='twt')
