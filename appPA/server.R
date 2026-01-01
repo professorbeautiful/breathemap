@@ -190,15 +190,21 @@ function(input, output, session) {
     gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
                                          twt$twtSaved )
   #    grep('\\(P', twt$twt,perl=T)
-  reactive({
+  observeEvent(input$IdNbhds, {
     if (input$IdNbhds) {
-      twt$twt = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+      print('Going Pittsburgh nbhd')
+      twt$twt = twt$twt.for.towns = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
                                  twt$twtSaved )
     }
     else {
-      twt$twt = twt$twt.for.towns = gsub( '.* \\(Pittsburgh\\)', 'Pittsburgh',
-                            twt$twtSaved )
+      print('Going Pittsburgh all in one')
+      twt$twt = twt$twt.for.towns = gsub(
+        '.* \\(Pittsburgh\\)', 'Pittsburgh',
+        gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
+                                                twt$twtSaved ) )
     }
+    # TESTING in shinyDebuggingPanel:
+    #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
     ## refresh the maps
     #click
     leafletProxy("map", session) %>%
@@ -206,7 +212,8 @@ function(input, output, session) {
       clearGroup("selectedTown")
     ### so that you can 're-click', i.e. select a different town?  doesn't work probably
     updateSelectInput(session, "areaSelectorId", selected = NULL)
-    updateSelectInput(session, "areaSelectorId", selected = click$id)
+    if(!is.null(input$map_shape_click))
+      updateSelectInput(session, "areaSelectorId", selected = input$map_shape_click$id)
   })
   #### leaflet output$map ####
   output$map <- renderLeaflet({
