@@ -175,7 +175,7 @@ function(input, output, session) {
       print(paste('areaFieldName? ', areaFieldName))
       #browser(text = 'what areaFieldName?')
     }
-    print(paste('TARGETrownumbers', paste(collapse = '+', 'TARGET (out):', rownumbers)))
+    print(paste('TARGETrownumbers', 'TARGET (out):', paste(collapse = '+', rownumbers)))
     return(rownumbers)
   }
 
