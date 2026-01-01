@@ -6,7 +6,7 @@ fluidPage({
               # includeScript('navigateToId.js'),   ### ESCAPE key to return.
               singleton(tags$head(tags$script(src = "pop_patch.js"))),
               #uiOutput('JSstopPopups'),
-              tags$style(".popover{max-width: 100%; font-size:12px; color:blue}"),
+              tags$style(".popover{max-width: 100%; font-size:10px; color:blue}"),
               # style tags used throughout app
               tags$style(type="text/css",
                           "a{
@@ -71,7 +71,8 @@ fluidPage({
                            column(2,
 
                                     div(style='color:yellow; background-color:green',
-                                        popify(title='title', content='content',
+                                        popify(title='Area shown:',
+                                               content='If "towns" is selected,<br>and "Town shares" is checked, <br>then if there\'s more than one town in this tract,<br> you pick a town,<br> then we show all tracts  intersecting with that town.',
                                                radioButtons("townToggleId", "Show by:",
                                                    choiceNames=c('towns ', 'tracts'),
                                                    choiceValues=c('towns', 'twt'),
@@ -81,15 +82,15 @@ fluidPage({
                            column(3,
                                   div(style='color:yellow; background-color:green',
                                       popify(title='Pittsburgh Neighborhood toggle',
-                                             content='When "town" is selected, <br>should Pittsburgh be seen as one "town", or as separate neighborhoods?',
+                                             content='When "town" is selected, <br>should Pittsburgh be seen <br>as one "town", <br>or as separate neighborhoods?',
 
                                              checkboxInput('IdNbhds', 'See Pgh nbhds?'
                                                            ,value = TRUE)
                                       ),
                                       popify(title='Selecting one town in a tract:',
                                              content=
-                                                div(style='font-size:6px',
-                                                HTML('With Town shares? = YES<br>  ____ show all tracts including this town.<br>With Town shares? = NO<br>   ____ show only tracts where this is the only town.'
+                                                div(style='font-size:6px !important; container:body !important',
+                                                HTML('With Town shares? = YES<br>  ____ show all tracts that include this town.<hr>With Town shares? = NO<br>   ____ show only tracts where this is the only town.'
                                                )),
                                                checkboxInput("townSharedToggleId",
                                                     "Town shares?",value = TRUE)
