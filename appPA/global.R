@@ -7,6 +7,7 @@ library(data.table)
 library(tigris)
 library(sf)
 library(dplyr)
+library(shinyBS)
 
 if(basename(getwd()) != 'appPA')
   setwd('appPA')

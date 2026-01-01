@@ -6,7 +6,6 @@ function(input, output, session) {
        condition='ctrlDpressed === true'
       )
 
-
     # to speed app up and lower RAM
   #townreac <- reactive(PAtown[PAtown$NAME==input$areaSelectorId,])
   # townreac <- reactive({
@@ -419,6 +418,12 @@ function(input, output, session) {
            col='green', lwd=3)
 
   })
+  ### popovers--  popify or tipify work, but these don't.
+  # addPopover(session, id='IdNbhds',title = 'Pittsburgh Neighborhood toggle',
+  #            content = '...in progress.', placement='top', trigger='hover')
+  # addPopover(session, id='areaSelectorId',title = 'census tracts',
+  #            content = 'with town names when available', placement='top', trigger='hover')
+  #source('popovers.R')
 }
 
 
