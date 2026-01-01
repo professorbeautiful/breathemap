@@ -199,7 +199,7 @@ function(input, output, session) {
     }
     else {
       twt$twt = twt$twt.for.towns = gsub( '.* \\(Pittsburgh\\)', 'Pittsburgh',
-                            twt$twt )
+                            twt$twtSaved )
     }
   })
   #### leaflet output$map ####
