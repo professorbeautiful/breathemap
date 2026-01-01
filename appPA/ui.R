@@ -2,8 +2,8 @@ fluidPage({
 
   mainPanel(width = 12,
             tags$head(
-              includeScript('www/KeyHandler.js'),
-              includeScript('navigateToId.js'),   ### ESCAPE key to return.
+              includeScript('KeyHandler.js'),
+              # includeScript('navigateToId.js'),   ### ESCAPE key to return.
 
               # style tags used throughout app
               tags$style(type="text/css",

@@ -1,5 +1,5 @@
 function(input, output, session) {
-  includeScript('www/KeyHandler.js')
+  includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
        session, toolsInitialState = FALSE,
