@@ -6,7 +6,7 @@ fluidPage({
               # includeScript('navigateToId.js'),   ### ESCAPE key to return.
               singleton(tags$head(tags$script(src = "pop_patch.js"))),
               #uiOutput('JSstopPopups'),
-              tags$style(".popover{max-width: 100%; font-size:large; color:blue}"),
+              tags$style(".popover{max-width: 100%; font-size:12px; color:blue}"),
               # style tags used throughout app
               tags$style(type="text/css",
                           "a{
