@@ -6,6 +6,30 @@ function(input, output, session) {
        condition='ctrlDpressed === true'
       )
 
+  observeEvent(input$IdAck, {
+    showModal(modalDialog(#footer = NULL,
+      div(HTML(paste(
+        'Philip Landrigan, Boston College<br>',
+        'Christopher Lemery',
+         '<a href=',
+         '"https://pitt.libguides.com/pghcensus/pghcensustracts">U. Pitt Pittsburgh Census Information @ Pitt</a>',
+        '<br>Fireman Creative',
+        '<br>The Breathe Project',
+        'Page design: Luke Bryan, Boston College, Roger Day, U. Pittsburgh'
+      )))
+    ))
+  })
+  observeEvent(input$IdMapAdvice, {
+    showModal(modalDialog(#footer = NULL,
+      div(HTML(paste(
+        'To zoom the map, scroll over the map',
+        '<br>or use the buttons at top left.',
+        '<br><br>To move around,  click and drag.')
+      # el="Hover to see tips for the map"
+    ))))
+  })
+
+
     # to speed app up and lower RAM
   #townreac <- reactive(PAtown[PAtown$NAME==input$areaSelectorId,])
   # townreac <- reactive({

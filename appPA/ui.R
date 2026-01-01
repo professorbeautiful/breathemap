@@ -72,11 +72,16 @@ fluidPage({
 
                                     div(style='color:yellow; background-color:green',
                                         popify(title='Area shown:',
-                                               content='If "towns" is selected,<br>and "Town shares" is checked, <br>then if there\'s more than one town in this tract,<br> you pick a town,<br> then we show all tracts  intersecting with that town.',
+                                               content=paste('If "towns" is selected,<br>',
+                                                             'and "Town shares" is checked, <br>',
+                                                             'then if there is more than one town in this tract,',
+                                                             '<br> you pick a town,<br> ',
+                                                             'then we show all tracts  intersecting with that town.'
+                                               ),
                                                radioButtons("townToggleId", "Show by:",
                                                    choiceNames=c('towns ', 'tracts'),
                                                    choiceValues=c('towns', 'twt'),
-                                                   selected='twt'),
+                                                   selected='twt')
                                              )
                                   )),
                            column(3,
@@ -97,10 +102,22 @@ fluidPage({
                                       )
                                       ))
                          ),
-                         leafletOutput("map", height = 450), br(),
-                          fluidRow(
-                            column(width=8, p("Note you can zoom in and out by scrolling over the map or using the buttons in the top left. You can also move around by clicking and dragging.")),
-                            column(width = 2, offset = 0.5, downloadButton("downloadData", "Export Data"), br(), br()))),
+                         leafletOutput("map", height = 450),
+                         br(),
+                         fluidRow(  #  final rhs
+                           column(width=4,
+                                  #div(
+                                    actionButton('IdAck', 'Acknowledgments')
+                           ),
+                           column(width=4,
+                                  actionButton(inputId='IdMapAdvice',
+                                               label = 'Navigating the map')
+                           ),
+                           column(width = 2, offset = 0.5,
+                                  downloadButton("downloadData", "Export Data")
+                           )
+                         ) #fluidRow
+                  ), #  final rhs
                   column(5,
                          div(style='color:yellow; background-color:green',
                              strong("Select a feature to show:")),
