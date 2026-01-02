@@ -9,8 +9,8 @@ library(sf)
 library(dplyr)
 library(shinyBS)
 
-if(basename(getwd()) != 'appPA')
-  setwd('appPA')
+# if(basename(getwd()) != 'appPA')
+#   setwd('appPA')
 source('moveColumns.R')
 source('cq.R')
 
