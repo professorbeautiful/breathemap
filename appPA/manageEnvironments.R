@@ -44,6 +44,7 @@ rmNotEnv = function(){
                      c('rmNotEnv', 'not_envNames.f', 'envNames.f',
                        'cq', 'moveColumns', 'showTownsInLeaflet'))
   print(toRemove)
+  cat("were removed\n")
   rm(list = toRemove, pos=1)
 }
 rmNotEnv()
