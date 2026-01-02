@@ -167,9 +167,25 @@ function(input, output, session) {
     removeModal()
   })
 
+  isPittsburgh = function(town) {
+    value1 = grep('\\(Pittsburgh\\)', town, perl=T)
+    value1 = (length(value1)>0)
+    value2 = grep('^Pittsburgh.*unspecified', town)
+    value2 = (length(value2)>0)
+    value  = (value1 | value2)
+    # print(paste('isPittsburgh', town))
+    # print(paste('isPittsburgh', value1, value2,  value))
+    return(value)
+  }
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
-  getRownumbersForTown = function( town) {
+  getRownumbersForTown = function( town, nbhd=FALSE) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
+    if(isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns')) {
+      print('getRownumbersForTown: ALL Pittsburgh')
+      return(which(sapply(twt$twt, isPittsburgh)))
+    }
+    ## all the tracts which are part of Pittsburgh.
+
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
     #### ah, but what if there aren't any???
@@ -217,12 +233,12 @@ function(input, output, session) {
   observeEvent(input$IdNbhds, {
     if (input$IdNbhds) {
       print('Going Pittsburgh nbhd')
-      twt$twt = twt$twt.for.towns = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
                                  twt$twtSaved )
     }
     else {
       print('Going Pittsburgh all in one')
-      twt$twt = twt$twt.for.towns = gsub(
+      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
         '.* \\(Pittsburgh\\)', 'Pittsburgh',
         gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
                                                 twt$twtSaved ) )
@@ -290,7 +306,8 @@ function(input, output, session) {
 
   ##### newTownsObserver:  leafletProxy: Map animation  ####
 
-  newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId), {
+  newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId,
+                                    input$IdNbhds), {
     print(paste('newTownsObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('newTownsObserver: input$townToggleId', input$townToggleId) )
     print(paste('newTownsObserver: SELECTEDstring', SELECTEDstring() ) )
@@ -298,7 +315,7 @@ function(input, output, session) {
       leafletProxy("map", session) %>%
         clearGroup("selectedTowns")
     else {
-      townRowNumbers = getRownumbersForTown(rV$selectedTown)
+      townRowNumbers = getRownumbersForTown(rV$selectedTown, input$IdNbhds)
 
       leafletProxy("map", session) %>%
         flyTo(lng = TARGETdatarows()$lon.places[1],

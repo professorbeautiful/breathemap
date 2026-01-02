@@ -92,7 +92,7 @@ fluidPage({
                                       popify(title='Pittsburgh Neighborhood toggle',
                                              content='When "town" is selected, <br>should Pittsburgh be seen <br>as one "town", <br>or as separate neighborhoods?',
 
-                                             checkboxInput('IdNbhds', 'See Pgh nbhds?'
+                                             checkboxInput('IdNbhds', 'See each Pgh nbhd?'
                                                            ,value = TRUE)
                                       ),
                                       popify(title='Selecting one town in a tract:',
