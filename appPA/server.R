@@ -397,17 +397,10 @@ function(input, output, session) {
   #   "WARNING: columnchartdata is not available"
   # })
 
-  #### featureList ####
 
-  featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
-                 # "All Cause Deaths, Laden Estimate"  ,
-                 # "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
-                 # "All Cause Deaths, Di Estimate",
-                 "All-cause deaths", # (avg Krewski, Laden)
-                 "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
-                 "Total Population (2019)", "PM2.5 average")
+  #### featureList  functions ####
   #feat.countsPerPerson presumes that feature is in counts of people.
-  feat.countsPerPerson = function() safe.sum(getThisAreaFeature()) /
+  feat.countsPerPerson = function() safe.sum(getThisAreaFeature())
     safe.sum(getThisAreaPopulation())
   #feat.weightedRate presumes that feature is a rate.
   feat.weightedRate = function()

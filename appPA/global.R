@@ -75,6 +75,16 @@ tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs_
 # But needs more checking.
 ##
 PAtowndata$tracts = PAtowndata$GEOID
+
+#### featureList ####
+
+featureList= c("Myocardial Infarctions", "COPD Deaths", "Ischemic Heart Disease Deaths",
+               # "All Cause Deaths, Laden Estimate"  ,
+               # "All Cause Deaths, Krewski Estimate", "All Cause Deaths, Lepeule Estimate",
+               # "All Cause Deaths, Di Estimate",
+               "All-cause deaths", # (avg Krewski, Laden)
+               "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
+               "Total Population (2019)", "PM2.5 average")
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
 tracts_with_towns.wide = merge(

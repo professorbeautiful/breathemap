@@ -43,6 +43,7 @@ rmNotEnv = function(){
   toRemove = setdiff(toRemove,
                      c('rmNotEnv', 'not_envNames.f', 'envNames.f',
                        'cq', 'moveColumns', 'showTownsInLeaflet'))
+  toRemove = c(toRemove, 'thisSession')
   print(toRemove)
   cat("were removed\n")
   rm(list = toRemove, pos=1)
