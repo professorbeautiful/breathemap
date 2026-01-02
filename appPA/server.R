@@ -400,14 +400,14 @@ function(input, output, session) {
 
   #### featureList  functions ####
   #feat.countsPerPerson presumes that feature is in counts of people.
-  feat.countsPerPerson = function() safe.sum(getThisAreaFeature())
-    safe.sum(getThisAreaPopulation())
+  safe.sum = function(x) sum(x, na.rm=T)
+  feat.countsPerPerson = function()
+    safe.sum(getThisAreaFeature()) / safe.sum(getThisAreaPopulation())
   #feat.weightedRate presumes that feature is a rate.
   feat.weightedRate = function()
     safe.sum(getThisAreaFeature()*getThisAreaPopulation()) /
     safe.sum(getThisAreaPopulation())
   feat.sum = function() safe.sum(getThisAreaFeature())
-  safe.sum = function(x) sum(x, na.rm=T)
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
   featureSummaryFunctionTable = data.frame(
     feature=featureList,

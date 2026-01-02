@@ -115,7 +115,7 @@ head(twt$areaField)
 
 #### move '___' to the end, ####
 which___ = (grep('___', twt$areaField))   ### 1 to 15
-twt = twt[c(16:nrow(twt),  1:15), ]
+twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
 
 ####and create twtFirst ?   no, rely on towns field ####
 # twt$twtFirst = paste(twt$towns.intersects.first, twt$tracts)
