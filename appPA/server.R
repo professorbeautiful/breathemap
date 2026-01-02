@@ -180,7 +180,9 @@ function(input, output, session) {
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
   getRownumbersForTown = function( town, nbhd=FALSE) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
-    if(isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns')) {
+    rV$showingPittsburgh =
+      (isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns'))
+    if(rV$showingPittsburgh) {
       print('getRownumbersForTown: ALL Pittsburgh')
       return(which(sapply(twt$twt, isPittsburgh)))
     }
@@ -461,9 +463,11 @@ function(input, output, session) {
 
     div(hr(),
         span(strong(
-          switch(get_areaFieldName(),
+          switch(isTRUE(rV$showingPittsburgh),
+                 'Selected all Pittsburgh from',
+                 switch(get_areaFieldName(),
                  towns="Selected town:",
-                 twt="Selected town/tract:")),
+                 twt="Selected town/tract:"))),
              span(
           style='color:green',
           paste(SELECTEDstring()))),
