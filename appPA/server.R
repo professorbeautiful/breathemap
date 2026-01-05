@@ -340,7 +340,7 @@ function(input, output, session) {
   output$downloadData <- downloadHandler(
     filename = "Air-Pollution-PA.csv",
     content = function(file) {
-      write.csv(PAtown, file)
+      write.csv(twt, file)
     }
   )
 
