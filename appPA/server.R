@@ -71,8 +71,11 @@ function(input, output, session) {
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else {
-      if(is.null(click) & !  is.null(savedclick) )
+      if(is.null(click) &     !  is.null(savedclick) )  {
+        if(verbose>0)
+          print(paste('Copying savedclick to click:  ', savedclick$id))
         click = savedclick
+      }
       leafletProxy("map", session) %>%
         clearGroup("selectedTract") %>%
         clearGroup("selectedTown")
@@ -80,7 +83,8 @@ function(input, output, session) {
       updateSelectInput(session, "areaSelectorId", selected = NULL)
       if(verbose>0) print(paste('click$id', click$id))
       updateSelectInput(session, "areaSelectorId", selected = click$id)
-      if(verbose>0) print(paste('Updating areaSelectorId:' , input$areaSelectorId, '   click$id', click$id))
+      if(verbose>0) print(paste('Updating areaSelectorId:' ,
+                                input$areaSelectorId, '   click$id', click$id))
     }
   })
 
@@ -101,6 +105,10 @@ function(input, output, session) {
 
   #### get_areaFieldName ####
   get_areaFieldName = function(){
+
+    ### simplify! no.  breaks "towns".
+    ##   return('twt')
+
     if(length(input$townToggleId) == 1)
       areaFieldName = input$townToggleId
     else
