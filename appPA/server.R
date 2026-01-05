@@ -7,6 +7,10 @@ function(input, output, session) {
       )
 
   zoomLevel = 10
+  verbose=1
+
+  print(paste('server: twt unspecified ', length(grep('unspec', twt$twt))))
+
 
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
@@ -56,22 +60,27 @@ function(input, output, session) {
   medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
-
+  savedclick = NULL
  #### clicking updates selectInput ####
   observe({
     click <- input$map_shape_click
-    print(paste('click$id', click$id))
+    if(verbose>0) print(paste('input$map_shape_click$id', click$id))
     ### TODO  Seems ok but keep an eye on this.
-    if(is.null(click))
+    ### If "towns", click becomes null.
+    if(is.null(click) & is.null(savedclick) )
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else {
+      if(is.null(click) & !  is.null(savedclick) )
+        click = savedclick
       leafletProxy("map", session) %>%
         clearGroup("selectedTract") %>%
         clearGroup("selectedTown")
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       updateSelectInput(session, "areaSelectorId", selected = NULL)
+      if(verbose>0) print(paste('click$id', click$id))
       updateSelectInput(session, "areaSelectorId", selected = click$id)
+      if(verbose>0) print(paste('Updating areaSelectorId:' , input$areaSelectorId, '   click$id', click$id))
     }
   })
 
@@ -96,7 +105,8 @@ function(input, output, session) {
       areaFieldName = input$townToggleId
     else
       areaFieldName = 'twt'
-    print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
+    if(verbose>1)
+      print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
     twt[['areaField']] <<-twt[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
     # updateSelectInput(session, "areaSelectorId", choices = PAtown)
@@ -107,7 +117,7 @@ function(input, output, session) {
   })
   #### SELECTEDstring reactive  ####
   SELECTEDstring = reactive( {
-    print( paste('SELECTEDstring: TARGETstring: ',  TARGETstring(),
+    if(verbose>0) print( paste('SELECTEDstring: TARGETstring: ',  TARGETstring(),
                  '\nSELECTEDstring:  get_areaFieldName: ',input$townToggleId
            ,
            '\nSELECTEDstring:  townToggleId: ',input$townToggleId) )
@@ -132,19 +142,19 @@ function(input, output, session) {
   getATownFromThisTract = function(target = TARGETstring())  {
     townsForThisTract = getTownsForThisTract(target)
     isolate({
-      print(paste('getATownFromThisTract: townsForThisTract:',
+      if(verbose>1) print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
     if(length(townsForThisTract) == 1 ){
       rV$selectedTown = townsForThisTract[1]
-      print(paste('selectedTown (1): ', rV$selectedTown))
+      if(verbose>0) print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
       if(rV$showingModal == FALSE) {
         rV$savedTract = input$areaSelectorId
         townsForThisTract = getTownsForThisTract()
         townsString = paste(collapse="+", townsForThisTract)
-        print(paste('showModal: townsForThisTract:', townsString))
+        if(verbose>0) print(paste('showModal: townsForThisTract:', townsString))
         showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
           title = span(rV$savedTract, ' select one town:', townsString),
           selectInput(inputId = "modalId", label = "select a town ",
@@ -161,7 +171,7 @@ function(input, output, session) {
       rV$selectedTown = rV$selectedTownModal
       rV$selectedTownModal = NULL
     }
-    print(paste('selectedTown return: ', rV$selectedTown))
+      if(verbose>0) print(paste('selectedTown return: ', rV$selectedTown))
     })
     return(rV$selectedTown)
   }
@@ -186,14 +196,16 @@ function(input, output, session) {
   }
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
   getRownumbersForTown = function( town, nbhd=FALSE) {
-    print(paste('getRownumbersForTown  selectedTown: ', town))
+    if(verbose>0) print(paste('getRownumbersForTown  selectedTown: ', town))
     rV$showingPittsburgh =
       (isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns'))
     if(rV$showingPittsburgh) {
-      print('getRownumbersForTown: ALL Pittsburgh')
-      return(which(sapply(twt$twt, isPittsburgh)))
+      ## all the tracts which are part of Pittsburgh.
+      PittsburghRows = which(sapply(twt$twt, isPittsburgh))
+      if(verbose>0) print(paste('getRownumbersForTown: ALL Pittsburgh',
+                               paste(collapse=',', PittsburghRows) ))
+      return(PittsburghRows)
     }
-    ## all the tracts which are part of Pittsburgh.
 
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
@@ -203,7 +215,7 @@ function(input, output, session) {
     if (length(rownumbersForTown) == 0 | input$townSharedToggleId == TRUE)
       rownumbersForTown =
         which(sapply(  townsForAllTracts, function(t) town %in% t))
-    print(paste('getRownumbersForTown: selectedTown: ',
+    if(verbose>0) print(paste('getRownumbersForTown: selectedTown: ',
                 town, paste(collapse='+', rownumbersForTown)))
     rV$TARGETrownumbers = rownumbersForTown
     return(rownumbersForTown)
@@ -214,16 +226,16 @@ function(input, output, session) {
     if(missing(target))
       target = SELECTEDstring()
     areaFieldName = get_areaFieldName()
-    print(paste('TARGETrownumbers:  areaFieldName :', areaFieldName))
-    print(paste('TARGETrownumbers:  target (in):', target))
+    if(verbose>1) print(paste('TARGETrownumbers:  areaFieldName :', areaFieldName))
+    if(verbose>1) print(paste('TARGETrownumbers:  target (in):', target))
     if(areaFieldName == 'towns')
       rownumbers = getRownumbersForTown(getATownFromThisTract())
     else if(areaFieldName == 'twt')   # towns with tracts
       rownumbers = grep(gsub('.* 42', '42', target), twt$twt) ## should be a tract
     else {
-      print(paste('areaFieldName? ', areaFieldName))
+      if(verbose>1) print(paste('areaFieldName? ', areaFieldName))
     }
-    print(paste('TARGETrownumbers', 'TARGET (out):', paste(collapse = '+', rownumbers)))
+    if(verbose>1) print(paste('TARGETrownumbers', 'TARGET (out):', paste(collapse = '+', rownumbers)))
     return(rownumbers)
   }
 
@@ -233,19 +245,23 @@ function(input, output, session) {
   }
 
   #### fixNbhds ####
-  twt$twtSaved = twt$twt
-  twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
-    gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-                                         twt$twtSaved )
+  #twt$twtSaved = twt$twt
+  # twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
+  #   gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+  #                                        twt$twtSaved )
   #    grep('\\(P', twt$twt,perl=T)
   observeEvent(input$IdNbhds, {
-    if (input$IdNbhds) {
-      print('Going Pittsburgh nbhd')
-      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-                                 twt$twtSaved )
+    if (isTRUE(input$IdNbhds)) {
+      # WHY ERROR? updateRadioButtons(session=session, inputId = 'townToggleId', selected = 'towns')
+      if(verbose>1) print('Going Pittsburgh nbhd')
+      twt$twt = twt$twt.for.tracts = twt$twt.for.towns = twt$areaField = twt$twtSaved
+        #gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+                                 # twt$twtSaved )
+      twt$twt = twt$twt.for.tracts = twt$twt.for.towns = twt$areaField =
+        twt$twtSaved
     }
     else {
-      print('Going Pittsburgh all in one')
+      if(verbose>1) print('Going Pittsburgh all in one')
       twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
         '.* \\(Pittsburgh\\)', 'Pittsburgh',
         gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
@@ -275,8 +291,8 @@ function(input, output, session) {
                   fillOpacity = 0.3,
                   # label is the label shown
                   #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-                  label = ~twt.for.tracts,
-                  layerId = ~twt.for.tracts, ## initially.
+                  label = ~twt,
+                  layerId = ~twt, ## initially.
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",
@@ -287,14 +303,15 @@ function(input, output, session) {
 
   ##### newTractObserver:  leafletProxy: Map animation  ####
   newTractObserver = observeEvent(c(input$map_shape_click,
+                                    rV$showingPittsburgh,
                                     rV$TARGETrownumbers, input$areaSelectorId), {
-    print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTractObserver: input$townToggleId', input$townToggleId) )
-    print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
+    if(verbose>1) print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
+    if(verbose>1) print(paste('newTractObserver: input$townToggleId', input$townToggleId) )
+    if(verbose>1) print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
 
     tractRowNumber = TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
 
-    print(paste('newTractObserver: tractRowNumber',
+    if(verbose>1) print(paste('newTractObserver: tractRowNumber',
                 paste(collapse=',', tractRowNumber)))
     #### leafletProxy - tracts ####
     leafletProxy("map", session) %>%
@@ -303,7 +320,7 @@ function(input, output, session) {
       clearGroup("selectedTract") %>%
       addPolygons(data=twt[tractRowNumber,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~twt.for.tracts,
+                  label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="selectedTract")  #%>%
       # addPolygons(data=twt[areaRowNumbers,], weight = 1,
@@ -317,9 +334,9 @@ function(input, output, session) {
 
   newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId,
                                     input$IdNbhds), {
-    print(paste('newTownsObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTownsObserver: input$townToggleId', input$townToggleId) )
-    print(paste('newTownsObserver: SELECTEDstring', SELECTEDstring() ) )
+    if(verbose>1) print(paste('newTownsObserver: input$areaSelectorId', input$areaSelectorId) )
+    if(verbose>1) print(paste('newTownsObserver: input$townToggleId', input$townToggleId) )
+    if(verbose>1) print(paste('newTownsObserver: SELECTEDstring', SELECTEDstring() ) )
     if(input$areaSelectorId != 'towns')
       leafletProxy("map", session) %>%
         clearGroup("selectedTowns")
@@ -444,7 +461,7 @@ function(input, output, session) {
     featureName = input$idFeature
     featureSummaryFunctionName = featureSummaryFunctionTable[featureName, 'func']
     featureSummaryFunction = get(featureSummaryFunctionName)
-    print(paste("featureSummaryFunctionName", featureSummaryFunctionName))
+    if(verbose>1) print(paste("featureSummaryFunctionName", featureSummaryFunctionName))
     ### for now.  May also be popWeightedMean or sum
     return(featureSummaryFunction())
   })

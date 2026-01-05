@@ -21,6 +21,8 @@ library(shinyDebuggingPanel)
 
 
 load('tracts_with_towns.Rd')   ## of type sf
+### From "geodataPA-tt1.R
+
 load('patown1.Rd')   ## 26 fields only
 patown1 = st_transform(patown1, 'WGS84')
 PAtown = patown1
@@ -161,6 +163,8 @@ twt$twtSaved = twt$twt
 twt$twt = twt$twt.for.tracts = twt$twt.for.towns = twt$areaField =
   gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
         twt$twtSaved )
+print(paste('global: twt unspecified ', length(grep('unspec', twt$twt))))
+### does not appear in the
 
 eachTown = sort(unique(unlist(strsplit(twt$towns, split=', *'))))
 #eachTown.isNbhd = match(eachTown, twt$towns)
