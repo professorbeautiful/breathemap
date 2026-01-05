@@ -74,16 +74,16 @@ function(input, output, session) {
       if(is.null(click) &     !  is.null(savedclick) )  {
         if(verbose>0)
           print(paste('Copying savedclick to click:  ', savedclick$id))
-        click = savedclick
+        #? click = savedclick
       }
       leafletProxy("map", session) %>%
         clearGroup("selectedTract") %>%
         clearGroup("selectedTown")
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       updateSelectInput(session, "areaSelectorId", selected = NULL)
-      if(verbose>0) print(paste('click$id', click$id))
+      if(verbose>0) print(paste('areaSelectorId to NULL; click$id = ', click$id))
       updateSelectInput(session, "areaSelectorId", selected = click$id)
-      if(verbose>0) print(paste('Updating areaSelectorId:' ,
+      if(verbose>0) print(paste('Updating areaSelectorId to click$id:' ,
                                 input$areaSelectorId, '   click$id', click$id))
     }
   })
@@ -198,8 +198,8 @@ function(input, output, session) {
     value2 = grep('^Pittsburgh.*unspecified', town)
     value2 = (length(value2)>0)
     value  = (value1 | value2)
-    # print(paste('isPittsburgh', town))
-    # print(paste('isPittsburgh', value1, value2,  value))
+    print(paste('isPittsburgh', town, value))
+    print(paste('isPittsburgh ', value1, value2,  value))
     return(value)
   }
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
@@ -270,10 +270,10 @@ function(input, output, session) {
     }
     else {
       if(verbose>1) print('Going Pittsburgh all in one')
-      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
-        '.* \\(Pittsburgh\\)', 'Pittsburgh',
-        gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
-                                                twt$twtSaved ) )
+      # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
+      #   '.* \\(Pittsburgh\\)', 'Pittsburgh',
+      #   gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
+      #                                           twt$twtSaved ) )
     }
     # TESTING in shinyDebuggingPanel:
     #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
