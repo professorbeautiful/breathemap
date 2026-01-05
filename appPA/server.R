@@ -221,7 +221,6 @@ function(input, output, session) {
       rownumbers = grep(gsub('.* 42', '42', target), twt$twt) ## should be a tract
     else {
       print(paste('areaFieldName? ', areaFieldName))
-      #browser(text = 'what areaFieldName?')
     }
     print(paste('TARGETrownumbers', 'TARGET (out):', paste(collapse = '+', rownumbers)))
     return(rownumbers)
