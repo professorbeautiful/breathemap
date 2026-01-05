@@ -60,6 +60,7 @@ function(input, output, session) {
  #### clicking updates selectInput ####
   observe({
     click <- input$map_shape_click
+    print(paste('click$id', click$id))
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
@@ -285,7 +286,8 @@ function(input, output, session) {
   })
 
   ##### newTractObserver:  leafletProxy: Map animation  ####
-  newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
+  newTractObserver = observeEvent(c(input$map_shape_click,
+                                    rV$TARGETrownumbers, input$areaSelectorId), {
     print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
     print(paste('newTractObserver: input$townToggleId', input$townToggleId) )
     print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
