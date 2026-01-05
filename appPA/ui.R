@@ -107,17 +107,20 @@ fluidPage({
                          ),
                          leafletOutput("map", height = 450),
                          br(),
-                         fluidRow(  #  final rhs
+                         fluidRow(#style='background:green',  #  final rhs
                            column(width=4,
                                   #div(
-                                    actionButton('IdAck', 'Acknowledgments')
+                                    actionButton('IdAck', label='Acknowledgments',
+                                                 style='background-color:green; color:yellow')
                            ),
                            column(width=4,
                                   actionButton(inputId='IdMapAdvice',
+                                               style='background-color:green; color:yellow',
                                                label = 'Navigating the map')
                            ),
                            column(width = 2, offset = 0.5,
-                                  downloadButton("downloadData", "Export Data")
+                                  downloadButton("downloadData", "Export Data",
+                                                 style='background-color:green; color:yellow')
                            )
                          ) #fluidRow
                   ), #  final rhs
