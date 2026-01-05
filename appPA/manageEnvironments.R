@@ -45,7 +45,7 @@ rmNotEnv = function(){
                        'cq', 'moveColumns', 'showTownsInLeaflet'))
   toRemove = c(toRemove, 'thisSession')
   print(toRemove)
-  cat("were removed\n")
+  cat("--------------These ^^^^ were removed.---------\n")
   rm(list = toRemove, pos=1)
 }
 rmNotEnv()
