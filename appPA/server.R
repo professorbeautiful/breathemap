@@ -6,6 +6,8 @@ function(input, output, session) {
        condition='ctrlDpressed === true'
       )
 
+  zoomLevel = 10
+
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
       div(HTML(paste(
@@ -265,7 +267,7 @@ function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
-      setView(lng = medianLON, lat = medianLAT, zoom = 10)  %>%
+      setView(lng = medianLON, lat = medianLAT, zoom = zoomLevel)  %>%
       addPolygons(data = twt,
                   weight = 1,
                   color = "Black",
@@ -296,7 +298,7 @@ function(input, output, session) {
     #### leafletProxy - tracts ####
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon.places[1],
-            lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
+            lat = TARGETdatarows()$lat.places[1], zoom=zoomLevel) %>%
       clearGroup("selectedTract") %>%
       addPolygons(data=twt[tractRowNumber,], weight = 1,
                   color="Red", fillColor="yellow",
@@ -325,7 +327,7 @@ function(input, output, session) {
 
       leafletProxy("map", session) %>%
         flyTo(lng = TARGETdatarows()$lon.places[1],
-              lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
+              lat = TARGETdatarows()$lat.places[1], zoom=zoomLevel) %>%
         clearGroup("selectedTown") %>%
         addPolygons(data=twt[townRowNumbers,], weight = 1,
                     color="purple", fillColor="grey",

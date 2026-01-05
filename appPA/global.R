@@ -157,6 +157,11 @@ IQcaption <- htmltools::tags$caption(
 twt = st_transform(twt, "WGS84")
 #st_crs(twt) <- 4326
 
+twt$twtSaved = twt$twt
+twt$twt = twt$twt.for.tracts = twt$twt.for.towns = twt$areaField =
+  gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+        twt$twtSaved )
+
 eachTown = sort(unique(unlist(strsplit(twt$towns, split=', *'))))
 #eachTown.isNbhd = match(eachTown, twt$towns)
 #twt$lem.tracts
