@@ -6,6 +6,9 @@ function(input, output, session) {
        condition='ctrlDpressed === true'
       )
 
+  if(file.exists('gitbranch.txt'))
+    gitbranch = readLines('gitbranch.txt')
+
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
       div(HTML(paste(
