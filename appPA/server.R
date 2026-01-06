@@ -77,7 +77,7 @@ function(input, output, session) {
       clearGroup("selectedTract") %>%
       addPolygons(data=twt[tractNumber,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~twt.for.tracts,
+                  label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="selectedTract")
     updateSelectInput(session, "areaSelectorId",
@@ -326,8 +326,8 @@ function(input, output, session) {
                   fillOpacity = 0.3,
                   # label is the label shown
                   #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-                  label = ~twt.for.tracts,
-                  layerId = ~twt.for.tracts, ## initially.
+                  label = ~twt,
+                  layerId = ~twt, ## initially.
                   highlight = highlightOptions(
                     fillColor = "green",
                     color = "red",
@@ -353,7 +353,7 @@ function(input, output, session) {
       clearGroup("selectedTract") %>%
       addPolygons(data=twt[tractRowNumber,], weight = 1,
                   color="Red", fillColor="yellow",
-                  label= ~twt.for.tracts,
+                  label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="selectedTract")  #%>%
       # addPolygons(data=twt[areaRowNumbers,], weight = 1,
