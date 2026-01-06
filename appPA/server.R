@@ -88,6 +88,7 @@ function(input, output, session) {
 
 
  #### clicking updates selectInput ####
+  ## replacing with jan5now6 crashes.
   observe({
     click <- input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
@@ -101,6 +102,8 @@ function(input, output, session) {
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
+      rV$savedTract = click$id
+      if(verbose>1)  print(paste('copying click$id to rV$savedTract', rV$savedTract))
     }
   })
 
