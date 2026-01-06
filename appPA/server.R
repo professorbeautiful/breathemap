@@ -9,6 +9,17 @@ function(input, output, session) {
   if(file.exists('gitbranch.txt'))
     gitbranch = readLines('gitbranch.txt')
 
+
+  zoomLevel = 10
+  verbose = 2
+  rV = reactiveValues(selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
+  # savedTract can be either numeric or a character entry in areaSelectorId
+
+  print(paste('======== BEGIN server: #unspecified=',
+              length(grep('unspec', twt$twt)), '======'))
+
+
+
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
       div(HTML(paste(
