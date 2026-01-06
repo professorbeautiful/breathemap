@@ -120,6 +120,21 @@ function(input, output, session) {
   #
   # })
 
+  #### If switching toggle   observeEvent   input$townToggleId ####
+  townToggleIdObserver = observeEvent(input$townToggleId, {
+    if(input$townToggleId == 'twt') {
+      print(paste('input$townToggleId:  switched from towns to twt'))
+      if(is.null(rV$savedTract))
+        rV$savedTract = 1
+      clickATract(rV$savedTract)
+      print(paste('input$townToggleId:  rV$savedTract = ', rV$savedTract))
+    }
+    if(input$townToggleId == 'towns')
+      print(paste('input$townToggleId: towns  SELECTEDstring:  ', SELECTEDstring()))
+    ### can this force a new modal? No.
+
+  })
+
   areaFieldName = 'twt'  ## towns with tracts
 
   #### get_areaFieldName ####
