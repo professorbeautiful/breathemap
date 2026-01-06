@@ -68,6 +68,24 @@ function(input, output, session) {
   medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
+  clickATract = function(tractNumber) {
+    if(is.character(tractNumber))
+      tractNumber = match(tractNumber, twt$twt)
+    if(verbose>0)
+      print(paste('clickATract: ', tractNumber))
+    leafletProxy("map", session) %>%
+      clearGroup("selectedTract") %>%
+      addPolygons(data=twt[tractNumber,], weight = 1,
+                  color="Red", fillColor="yellow",
+                  label= ~twt.for.tracts,
+                  #layerId = ~twt,
+                  fillOpacity = 1, group="selectedTract")
+    updateSelectInput(session, "areaSelectorId",
+                      selected = twt[['areaField']] [tractNumber])
+    if(verbose>0)
+      print(paste('clickATract: areaSelectorId: ', input$areaSelectorId))
+  }
+
 
  #### clicking updates selectInput ####
   observe({
@@ -191,8 +209,10 @@ function(input, output, session) {
     value2 = grep('^Pittsburgh.*unspecified', town)
     value2 = (length(value2)>0)
     value  = (value1 | value2)
-    # print(paste('isPittsburgh', town))
-    # print(paste('isPittsburgh', value1, value2,  value))
+    if(value) {
+      print(paste('isPittsburgh', town, value))
+      print(paste('isPittsburgh ', value1, value2,  value))
+    }
     return(value)
   }
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
