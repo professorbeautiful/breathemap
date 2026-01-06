@@ -285,21 +285,23 @@ function(input, output, session) {
   #### fixNbhds ####
   twt$twtSaved = twt$twt
   twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
-    gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-                                         twt$twtSaved )
+    gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
+          twt$twtSaved )
+  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
+
   #    grep('\\(P', twt$twt,perl=T)
   observeEvent(input$IdNbhds, {
     if (input$IdNbhds) {
       print('Going Pittsburgh nbhd')
-      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-                                 twt$twtSaved )
+      # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+      #                            twt$twtSaved )
     }
     else {
       print('Going Pittsburgh all in one')
-      twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
-        '.* \\(Pittsburgh\\)', 'Pittsburgh',
-        gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
-                                                twt$twtSaved ) )
+      # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
+      #   '.* \\(Pittsburgh\\)', 'Pittsburgh',
+      #   gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
+      #                                           twt$twtSaved ) )
     }
     # TESTING in shinyDebuggingPanel:
     #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
