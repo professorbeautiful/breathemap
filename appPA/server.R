@@ -360,12 +360,7 @@ function(input, output, session) {
                   color="Red", fillColor="yellow",
                   label= ~twt,
                   #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTract")  #%>%
-      # addPolygons(data=twt[areaRowNumbers,], weight = 1,
-      #           #  color="Red", fillColor="yellow",
-      #             label= ~twt,
-      #             layerId = ~twt,
-      #             fillOpacity = 1, group="showIds")
+                  fillOpacity = 1, group="selectedTract")
   })
 
   ##### newTownsObserver:  leafletProxy: Map animation  ####
@@ -402,62 +397,6 @@ function(input, output, session) {
     }
   )
 
-  # Reactive storage of comparative tool inputs. Speeds up app
-  # secondpageinput <- reactive(c(input$areaSelectorIdleft, input$areaSelectorIdright))
-
-  # datatables for comparison tool
-  # output$tabledemogleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(1,4,5)]),
-  #                                              caption = demogcaption,
-  #                                              options = list(dom="t",
-  #                                                             columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                             headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  #
-  # output$tablepoprateleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(19:20,17:18)]),
-  #                                            caption = popratecaption,
-  #                                            options = list(dom="t",
-  #                                                           columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                           headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  #
-  # output$tableIQleft <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[1],c(15:16)]),
-  #                                           caption = IQcaption,
-  #                                           options = list(dom="t",
-  #                                                          columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                          headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  #
-  # output$tabledemogright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(1,4,5)]),
-  #                                               caption = demogcaption,
-  #                                               options = list(dom="t",
-  #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  #
-  # output$tablepoprateright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(19:20,17:18)]),
-  #                                             caption = popratecaption,
-  #                                             options = list(dom="t",
-  #                                                            columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                            headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-  #
-  # output$tableIQright <- DT::renderDataTable(t(PAtown[PAtown$NAME==secondpageinput()[2],c(15:16)]),
-  #                                               caption = IQcaption,
-  #                                               options = list(dom="t",
-  #                                                              columnDefs = list(list(className = 'dt-right', targets = 1)),
-  #                                                              headerCallback = JS("function(thead, data, start, end, display){$(thead).remove();}")))
-
-  # column plot for comparison tool (hidden for small devices)
-  reactivedata <- reactive({
-    if(exists(x = 'columnchartdata'))
-      columnchartdata[columnchartdata$Town == secondpageinput()[1] | columnchartdata$Town ==secondpageinput()[2],]
-  })
-  # output$comptable <- renderPlot({
-  #   if(exists(x = 'columnchartdata'))
-  #     ggplot(data=melt(data.table(reactivedata()), id=1), aes(x=variable, y=value, fill=Town)) +
-  #                                 geom_bar(stat="identity", position=position_dodge(), colour="black") +
-  #                                 theme_classic() + xlab("Incidence Rates") + ylab("") +
-  #                                 scale_fill_manual(values = c("#8a100b", "#b29d6c")) +
-  #                                 scale_x_discrete(labels= c("CancerDeaths_IR"="Cancer Deaths per 10,000 Population", "IHDDeaths_IR"="Heart Disease Deaths per 10,000 Population",
-  #                                                             "**PIQ points lost per child"="PIQ Points Lost per child"))
-  # else
-  #   "WARNING: columnchartdata is not available"
-  # })
 
 
   #### featureList  functions ####
@@ -505,17 +444,9 @@ function(input, output, session) {
   })
 
   addSpaces = function(n) rep('&nbsp;', n)
+
   output$histTitle = renderUI( {
-    # print(paste('histTitle:', 'get_areaFieldName()=', get_areaFieldName()))
-    # print(paste('histTitle:', 'input$idFeature=', input$idFeature))
-
     thisFeature = as.numeric(twt[[input$idFeature]])
-
-    # print(paste('histTitle:', 'feature values',
-    #             paste(collapse=',', thisAreaFeature())))
-    # print(paste('histTitle:', 'feature summary',
-    #             paste(collapse=',', thisAreaFeatureSummary())))
-
     div(hr(),
         span(strong(
           switch(isTRUE(rV$showingPittsburgh),
@@ -546,8 +477,6 @@ function(input, output, session) {
           )))
   })
   output$proportion_smaller <- renderText({
-    #print(paste('proportion_smaller:', 'distribution of idFeature'))
-    #print(capture.output(summary(twt[[input$idFeature]])))
     howManyLess = try({
       twt[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
