@@ -193,7 +193,7 @@ function(input, output, session) {
         townsString = paste(collapse="+", townsForThisTract)
         print(paste('showModal: townsForThisTract:', townsString))
         showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
-          title = span(rV$savedTract, ' select one town:', townsString),
+          title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
           selectInput(inputId = "modalId", label = "select a town ",
                       choices = townsForThisTract
           ),
