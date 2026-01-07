@@ -18,7 +18,11 @@ function(input, output, session) {
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
 
-
+  set_showingModal = function(val=FALSE, n=0){
+    print(paste('set_showingModal: ', val))
+    print(sys.call(which=n))
+    rV$showingModal = val
+  }
 
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
@@ -193,13 +197,14 @@ function(input, output, session) {
         townsString = paste(collapse="+", townsForThisTract)
         print(paste('showModal: townsForThisTract:', townsString))
         showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
-          title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
+          title = div(span('From the tract ', rV$savedTract),  br(),
+                      span('select one town:', townsString)),
           selectInput(inputId = "modalId", label = "select a town ",
                       choices = townsForThisTract
           ),
           footer=actionButton("ok", "OK")
         ))
-        rV$showingModal = TRUE
+        set_showingModal(TRUE)
       }
       #print(paste('selectedTown (modal): ', rV$selectedTown))
       #rV$selectedTown = townsForThisTract[1]
@@ -215,7 +220,7 @@ function(input, output, session) {
 
   #### modal OK ####
   observeEvent(input$ok, handlerExpr = {
-    rV$showingModal = FALSE
+    set_showingModal(FALSE)
     rV$selectedTownModal = (input$modalId)
     print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
     rV$selectedTown = rV$selectedTownModal
@@ -235,8 +240,11 @@ function(input, output, session) {
     return(value)
   }
   #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
-  getRownumbersForTown = function( town, nbhd=FALSE) {
+  getRownumbersForTown = function( town=NULL, nbhd=FALSE) {
+    set_showingModal(FALSE)
     print(paste('getRownumbersForTown  selectedTown: ', town))
+    print(paste('getRownumbersForTown  str: ', str(town)))
+    if(is.null(town)) return(NULL)
     rV$showingPittsburgh =
       (isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns'))
     if(rV$showingPittsburgh) {
@@ -261,6 +269,7 @@ function(input, output, session) {
 
   #### TARGETrownumbers TARGETstring() ->rV$TARGETrownumbers  ####
   TARGETrownumbers = function(target){
+    set_showingModal(FALSE)
     if(missing(target))
       target = SELECTEDstring()
     areaFieldName = get_areaFieldName()
