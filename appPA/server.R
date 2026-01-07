@@ -214,10 +214,11 @@ function(input, output, session) {
   }
 
   #### modal OK ####
-  observeEvent(input$ok, {
+  observeEvent(input$ok, handlerExpr = {
+    rV$showingModal = FALSE
     rV$selectedTownModal = (input$modalId)
     print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
-    isolate({rV$selectedTown = rV$selectedTownModal})
+    rV$selectedTown = rV$selectedTownModal
     removeModal()
   })
 
