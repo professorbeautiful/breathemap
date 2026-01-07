@@ -113,6 +113,12 @@ class(twt)  #sf
 names(twt)
 head(twt$areaField)
 
+twt$twtSaved = twt$twt
+# twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
+#   gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
+#         twt$twtSaved )
+
+
 #### move '___' to the end, ####
 which___ = (grep('___', twt$areaField))   ### 1 to 15
 twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
