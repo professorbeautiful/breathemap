@@ -167,6 +167,11 @@ table( ! is.na(tt1.sw.l$towns))  ### 15 missing town names.
 
 save(tt1.sw.l, file='tt1.sw.l.Rd')
 tracts_with_towns =  tt1.sw.l
+
+tracts_with_towns$twtSaved = tracts_with_towns$twt
+tracts_with_towns$twt = tracts_with_towns$twt.for.tracts = tracts_with_towns$twt.for.towns =
+  gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
+        tracts_with_towns$twtSaved )
 save(tracts_with_towns, file='tracts_with_towns.Rd')
 
 
