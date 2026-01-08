@@ -253,6 +253,7 @@ function(input, output, session) {
     if(areaFieldName == 'towns')
       rownumbers = getRownumbersForTown(getATownFromThisTract())
     else if(areaFieldName == 'twt')   # towns with tracts
+      # this extracts and searches for ONLY the tract number.
       rownumbers = grep(gsub('.* 42', '42', target), twt$twt) ## should be a tract
     else {
       print(paste('areaFieldName? ', areaFieldName))
