@@ -215,10 +215,10 @@ function(input, output, session) {
 
   #### modal OK ####
   observeEvent(input$ok, handlerExpr = {
-    rV$showingModal = FALSE
+    #rV$showingModal = FALSE  <== troublemaker! but why?
     rV$selectedTownModal = (input$modalId)
     print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
-    rV$selectedTown = rV$selectedTownModal
+    isolate({rV$selectedTown = rV$selectedTownModal})
     removeModal()
   })
 
