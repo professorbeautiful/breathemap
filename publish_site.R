@@ -1,5 +1,6 @@
-
-gitbranchOutput = grep(v=T, '^\\*', system("git branch -v",  intern = T) )
+#  git push --set-upstream origin jan8
+gitbranchOutput =
+  print( grep(v=T, '^\\*', system("git branch -v",  intern = T) ) )
 write(file = 'appPA/gitbranch.txt',
       grep(v=T, '^\\*', system("git branch -v",  intern = T) )
 )
@@ -7,6 +8,14 @@ write(file = 'appPA/gitbranch.txt',
 
 appName = 'appPA_deployApp'
 appTitle = 'appPA_deployApp'
+appName = 'appPA'
+appTitle = 'appPA'
+logLevel = c("normal", "quiet", "verbose") [3]
+
+launch.browser.bad = getOption("rsconnect.launch.browser",
+                           is_interactive())
+###----- Deployment error -----
+# Error in is_interactive() : could not find function "is_interactive"
 
 deployApp(
   appDir = ifelse(basename(getwd()) == 'appPA', '.', 'appPA'),
@@ -23,16 +32,16 @@ deployApp(
   server = 'shinyapps.io',
   upload = TRUE,
   recordDir = NULL,
-  launch.browser = getOption("rsconnect.launch.browser", is_interactive()),
+  # launch.browser = launch.browsergetOption("rsconnect.launch.browser", is_interactive()),
   on.failure = NULL,
-  logLevel = c("normal", "quiet", "verbose"),
+  logLevel = logLevel,
   lint = TRUE,
   metadata = list(),
   forceUpdate = NULL,
   python = NULL,
   #forceGeneratePythonEnvironment = FALSE,
   quarto = NA,
-  appVisibility = NULL,
+  appVisibility = NULL, #NULL, "private", or "public". NULL= no change
   image = NULL,
   envManagement = NULL,
   envManagementR = NULL,
