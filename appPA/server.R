@@ -112,25 +112,25 @@ function(input, output, session) {
   if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
     updateSelectInput(inputId='areaSelectorId', selected = 1)
   })
-  #### NOT USED  observeEvent   input$townToggleId ####
-  # observeEvent(input$townToggleId, {
+  #### NOT USED  observeEvent   input$Id_ToggleTownTract ####
+  # observeEvent(input$Id_ToggleTownTract, {
   #   twt$areaField = twt$towns
   #   updateSelectInput(inputId='areaSelectorId',
-  #                     choices = twt[[input$townToggleId]])
+  #                     choices = twt[[input$Id_ToggleTownTract]])
   #
   # })
 
-  #### If switching toggle   observeEvent   input$townToggleId ####
-  townToggleIdObserver = observeEvent(input$townToggleId, {
-    if(input$townToggleId == 'twt') {
-      print(paste('input$townToggleId:  switched from towns to twt'))
+  #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
+  Id_ToggleTownTractObserver = observeEvent(input$Id_ToggleTownTract, {
+    if(input$Id_ToggleTownTract == 'twt') {
+      print(paste('input$Id_ToggleTownTract:  switched from towns to twt'))
       if(is.null(rV$savedTract))
         rV$savedTract = 1
       clickATract(rV$savedTract)
-      print(paste('input$townToggleId:  rV$savedTract = ', rV$savedTract))
+      print(paste('input$Id_ToggleTownTract:  rV$savedTract = ', rV$savedTract))
     }
-    if(input$townToggleId == 'towns')
-      print(paste('input$townToggleId: towns  SELECTEDstring:  ', SELECTEDstring()))
+    if(input$Id_ToggleTownTract == 'towns')
+      print(paste('input$Id_ToggleTownTract: towns  SELECTEDstring:  ', SELECTEDstring()))
     ### can this force a new modal? No.
 
   })
@@ -139,8 +139,8 @@ function(input, output, session) {
 
   #### get_areaFieldName ####
   get_areaFieldName = function(){
-    if(length(input$townToggleId) == 1)
-      areaFieldName = input$townToggleId
+    if(length(input$Id_ToggleTownTract) == 1)
+      areaFieldName = input$Id_ToggleTownTract
     else
       areaFieldName = 'twt'
     print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
@@ -155,9 +155,9 @@ function(input, output, session) {
   #### SELECTEDstring reactive  ####
   SELECTEDstring = reactive( {
     print( paste('SELECTEDstring: TARGETstring: ',  TARGETstring(),
-                 '\nSELECTEDstring:  get_areaFieldName: ',input$townToggleId
+                 '\nSELECTEDstring:  get_areaFieldName: ',input$Id_ToggleTownTract
            ,
-           '\nSELECTEDstring:  townToggleId: ',input$townToggleId) )
+           '\nSELECTEDstring:  Id_ToggleTownTract: ',input$Id_ToggleTownTract) )
   if(get_areaFieldName() == 'towns')
       return(   getATownFromThisTract(TARGETstring()))#
     else
@@ -238,7 +238,7 @@ function(input, output, session) {
   getRownumbersForTown = function( town, nbhd=FALSE) {
     print(paste('getRownumbersForTown  selectedTown: ', town))
     rV$showingPittsburgh =
-      (isPittsburgh(town) & (! input$IdNbhds) & (input$townToggleId == 'towns'))
+      (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
     if(rV$showingPittsburgh) {
       print('getRownumbersForTown: ALL Pittsburgh')
       return(which(sapply(twt$twt, isPittsburgh)))
@@ -250,7 +250,7 @@ function(input, output, session) {
     #### ah, but what if there aren't any???
     # if (length(rownumbersForTown) == 0)
        # showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
-    if (length(rownumbersForTown) == 0 | input$townSharedToggleId == TRUE)
+    if (length(rownumbersForTown) == 0 | input$Id_townSharesCheckbox == TRUE)
       rownumbersForTown =
         which(sapply(  townsForAllTracts, function(t) town %in% t))
     print(paste('getRownumbersForTown: selectedTown: ',
@@ -342,7 +342,7 @@ function(input, output, session) {
   ##### newTractObserver:  leafletProxy: Map animation  ####
   newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
     print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTractObserver: input$townToggleId', input$townToggleId) )
+    print(paste('newTractObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
     print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
 
     tractRowNumber = TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
@@ -371,7 +371,7 @@ function(input, output, session) {
   newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId,
                                     input$IdNbhds), {
     print(paste('newTownsObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTownsObserver: input$townToggleId', input$townToggleId) )
+    print(paste('newTownsObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
     print(paste('newTownsObserver: SELECTEDstring', SELECTEDstring() ) )
     if(input$areaSelectorId != 'towns')
       leafletProxy("map", session) %>%

@@ -75,17 +75,17 @@ fluidPage({
 
                                     div(style='color:yellow; background-color:green',
                                         popify(title='Area shown:',
-                                               content=paste('If "towns" is selected,<br>',
-                                                             'and "Town shares" is checked, <br>',
-                                                             'then if there is more than one town in this tract,',
-                                                             '<br> you pick a town,<br> ',
-                                                             'then we show all tracts  intersecting with that town.'
-                                               ),
-                                               radioButtons("townToggleId", "Area shown:",
-                                                   choiceNames=c('towns ', 'tracts'),
-                                                   choiceValues=c('towns', 'twt'),
-                                                   selected='twt')
-                                             )
+                                               content=HTML(paste('"tracts":  show one tract.<hr>',
+                                                                  '"towns":',
+                                                                  ' You pick one town in this tract,<br>',
+                                                                  ' and we show tracts for that town',
+                                                                  ' <hr>See "Town shares" checkbox for details'
+                                               ) ),
+                                               radioButtons("Id_ToggleTownTract", "Area shown:",
+                                                            choiceNames=c('towns ', 'tracts'),
+                                                            choiceValues=c('towns', 'twt'),
+                                                            selected='twt')
+                                        )
                                   )),
                            column(3,
                                   div(style='color:yellow; background-color:green',
@@ -97,10 +97,10 @@ fluidPage({
                                       ),
                                       popify(title='Selecting one town in a tract:',
                                              content=
-                                                div(style='font-size:6px !important; container:body !important',
-                                                HTML('With Town shares? = YES<br>  ____ show all tracts that include this town.<hr>With Town shares? = NO<br>   ____ show only tracts where this is the only town.'
-                                               )),
-                                               checkboxInput("townSharedToggleId",
+                                               div(style='font-size:6px !important; container:body !important',
+                                                   HTML('With "Town shares?" = YES<br>  ____ show ALL tracts that include this town.<hr>With "Town shares?" = NO<br>   ____ show ONLY tracts where this is the only town.'
+                                                   )),
+                                               checkboxInput("Id_townSharesCheckbox",
                                                     "Town shares?",value = TRUE)
                                       )
                                       ))
