@@ -125,25 +125,29 @@ function(input, output, session) {
   # })
 
   #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
-  Id_ToggleTownTractObserver = observeEvent(input$Id_ToggleTownTract, {
-    if(input$Id_ToggleTownTract == 'twt') {
+  Id_ToggleTownTractObserver_towns = observeEvent(input$Id_ToggleTownTract, {
+    if(input$Id_ToggleTownTract == 'towns') {
       print(paste('input$Id_ToggleTownTract:  switched from towns to twt'))
+      rV$selectedTown = NULL
       if(is.null(rV$savedTract))
         rV$savedTract = 1
-      clickATract(rV$savedTract)
-      updateSelectInput(session, "areaSelectorId",
-                        selected = twt[['areaField']] [rV$savedTract])
-      rV$selectedTown = NULL
-      print(paste('input$Id_ToggleTownTract:  rV$savedTract = ', rV$savedTract))
+      theseTowns = getTownsForThisTract(rV$savedTract)
+      # Now rV$selectedTown = NULL is no longer NULL, I hope.
+      if(is.null(rV$selectedTown)){
+        simpleError("Id_ToggleTownTractObserver_towns:   rV$selectedTown should not be NULL")
+      }
+      if(isTRUE(input$Id_townSharesCheckbox))
+        showAllTractsContaining(rV$selectedTown)
+      else
+        showAllTractsWithOnly(rV$selectedTown)
     }
-    if(input$Id_ToggleTownTract == 'towns') {
+  })
+  Id_ToggleTownTractObserver_tracts = observeEvent(input$Id_ToggleTownTract, {
+    if(input$Id_ToggleTownTract == 'twt') {
       print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
       rV$selectedTown = getATownFromThisTract(rV$savedTract)
       clickTowns(rV$selectedTown)
     }
-#    print(paste('input$Id_ToggleTownTract: towns  SELECTEDstring:  ', SELECTEDstring()))
-    ### can this force a new modal? No.
-
   })
 
   areaFieldName = 'twt'  ## towns with tracts
