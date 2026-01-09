@@ -154,7 +154,7 @@ function(input, output, session) {
     (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
 
   showAllTractsContaining = function(town=rV$selectedTown){
-    if(Id_ToggleTownTract != 'towns')
+    if(input$Id_ToggleTownTract != 'towns')
       simpleError('showAllTractsContaining only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
@@ -164,7 +164,7 @@ function(input, output, session) {
   }
 
   showAllTractsWithOnly = function(town=rV$selectedTown){
-    if(Id_ToggleTownTract != 'towns')
+    if(input$Id_ToggleTownTract != 'towns')
       simpleError('showAllTractsWithOnly only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
