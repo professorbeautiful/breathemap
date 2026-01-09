@@ -74,12 +74,12 @@ function(input, output, session) {
     if(verbose>0)
       print(paste('clickATract: ', tractNumber))
     leafletProxy("map", session) %>%
-      clearGroup("selectedTract") %>%
+      clearGroup("selectedTractGroup") %>%
       addPolygons(data=twt[tractNumber,], weight = 1,
                   color="Red", fillColor="yellow",
                   label= ~twt,
                   #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTract")
+                  fillOpacity = 1, group="selectedTractGroup")
     updateSelectInput(session, "areaSelectorId",
                       selected = twt[['areaField']] [tractNumber])
     if(verbose>0)
@@ -99,8 +99,8 @@ function(input, output, session) {
     else {
       rV$click = input$map_shape_click
       leafletProxy("map", session) %>%
-        clearGroup("selectedTract") %>%
-        clearGroup("selectedTown")
+        clearGroup("selectedTractGroup") %>%
+        clearGroup("selectedTownGroup")
       ### so that you can 're-click', i.e. select a different town?  doesn't work probably
       # updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
@@ -312,8 +312,8 @@ function(input, output, session) {
     ## refresh the maps
     #click
     leafletProxy("map", session) %>%
-      clearGroup("selectedTract") %>%
-      clearGroup("selectedTown")
+      clearGroup("selectedTractGroup") %>%
+      clearGroup("selectedTownGroup")
     ### so that you can 're-click', i.e. select a different town?  doesn't work probably
     updateSelectInput(session, "areaSelectorId", selected = NULL)
     if(!is.null(input$map_shape_click))
@@ -355,12 +355,12 @@ function(input, output, session) {
     leafletProxy("map", session) %>%
       flyTo(lng = TARGETdatarows()$lon.places[1],
             lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
-      clearGroup("selectedTract") %>%
+      clearGroup("selectedTractGroup") %>%
       addPolygons(data=twt[tractRowNumber,], weight = 1,
                   color="Red", fillColor="yellow",
                   label= ~twt,
                   #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTract")
+                  fillOpacity = 1, group="selectedTractGroup")
   })
 
   ##### newTownsObserver:  leafletProxy: Map animation  ####
@@ -379,12 +379,12 @@ function(input, output, session) {
       leafletProxy("map", session) %>%
         flyTo(lng = TARGETdatarows()$lon.places[1],
               lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
-        clearGroup("selectedTown") %>%
+        clearGroup("selectedTownGroup") %>%
         addPolygons(data=twt[townRowNumbers,], weight = 1,
                     color="purple", fillColor="grey",
                     label= ~twt.for.towns,
                     #layerId = ~twt,
-                    fillOpacity = 0.5, group="selectedTown")  #%>%
+                    fillOpacity = 0.5, group="selectedTownGroup")  #%>%
     }
   }
   )
