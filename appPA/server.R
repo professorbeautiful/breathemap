@@ -115,7 +115,7 @@ function(input, output, session) {
 
 
 
-  #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
+  #### switched from twt to towns  ####
   Id_ToggleTownTractObserver_towns = observeEvent(input$Id_ToggleTownTract, {
     if(input$Id_ToggleTownTract == 'towns') {
       print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
@@ -123,6 +123,7 @@ function(input, output, session) {
       if(is.null(rV$savedTract))
         rV$savedTract = 1
       theseTowns = getTownsForThisTract(rV$savedTract)
+
       # Now rV$selectedTown = NULL is no longer NULL, I hope.
       if(is.null(rV$selectedTown)){
         simpleError("Id_ToggleTownTractObserver_towns:   rV$selectedTown should not be NULL")
@@ -134,7 +135,8 @@ function(input, output, session) {
     }
   })
 
-  observeEvent(input$Id_townSharesCheckbox, {
+  #### townSharesCheckbox_Observer ####
+  townSharesCheckbox_Observer = observeEvent(input$Id_townSharesCheckbox, {
     if(isTRUE(input$Id_townSharesCheckbox))   ## Town share is ON
       showAllTractsContaining(rV$selectedTown)
     else
@@ -166,6 +168,7 @@ function(input, output, session) {
                   fillOpacity = 1, group="selectedTractGroup")
   }
 
+  #### switched from towns to twt  ####
   Id_ToggleTownTractObserver_tracts = observeEvent(input$Id_ToggleTownTract, {
     if(input$Id_ToggleTownTract == 'twt') {
       rV$selectedTown = NULL
