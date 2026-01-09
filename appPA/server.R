@@ -81,7 +81,14 @@ function(input, output, session) {
   }
 
 
-
+  observeEvent(input$areaSelectorId, {
+    if(input$areaSelectorId != rV$savedTract)
+       rV$savedTract = input$areaSelectorId
+  })
+  observeEvent(rV$savedTract, {
+    if(input$areaSelectorId != rV$savedTract)
+      updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
+  })
 
  #### clicking updates selectInput ####
   observeMapClick = observeEvent(c(input$map_shape_click), {
