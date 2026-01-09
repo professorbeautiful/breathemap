@@ -123,7 +123,8 @@ function(input, output, session) {
       if(is.null(rV$savedTract))
         rV$savedTract = 1
       theseTowns = getTownsForThisTract(rV$savedTract)
-
+      getATownFromThisTract(theseTowns)
+      # Because of the towns Modal, rely on rV$selectedTown, not a return value.
       # Now rV$selectedTown = NULL is no longer NULL, I hope.
       if(is.null(rV$selectedTown)){
         simpleError("Id_ToggleTownTractObserver_towns:   rV$selectedTown should not be NULL")
@@ -142,16 +143,19 @@ function(input, output, session) {
     else
       showAllTractsWithOnly(rV$selectedTown)  ## Town share is OFF
   })
+
   showAllTractsContaining = function(town=rV$selectedTown){
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
     showTheseTracts(rownumbersForTown)
   }
+
   showAllTractsWithOnly = function(town=rV$selectedTown){
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
     showTheseTracts(rownumbersForTown)
   }
+
   showTheseTracts = function(rownumbers) {
     if(is.character(rownumbers))  ## might be a twt (tract)
       rownumbers = which(rownumbers %in% twt$twt)
