@@ -321,7 +321,8 @@ function(input, output, session) {
   updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
 
   #    grep('\\(P', twt$twt,perl=T)
-  observeEvent(input$IdNbhds, {
+  ##### IdNbhdsObserver = observeEvent(input$IdNbhds, ####
+  IdNbhdsObserver = observeEvent(input$IdNbhds, {
     if (input$IdNbhds) {
       print('Going Pittsburgh nbhd')
       # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
