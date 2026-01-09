@@ -9,6 +9,19 @@ function(input, output, session) {
   if(file.exists('gitbranch.txt'))
     gitbranch = readLines('gitbranch.txt')
 
+  areaFieldName = 'twt'  ## towns with tracts
+  #### get_areaFieldName ####
+  get_areaFieldName = function(){
+    if(length(input$Id_ToggleTownTract) == 1)
+      areaFieldName = input$Id_ToggleTownTract
+    else
+      areaFieldName = 'twt'
+    print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
+    twt[['areaField']] <<-twt[[areaFieldName]]
+    return(areaFieldName)   ## get_areaFieldName
+    # updateSelectInput(session, "areaSelectorId", choices = PAtown)
+  }
+
 
   zoomLevel = 10
   verbose = 2
@@ -17,8 +30,6 @@ function(input, output, session) {
 
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
-
-
 
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
@@ -181,19 +192,6 @@ function(input, output, session) {
     }
   })
 
-  areaFieldName = 'twt'  ## towns with tracts
-
-  #### get_areaFieldName ####
-  get_areaFieldName = function(){
-    if(length(input$Id_ToggleTownTract) == 1)
-      areaFieldName = input$Id_ToggleTownTract
-    else
-      areaFieldName = 'twt'
-    print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
-    twt[['areaField']] <<-twt[[areaFieldName]]
-    return(areaFieldName)   ## get_areaFieldName
-    # updateSelectInput(session, "areaSelectorId", choices = PAtown)
-  }
 
   TARGETstring = reactive({
     return(input$areaSelectorId)
