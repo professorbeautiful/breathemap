@@ -111,13 +111,7 @@ function(input, output, session) {
   if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
     updateSelectInput(inputId='areaSelectorId', selected = 1)
   })
-  #### NOT USED  observeEvent   input$Id_ToggleTownTract ####
-  # observeEvent(input$Id_ToggleTownTract, {
-  #   twt$areaField = twt$towns
-  #   updateSelectInput(inputId='areaSelectorId',
-  #                     choices = twt[[input$Id_ToggleTownTract]])
-  #
-  # })
+
 
   #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
   Id_ToggleTownTractObserver_towns = observeEvent(input$Id_ToggleTownTract, {
@@ -177,6 +171,7 @@ function(input, output, session) {
       showTheseTracts(rV$savedTract)
     }
   })
+
 
   TARGETstring = reactive({
     return(input$areaSelectorId)
