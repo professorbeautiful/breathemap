@@ -144,15 +144,22 @@ function(input, output, session) {
       showAllTractsWithOnly(rV$selectedTown)  ## Town share changed to  OFF
   })
 
+  showingPittsburgh = function(town) #### townSharesCheckbox_Observer should be irrelevant
+    (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
+
   showAllTractsContaining = function(town=rV$selectedTown){
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
+    if(showingPittsburgh(town))
+      rownumbersForTown = which(sapply(twt$twt, isPittsburgh))
     showTheseTracts(rownumbersForTown)
   }
 
   showAllTractsWithOnly = function(town=rV$selectedTown){
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
+    if(showingPittsburgh(town))
+      rownumbersForTown = which(sapply(twt$twt, isPittsburgh))
     showTheseTracts(rownumbersForTown)
   }
 
