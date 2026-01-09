@@ -171,7 +171,6 @@ function(input, output, session) {
     }
   })
 
-
   TARGETstring = reactive({
     return(input$areaSelectorId)
   })
@@ -188,7 +187,7 @@ function(input, output, session) {
   })
 
   #### getTownsForThisTract ####
-  getTownsForThisTract = function(twtTractString=TARGETstring())
+  getTownsForThisTract = function(twtTractString=rV$savedTract)
     strsplit(split = ',',
              gsub(' 42.*', '',  #### 42 = Pennsylvania
                   twtTractString ) ) [[1]]
