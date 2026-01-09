@@ -89,8 +89,7 @@ function(input, output, session) {
 
  #### clicking updates selectInput ####
   ## replacing with jan5now6 crashes.
-  observeMapClick = observeEvent(input$map_shape_click, {
-    rV$click = input$map_shape_click
+  observeMapClick = observeEvent(c(input$Id_ToggleTownTract, input$map_shape_click), {
     click = input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
