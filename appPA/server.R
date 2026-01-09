@@ -84,9 +84,7 @@ function(input, output, session) {
 
 
  #### clicking updates selectInput ####
-  ## replacing with jan5now6 crashes.
-  observeMapClick = observeEvent(c(input$Id_ToggleTownTract, input$map_shape_click), {
-
+  observeMapClick = observeEvent(c(input$map_shape_click), {
     click = input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
@@ -94,15 +92,11 @@ function(input, output, session) {
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else {
       rV$click = input$map_shape_click
-      leafletProxy("map", session) %>%
-        clearGroup("selectedTractGroup") %>%
-        clearGroup("selectedTownGroup")
-      ### so that you can 're-click', i.e. select a different town?  doesn't work probably
-      # updateSelectInput(session, "areaSelectorId", selected = NULL)
       updateSelectInput(session, "areaSelectorId", selected = click$id)
       rV$savedTract = click$id
       if(verbose>1)  print(paste('copying click$id to rV$savedTract', rV$savedTract))
     }
+    showTheseTracts(rV$savedTract)
   })
 
   #### default before area is selected ####
