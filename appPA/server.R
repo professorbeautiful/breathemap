@@ -336,31 +336,31 @@ function(input, output, session) {
 
   #    grep('\\(P', twt$twt,perl=T)
   ##### IdNbhdsObserver = observeEvent(input$IdNbhds, ####
-  IdNbhdsObserver = observeEvent(input$IdNbhds, {
-    if (input$IdNbhds) {
-      print('Going Pittsburgh nbhd')
-      # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-      #                            twt$twtSaved )
-    }
-    else {
-      print('Going Pittsburgh all in one')
-      # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
-      #   '.* \\(Pittsburgh\\)', 'Pittsburgh',
-      #   gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
-      #                                           twt$twtSaved ) )
-    }
-    # TESTING in shinyDebuggingPanel:
-    #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
-    ## refresh the maps
-    #click
-    leafletProxy("map", session) %>%
-      clearGroup("selectedTractGroup") %>%
-      clearGroup("selectedTownGroup")
-    ### so that you can 're-click', i.e. select a different town?  doesn't work probably
-    updateSelectInput(session, "areaSelectorId", selected = NULL)
-    if(!is.null(input$map_shape_click))
-      updateSelectInput(session, "areaSelectorId", selected = input$map_shape_click$id)
-  })
+  # IdNbhdsObserver = observeEvent(input$IdNbhds, {
+  #   if (input$IdNbhds) {
+  #     print('Going Pittsburgh nbhd')
+  #     # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
+  #     #                            twt$twtSaved )
+  #   }
+  #   else {
+  #     print('Going Pittsburgh all in one')
+  #     # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
+  #     #   '.* \\(Pittsburgh\\)', 'Pittsburgh',
+  #     #   gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
+  #     #                                           twt$twtSaved ) )
+  #   }
+  #   # TESTING in shinyDebuggingPanel:
+  #   #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
+  #   ## refresh the maps
+  #   #click
+  #   leafletProxy("map", session) %>%
+  #     clearGroup("selectedTractGroup") %>%
+  #     clearGroup("selectedTownGroup")
+  #   ### so that you can 're-click', i.e. select a different town?  doesn't work probably
+  #   updateSelectInput(session, "areaSelectorId", selected = NULL)
+  #   if(!is.null(input$map_shape_click))
+  #     updateSelectInput(session, "areaSelectorId", selected = input$map_shape_click$id)
+  # })
   #### leaflet output$map ####
   output$map <- renderLeaflet({
     leaflet() %>%
