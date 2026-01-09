@@ -58,23 +58,6 @@ function(input, output, session) {
     ))))
   })
 
-
-    # to speed app up and lower RAM
-  #townreac <- reactive(PAtown[PAtown$NAME==input$areaSelectorId,])
-  # townreac <- reactive({
-  #   areaFieldName = get_areaFieldName()
-  #   print(paste('townreac: get_areaFieldName = ', areaFieldName))
-  #   result = PAtown[which(PAtown[[areaFieldName]]==TARGETstring()),]
-  #   if(nrow(result) > 1) {
-  #     cat('==== townreac   --  duplicates ===== \n')
-  #     print(result)
-  #     result = result[result$COUNTYFP == '003', ]  ### select Allegheny
-  #     print(result)
-  #   }
-  #   result   ###  it should return one row of PAtown.
-  #   })
-  #needs Town, lat, lon
-
   # This is ok, because only used for centering map at the start.
   medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
