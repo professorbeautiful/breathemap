@@ -85,11 +85,17 @@ function(input, output, session) {
       updateSelectInput(inputId='areaSelectorId', selected = 1)     #### default before area is selected ####
     if(input$areaSelectorId != rV$savedTract)
        rV$savedTract = input$areaSelectorId
+    tractIsChanged()
   })
   savedTractObserver = observeEvent(rV$savedTract, {
     if(input$areaSelectorId != rV$savedTract)
       updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
+    tractIsChanged()
   })
+
+  tractIsChanged = function(){
+    showTheseTracts(rV$savedTract)
+  }
 
  #### clicking updates selectInput ####
   observeMapClick = observeEvent(c(input$map_shape_click), {
