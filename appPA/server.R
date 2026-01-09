@@ -58,7 +58,7 @@ function(input, output, session) {
     ))))
   })
 
-  # This is ok, because only used for centering map at the start.
+  # for centering map at the start.
   medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
