@@ -97,7 +97,7 @@ function(input, output, session) {
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
-    else {
+    {
       rV$click = input$map_shape_click
       updateSelectInput(session, "areaSelectorId", selected = click$id)
       rV$savedTract = click$id
