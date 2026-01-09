@@ -353,14 +353,20 @@ function(input, output, session) {
 
   output$histTitle = renderUI( {
     thisFeature = as.numeric(twt[[input$idFeature]])
+    if(get_areaFieldName()=='towns') {
+      if(isTRUE(rV$showingPittsburgh))
+             firstLine = 'Selected all Pittsburgh from selecting...'
+      else
+        firstLine = "Selected town:"
+    }
+    else firstLine = "Selected town/tract:"
+
     div(hr(),
-        span(strong(
-          switch(isTRUE(rV$showingPittsburgh),
-                 'Selected all Pittsburgh from selecting...',
-                 switch(get_areaFieldName(),
-                 towns="Selected town:",
-                 twt="Selected town/tract:"))),
-             span(
+        span(
+          strong(firstLine
+
+          ),
+          span(
           style='color:green',
           paste(switch(get_areaFieldName(),
                       towns=rV$selectedTown,
