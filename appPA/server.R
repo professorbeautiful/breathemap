@@ -191,14 +191,13 @@ function(input, output, session) {
   rV = reactiveValues(showingModal = FALSE)
 
   ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
-  getATownFromThisTract = function(target = TARGETstring())  {
+  getATownFromThisTract = function(townsForThisTract)  {
     if(! is.null(rV$selectedTown)) {
       print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
                   rV$selectedTown, '  tract:', rV$selectedTract))
+      print(sys.calls())  ### Error
     }
-    townsForThisTract = getTownsForThisTract(target)
-    isolate({
-      print(paste('getATownFromThisTract: townsForThisTract:',
+    print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
     if(length(townsForThisTract) == 1 ){
@@ -206,9 +205,6 @@ function(input, output, session) {
       print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
-      if(rV$showingModal == FALSE) {
-        rV$savedTract = input$areaSelectorId
-        townsForThisTract = getTownsForThisTract()
         townsString = paste(collapse="+", townsForThisTract)
         print(paste('showModal: townsForThisTract:', townsString))
         showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
@@ -218,26 +214,15 @@ function(input, output, session) {
           ),
           footer=actionButton("ok", "OK")
         ))
-        rV$showingModal = TRUE
       }
-      #print(paste('selectedTown (modal): ', rV$selectedTown))
-      #rV$selectedTown = townsForThisTract[1]
     }
-    if(!is.null(rV$selectedTownModal)) {
-      rV$selectedTown = rV$selectedTownModal
-      rV$selectedTownModal = NULL
-    }
-    print(paste('selectedTown return: ', rV$selectedTown))
-    })
-    return(rV$selectedTown)
   }
 
   #### modal OK ####
   observeEvent(input$ok, handlerExpr = {
     #rV$showingModal = FALSE  <== troublemaker! but why?
-    rV$selectedTownModal = (input$modalId)
-    print(paste('OK, selectedTownModal: ', rV$selectedTownModal))
-    isolate({rV$selectedTown = rV$selectedTownModal})
+    rV$selectedTown = (input$modalId)
+    print(paste('OK, selectedTown from Modal: ', rV$selectedTown))
     removeModal()
   })
 
