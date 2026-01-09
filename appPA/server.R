@@ -127,7 +127,7 @@ function(input, output, session) {
   #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
   Id_ToggleTownTractObserver_towns = observeEvent(input$Id_ToggleTownTract, {
     if(input$Id_ToggleTownTract == 'towns') {
-      print(paste('input$Id_ToggleTownTract:  switched from towns to twt'))
+      print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
       rV$selectedTown = NULL
       if(is.null(rV$savedTract))
         rV$savedTract = 1
@@ -136,17 +136,48 @@ function(input, output, session) {
       if(is.null(rV$selectedTown)){
         simpleError("Id_ToggleTownTractObserver_towns:   rV$selectedTown should not be NULL")
       }
-      if(isTRUE(input$Id_townSharesCheckbox))
+      if(isTRUE(input$Id_townSharesCheckbox))   ## Town share is ON
         showAllTractsContaining(rV$selectedTown)
       else
-        showAllTractsWithOnly(rV$selectedTown)
+        showAllTractsWithOnly(rV$selectedTown)  ## Town share is OFF
     }
   })
+
+  observeEvent(input$Id_townSharesCheckbox, {
+    if(isTRUE(input$Id_townSharesCheckbox))   ## Town share is ON
+      showAllTractsContaining(rV$selectedTown)
+    else
+      showAllTractsWithOnly(rV$selectedTown)  ## Town share is OFF
+  })
+  showAllTractsContaining = function(town=rV$selectedTown){
+    rownumbersForTown =
+      which(sapply(  townsForAllTracts, function(t) town %in% t))
+    showTheseTracts(rownumbersForTown)
+  }
+  showAllTractsWithOnly = function(town=rV$selectedTown){
+    rownumbersForTown =
+      which(sapply(  townsForAllTracts, function(t) identical(town, t)))
+    showTheseTracts(rownumbersForTown)
+  }
+  showTheseTracts = function(rownumbers) {
+    TARGETdatarows = twt[rownumbers, ]
+    leafletProxy("map", session) %>%
+      clearGroup("selectedTractGroup") %>%
+      flyTo(lng = TARGETdatarows$lon.places[1],
+            lat = TARGETdatarows$lat.places[1], zoom=10) %>%
+      clearGroup("selectedTractGroup") %>%
+      addPolygons(data=rownumbers, weight = 1,
+                  color="Red", fillColor="yellow",
+                  label= ~twt,
+                  #layerId = ~twt,
+                  fillOpacity = 1, group="selectedTractGroup")
+  }
+
   Id_ToggleTownTractObserver_tracts = observeEvent(input$Id_ToggleTownTract, {
     if(input$Id_ToggleTownTract == 'twt') {
-      print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
-      rV$selectedTown = getATownFromThisTract(rV$savedTract)
-      clickTowns(rV$selectedTown)
+      rV$selectedTown = NULL
+      print(paste('input$Id_ToggleTownTract:  switched from towns to twt'))
+      showTheseTracts(rV$savedTract)
     }
   })
 
