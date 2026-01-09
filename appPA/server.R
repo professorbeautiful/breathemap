@@ -277,55 +277,6 @@ function(input, output, session) {
     }
     return(value)
   }
-  #### getRownumbersForTown  observeEvent( rV$selectedTown   ####
-  # getRownumbersForTown = function( town, nbhd=FALSE) {
-  #   print(paste('getRownumbersForTown  selectedTown: ', town))
-  #   rV$showingPittsburgh =
-  #     (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
-  #   if(rV$showingPittsburgh) {
-  #     print('getRownumbersForTown: ALL Pittsburgh')
-  #     return(which(sapply(twt$twt, isPittsburgh)))
-  #   }
-  #   ## all the tracts which are part of Pittsburgh.
-  #
-  #   rownumbersForTown =
-  #     which(sapply(  townsForAllTracts, function(t) identical(town, t)))
-  #   #### ah, but what if there aren't any???
-  #   # if (length(rownumbersForTown) == 0)
-  #      # showModal(modalDialog(paste("There are no tracts with ONLY ", town)))
-  #   if (length(rownumbersForTown) == 0 | input$Id_townSharesCheckbox == TRUE)
-  #     rownumbersForTown =
-  #       which(sapply(  townsForAllTracts, function(t) town %in% t))
-  #   print(paste('getRownumbersForTown: selectedTown: ',
-  #               town, paste(collapse='+', rownumbersForTown)))
-  #   rV$TARGETrownumbers = rownumbersForTown
-  #   return(rownumbersForTown)
-  # }
-
-  #### TARGETrownumbers TARGETstring() ->rV$TARGETrownumbers  ####
-  # TARGETrownumbers = function(target){
-  #   if(missing(target))
-  #     target = SELECTEDstring()
-  #   areaFieldName = get_areaFieldName()
-  #   print(paste('TARGETrownumbers:  areaFieldName :', areaFieldName))
-  #   print(paste('TARGETrownumbers:  target (in):', target))
-  #   if(areaFieldName == 'towns')
-  #     rownumbers = getRownumbersForTown(getATownFromThisTract())
-  #   else if(areaFieldName == 'twt')   # towns with tracts
-  #     # this extracts and searches for ONLY the tract number.
-  #     rownumbers = grep(gsub('.* 42', '42', target), twt$twt) ## should be a tract
-  #   else {
-  #     print(paste('areaFieldName? ', areaFieldName))
-  #     #browser(text = 'what areaFieldName?')
-  #   }
-  #   print(paste('TARGETrownumbers', 'TARGET (out):', paste(collapse = '+', rownumbers)))
-  #   return(rownumbers)
-  # }
-  #
-  # #### rV$TARGETdatarows ####
-  # rV$TARGETdatarows = function(target=TARGETstring()){
-  #   twt[TARGETrownumbers(target), ]
-  # }
 
   #### fixNbhds ####
   twt$twtSaved = twt$twt
@@ -334,33 +285,6 @@ function(input, output, session) {
           twt$twtSaved )
   updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
 
-  #    grep('\\(P', twt$twt,perl=T)
-  ##### IdNbhdsObserver = observeEvent(input$IdNbhds, ####
-  # IdNbhdsObserver = observeEvent(input$IdNbhds, {
-  #   if (input$IdNbhds) {
-  #     print('Going Pittsburgh nbhd')
-  #     # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub( '^Pittsburgh', 'Pittsburgh (unspecified)',
-  #     #                            twt$twtSaved )
-  #   }
-  #   else {
-  #     print('Going Pittsburgh all in one')
-  #     # twt$twt = twt$twt.for.towns = twt$twt.for.tracts = gsub(
-  #     #   '.* \\(Pittsburgh\\)', 'Pittsburgh',
-  #     #   gsub( '^Pittsburgh \\(unspecified\\)', 'Pittsburgh',
-  #     #                                           twt$twtSaved ) )
-  #   }
-  #   # TESTING in shinyDebuggingPanel:
-  #   #   c(twt$twt[grep('0317', twt$tracts)], twt$twt[grep('3192', twt$tracts)])
-  #   ## refresh the maps
-  #   #click
-  #   leafletProxy("map", session) %>%
-  #     clearGroup("selectedTractGroup") %>%
-  #     clearGroup("selectedTownGroup")
-  #   ### so that you can 're-click', i.e. select a different town?  doesn't work probably
-  #   updateSelectInput(session, "areaSelectorId", selected = NULL)
-  #   if(!is.null(input$map_shape_click))
-  #     updateSelectInput(session, "areaSelectorId", selected = input$map_shape_click$id)
-  # })
   #### leaflet output$map ####
   output$map <- renderLeaflet({
     leaflet() %>%
@@ -383,27 +307,6 @@ function(input, output, session) {
                     bringToFront = T))
   })
 
-  ##### newTractObserver:  leafletProxy: Map animation  ####
-  # newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
-  #   print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
-  #   print(paste('newTractObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
-  #   print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
-  #
-  #   tractRowNumber = TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
-  #
-  #   print(paste('newTractObserver: tractRowNumber',
-  #               paste(collapse=',', tractRowNumber)))
-  #   #### leafletProxy - tracts ####
-  #   leafletProxy("map", session) %>%
-  #     flyTo(lng = rV$TARGETdatarows()$lon.places[1],
-  #           lat = rV$TARGETdatarows()$lat.places[1], zoom=10) %>%
-  #     clearGroup("selectedTractGroup") %>%
-  #     addPolygons(data=twt[tractRowNumber,], weight = 1,
-  #                 color="Red", fillColor="yellow",
-  #                 label= ~twt,
-  #                 #layerId = ~twt,
-  #                 fillOpacity = 1, group="selectedTractGroup")
-  # })
 
   # export button
   output$downloadData <- downloadHandler(
