@@ -87,6 +87,8 @@ function(input, output, session) {
   }
 
 
+
+
  #### clicking updates selectInput ####
   ## replacing with jan5now6 crashes.
   observeMapClick = observeEvent(c(input$Id_ToggleTownTract, input$map_shape_click), {
@@ -129,10 +131,17 @@ function(input, output, session) {
       if(is.null(rV$savedTract))
         rV$savedTract = 1
       clickATract(rV$savedTract)
+      updateSelectInput(session, "areaSelectorId",
+                        selected = twt[['areaField']] [rV$savedTract])
+      rV$selectedTown = NULL
       print(paste('input$Id_ToggleTownTract:  rV$savedTract = ', rV$savedTract))
     }
-    if(input$Id_ToggleTownTract == 'towns')
-      print(paste('input$Id_ToggleTownTract: towns  SELECTEDstring:  ', SELECTEDstring()))
+    if(input$Id_ToggleTownTract == 'towns') {
+      print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
+      rV$selectedTown = getATownFromThisTract(rV$savedTract)
+      clickTowns(rV$selectedTown)
+    }
+#    print(paste('input$Id_ToggleTownTract: towns  SELECTEDstring:  ', SELECTEDstring()))
     ### can this force a new modal? No.
 
   })
@@ -179,6 +188,10 @@ function(input, output, session) {
 
   ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
   getATownFromThisTract = function(target = TARGETstring())  {
+    if(! is.null(rV$selectedTown)) {
+      print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
+                  rV$selectedTown, '  tract:', rV$selectedTract))
+    }
     townsForThisTract = getTownsForThisTract(target)
     isolate({
       print(paste('getATownFromThisTract: townsForThisTract:',
