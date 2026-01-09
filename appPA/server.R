@@ -193,7 +193,7 @@ function(input, output, session) {
                   twtTractString ) ) [[1]]
 
   #### townsForAllTracts ####
-  townsForAllTracts = lapply(twt$twt, getTownsForThisTract)  ### inefficient, so what.
+  townsForAllTracts = lapply(twt$twt, getTownsForThisTract)
 
   rV = reactiveValues(showingModal = FALSE)
 
