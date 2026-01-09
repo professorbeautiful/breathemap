@@ -159,11 +159,11 @@ function(input, output, session) {
   showTheseTracts = function(rownumbers) {
     if(is.character(rownumbers))  ## might be a twt (tract)
       rownumbers = which(rownumbers %in% twt$twt)
-    TARGETdatarows = twt[rownumbers, ]
+    rV$TARGETdatarows = twt[rownumbers, ]
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
-      flyTo(lng = TARGETdatarows$lon.places[1],
-            lat = TARGETdatarows$lat.places[1], zoom=10) %>%
+      flyTo(lng = rV$TARGETdatarows$lon.places[1],
+            lat = rV$TARGETdatarows$lat.places[1], zoom=10) %>%
       clearGroup("selectedTractGroup") %>%
       addPolygons(data=rownumbers, weight = 1,
                   color="Red", fillColor="yellow",
@@ -300,8 +300,8 @@ function(input, output, session) {
   #   return(rownumbers)
   # }
   #
-  # #### TARGETdatarows ####
-  # TARGETdatarows = function(target=TARGETstring()){
+  # #### rV$TARGETdatarows ####
+  # rV$TARGETdatarows = function(target=TARGETstring()){
   #   twt[TARGETrownumbers(target), ]
   # }
 
@@ -372,8 +372,8 @@ function(input, output, session) {
   #               paste(collapse=',', tractRowNumber)))
   #   #### leafletProxy - tracts ####
   #   leafletProxy("map", session) %>%
-  #     flyTo(lng = TARGETdatarows()$lon.places[1],
-  #           lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
+  #     flyTo(lng = rV$TARGETdatarows()$lon.places[1],
+  #           lat = rV$TARGETdatarows()$lat.places[1], zoom=10) %>%
   #     clearGroup("selectedTractGroup") %>%
   #     addPolygons(data=twt[tractRowNumber,], weight = 1,
   #                 color="Red", fillColor="yellow",
