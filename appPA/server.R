@@ -138,10 +138,10 @@ function(input, output, session) {
 
   #### townSharesCheckbox_Observer ####
   townSharesCheckbox_Observer = observeEvent(input$Id_townSharesCheckbox, {
-    if(isTRUE(input$Id_townSharesCheckbox))   ## Town share is ON
+    if(isTRUE(input$Id_townSharesCheckbox))   ## Town share changed to  ON
       showAllTractsContaining(rV$selectedTown)
     else
-      showAllTractsWithOnly(rV$selectedTown)  ## Town share is OFF
+      showAllTractsWithOnly(rV$selectedTown)  ## Town share changed to  OFF
   })
 
   showAllTractsContaining = function(town=rV$selectedTown){
