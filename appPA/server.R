@@ -80,12 +80,13 @@ function(input, output, session) {
       print(paste('clickATract: areaSelectorId: ', input$areaSelectorId))
   }
 
-
-  observeEvent(input$areaSelectorId, {
+  areaSelectorObserver = observeEvent(input$areaSelectorId, {
+    if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
+      updateSelectInput(inputId='areaSelectorId', selected = 1)     #### default before area is selected ####
     if(input$areaSelectorId != rV$savedTract)
        rV$savedTract = input$areaSelectorId
   })
-  observeEvent(rV$savedTract, {
+  savedTractObserver = observeEvent(rV$savedTract, {
     if(input$areaSelectorId != rV$savedTract)
       updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
   })
@@ -106,11 +107,6 @@ function(input, output, session) {
     showTheseTracts(rV$savedTract)
   })
 
-  #### default before area is selected ####
-  observe({
-  if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
-    updateSelectInput(inputId='areaSelectorId', selected = 1)
-  })
 
 
   #### If switching toggle   observeEvent   input$Id_ToggleTownTract ####
