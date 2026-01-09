@@ -320,7 +320,7 @@ function(input, output, session) {
 
   #### featureList  functions ####
   #feat.countsPerPerson presumes that feature is in counts of people.
-  safe.sum = function(x) sum(x, na.rm=T)
+  safe.sum = function(x) sum(as.numeric(x), na.rm=T)
   feat.countsPerPerson = function()
     safe.sum(getThisAreaFeature()) / safe.sum(getThisAreaPopulation())
   #feat.weightedRate presumes that feature is a rate.
