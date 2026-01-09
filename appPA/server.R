@@ -204,21 +204,6 @@ function(input, output, session) {
   })
 
 
-  TARGETstring = reactive({
-    return(input$areaSelectorId)
-  })
-  #### SELECTEDstring reactive  ####
-  SELECTEDstring = reactive( {
-    print( paste('SELECTEDstring: TARGETstring: ',  TARGETstring(),
-                 '\nSELECTEDstring:  get_areaFieldName: ',input$Id_ToggleTownTract
-           ,
-           '\nSELECTEDstring:  Id_ToggleTownTract: ',input$Id_ToggleTownTract) )
-  if(get_areaFieldName() == 'towns')
-      return(   getATownFromThisTract(TARGETstring()))#
-    else
-      return(TARGETstring())
-  })
-
   #### getTownsForThisTract ####
   getTownsForThisTract = function(twtTractString=rV$savedTract)
     strsplit(split = ',',
@@ -230,7 +215,7 @@ function(input, output, session) {
 
   rV = reactiveValues(showingModal = FALSE)
 
-  ####   getATownFromThisTract  observeEvent TARGETstring -> rV$selectedTown ####
+  ####   getATownFromThisTract  observeEvent  townsForThisTract -> rV$selectedTown ####
   getATownFromThisTract = function(townsForThisTract)  {
     if(! is.null(rV$selectedTown)) {
       print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
@@ -371,13 +356,15 @@ function(input, output, session) {
     div(hr(),
         span(strong(
           switch(isTRUE(rV$showingPittsburgh),
-                 'Selected all Pittsburgh from',
+                 'Selected all Pittsburgh from selecting...',
                  switch(get_areaFieldName(),
                  towns="Selected town:",
                  twt="Selected town/tract:"))),
              span(
           style='color:green',
-          paste(SELECTEDstring()))),
+          paste(switch(get_areaFieldName(),
+                      towns=rV$selectedTown,
+                      twt=rV$savedTract)))),
         br(),
         span(strong("Selected feature: "),
              span(
