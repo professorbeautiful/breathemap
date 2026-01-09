@@ -148,6 +148,8 @@ function(input, output, session) {
     showTheseTracts(rownumbersForTown)
   }
   showTheseTracts = function(rownumbers) {
+    if(is.character(rownumbers))  ## might be a twt (tract)
+      rownumbers = which(rownumbers %in% twt$twt)
     TARGETdatarows = twt[rownumbers, ]
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
