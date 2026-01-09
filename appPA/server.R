@@ -159,6 +159,7 @@ function(input, output, session) {
   showTheseTracts = function(rownumbers) {
     if(is.character(rownumbers))  ## might be a twt (tract)
       rownumbers = which(rownumbers %in% twt$twt)
+    rV$TARGETrownumbers = rownumbers
     rV$TARGETdatarows = twt[rownumbers, ]
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
@@ -420,12 +421,14 @@ function(input, output, session) {
 
   #### Bring in featureList.  Careful: renamed PM_avg  ##
   getThisAreaFeature = reactive({
-    thisFeature = as.numeric(twt[[input$idFeature]])
-    return(thisFeature[TARGETrownumbers(TARGETstring())])
+    # thisFeature = as.numeric(twt[[input$idFeature]])
+    # return(thisFeature[TARGETrownumbers(TARGETstring())])
+    return(rV$TARGETdatarows[[input$idFeature]])
   })
   getThisAreaPopulation = reactive({
-    thisFeature = as.numeric(twt[["Total Population (2019)"]])
-    return(thisFeature[TARGETrownumbers(TARGETstring())])
+    # thisFeature = as.numeric(twt[["Total Population (2019)"]])
+    # return(thisFeature[TARGETrownumbers(TARGETstring())])
+    return(rV$TARGETdatarows[["Total Population (2019)"]])
   })
   thisAreaFeatureSummary = reactive({
     featureName = input$idFeature
