@@ -90,12 +90,14 @@ function(input, output, session) {
  #### clicking updates selectInput ####
   ## replacing with jan5now6 crashes.
   observeMapClick = observeEvent(c(input$Id_ToggleTownTract, input$map_shape_click), {
+
     click = input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
     else {
+      rV$click = input$map_shape_click
       leafletProxy("map", session) %>%
         clearGroup("selectedTract") %>%
         clearGroup("selectedTown")
