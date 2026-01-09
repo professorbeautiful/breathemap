@@ -83,8 +83,10 @@ function(input, output, session) {
   areaSelectorObserver = observeEvent(input$areaSelectorId, {
     if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
       updateSelectInput(inputId='areaSelectorId', selected = 1)     #### default before area is selected ####
-    if(input$areaSelectorId != rV$savedTract)
-       rV$savedTract = input$areaSelectorId
+    #if(input$areaSelectorId != rV$savedTract)
+    rV$savedTract = input$areaSelectorId
+    print(paste('areaSelectorObserver: ',
+                'input$areaSelectorId', input$areaSelectorId))
     tractIsChanged()
   })
   savedTractObserver = observeEvent(rV$savedTract, {
@@ -94,6 +96,8 @@ function(input, output, session) {
   })
 
   tractIsChanged = function(){
+    print(paste('tractIsChanged: ',
+                'rV$savedTract', rV$savedTract))
     showTheseTracts(rV$savedTract)
   }
 
@@ -138,16 +142,20 @@ function(input, output, session) {
 
   #### townSharesCheckbox_Observer ####
   townSharesCheckbox_Observer = observeEvent(input$Id_townSharesCheckbox, {
-    if(isTRUE(input$Id_townSharesCheckbox))   ## Town share changed to  ON
-      showAllTractsContaining(rV$selectedTown)
-    else
-      showAllTractsWithOnly(rV$selectedTown)  ## Town share changed to  OFF
+    if(input$Id_ToggleTownTract != 'twt') {
+      if(isTRUE(input$Id_townSharesCheckbox))   ## Town share changed to  ON
+        showAllTractsContaining(rV$selectedTown)
+      else
+        showAllTractsWithOnly(rV$selectedTown)  ## Town share changed to  OFF
+    }
   })
 
   showingPittsburgh = function(town) #### townSharesCheckbox_Observer should be irrelevant
     (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
 
   showAllTractsContaining = function(town=rV$selectedTown){
+    if(Id_ToggleTownTract != 'towns')
+      simpleError('showAllTractsContaining only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
     if(showingPittsburgh(town))
@@ -156,24 +164,30 @@ function(input, output, session) {
   }
 
   showAllTractsWithOnly = function(town=rV$selectedTown){
+    if(Id_ToggleTownTract != 'towns')
+      simpleError('showAllTractsWithOnly only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
-    if(showingPittsburgh(town))
+    if(showingPittsburgh(town)) {
       rownumbersForTown = which(sapply(twt$twt, isPittsburgh))
+    }
     showTheseTracts(rownumbersForTown)
   }
 
   showTheseTracts = function(rownumbers) {
-    if(is.character(rownumbers))  ## might be a twt (tract)
-      rownumbers = which(rownumbers %in% twt$twt)
+    if(is.character(rownumbers))  ## might be a twt (tract), or several tracts
+      rownumbers = which(twt$twt %in% rownumbers)  ### notice the order!!
     rV$TARGETrownumbers = rownumbers
     rV$TARGETdatarows = twt[rownumbers, ]
+    print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
+                'dim rV$TARGETdatarows',
+                paste(collapse=',', dim(rV$TARGETdatarows ))))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
       flyTo(lng = rV$TARGETdatarows$lon.places[1],
             lat = rV$TARGETdatarows$lat.places[1], zoom=10) %>%
       clearGroup("selectedTractGroup") %>%
-      addPolygons(data=rownumbers, weight = 1,
+      addPolygons(data=rV$TARGETdatarows, weight = 1,
                   color="Red", fillColor="yellow",
                   label= ~twt,
                   #layerId = ~twt,
