@@ -1,1 +1,1 @@
-* deployed25dc 25dc3b3 slightly better looking bottom bar.
+* jan8         e28751f save current commit branch info, and deploy. Must set appName and appTitle.
