@@ -353,26 +353,26 @@ function(input, output, session) {
   })
 
   ##### newTractObserver:  leafletProxy: Map animation  ####
-  newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
-    print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTractObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
-    print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
-
-    tractRowNumber = TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
-
-    print(paste('newTractObserver: tractRowNumber',
-                paste(collapse=',', tractRowNumber)))
-    #### leafletProxy - tracts ####
-    leafletProxy("map", session) %>%
-      flyTo(lng = TARGETdatarows()$lon.places[1],
-            lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
-      clearGroup("selectedTractGroup") %>%
-      addPolygons(data=twt[tractRowNumber,], weight = 1,
-                  color="Red", fillColor="yellow",
-                  label= ~twt,
-                  #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTractGroup")
-  })
+  # newTractObserver = observeEvent(c(rV$TARGETrownumbers, input$areaSelectorId), {
+  #   print(paste('newTractObserver: input$areaSelectorId', input$areaSelectorId) )
+  #   print(paste('newTractObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
+  #   print(paste('newTractObserver: SELECTEDstring', SELECTEDstring() ) )
+  #
+  #   tractRowNumber = TARGETrownumbers() #rV$TARGETrownumbers  fails at first.
+  #
+  #   print(paste('newTractObserver: tractRowNumber',
+  #               paste(collapse=',', tractRowNumber)))
+  #   #### leafletProxy - tracts ####
+  #   leafletProxy("map", session) %>%
+  #     flyTo(lng = TARGETdatarows()$lon.places[1],
+  #           lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
+  #     clearGroup("selectedTractGroup") %>%
+  #     addPolygons(data=twt[tractRowNumber,], weight = 1,
+  #                 color="Red", fillColor="yellow",
+  #                 label= ~twt,
+  #                 #layerId = ~twt,
+  #                 fillOpacity = 1, group="selectedTractGroup")
+  # })
 
   # export button
   output$downloadData <- downloadHandler(
