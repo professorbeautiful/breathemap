@@ -374,32 +374,6 @@ function(input, output, session) {
                   fillOpacity = 1, group="selectedTractGroup")
   })
 
-  ##### newTownsObserver:  leafletProxy: Map animation  ####
-
-  newTownsObserver = observeEvent(c(rV$selectedTown, input$areaSelectorId,
-                                    input$IdNbhds), {
-    print(paste('newTownsObserver: input$areaSelectorId', input$areaSelectorId) )
-    print(paste('newTownsObserver: input$Id_ToggleTownTract', input$Id_ToggleTownTract) )
-    print(paste('newTownsObserver: SELECTEDstring', SELECTEDstring() ) )
-    if(input$areaSelectorId != 'towns')
-      leafletProxy("map", session) %>%
-        clearGroup("selectedTowns")
-    else {
-      townRowNumbers = getRownumbersForTown(rV$selectedTown, input$IdNbhds)
-
-      leafletProxy("map", session) %>%
-        flyTo(lng = TARGETdatarows()$lon.places[1],
-              lat = TARGETdatarows()$lat.places[1], zoom=10) %>%
-        clearGroup("selectedTownGroup") %>%
-        addPolygons(data=twt[townRowNumbers,], weight = 1,
-                    color="purple", fillColor="grey",
-                    label= ~twt.for.towns,
-                    #layerId = ~twt,
-                    fillOpacity = 0.5, group="selectedTownGroup")  #%>%
-    }
-  }
-  )
-
   # export button
   output$downloadData <- downloadHandler(
     filename = "Air-Pollution-PA.csv",
