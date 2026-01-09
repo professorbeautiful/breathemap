@@ -234,7 +234,6 @@ function(input, output, session) {
         ))
       }
     }
-  }
 
   #### modal OK ####
   observeEvent(input$ok, handlerExpr = {
