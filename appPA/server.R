@@ -117,9 +117,20 @@ function(input, output, session) {
     showTheseTracts(rV$savedTract)
   })
 
-
+  #### havetownObserver:  ok we have our town ####
+  havetownObserver  = observeEvent(rV$selectedTown, {
+    if(is.null(rV$selectedTown))
+      return()
+    if(input$Id_ToggleTownTract != 'twt') {
+      if(isTRUE(input$Id_townSharesCheckbox))   ## Town share changed to  ON
+        showAllTractsContaining(rV$selectedTown)
+      else
+        showAllTractsWithOnly(rV$selectedTown)  ## Town share changed to  OFF
+    }
+  })
 
   #### switched from twt to towns  ####
+  ##same thing if clicking a new tract.
   Id_ToggleTownTractObserver_towns = observeEvent(input$Id_ToggleTownTract, {
     if(input$Id_ToggleTownTract == 'towns') {
       print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
@@ -128,16 +139,10 @@ function(input, output, session) {
         rV$savedTract = 1
       theseTowns = getTownsForThisTract(rV$savedTract)
       getATownFromThisTract(theseTowns)
+    }
       # Because of the towns Modal, rely on rV$selectedTown, not a return value.
       # Now rV$selectedTown = NULL is no longer NULL, I hope.
-      if(is.null(rV$selectedTown)){
-        simpleError("Id_ToggleTownTractObserver_towns:   rV$selectedTown should not be NULL")
-      }
-      if(isTRUE(input$Id_townSharesCheckbox))   ## Town share is ON
-        showAllTractsContaining(rV$selectedTown)
-      else
-        showAllTractsWithOnly(rV$selectedTown)  ## Town share is OFF
-    }
+      ### use haveTownObserver to continue  ###
   })
 
   #### townSharesCheckbox_Observer ####
@@ -150,16 +155,18 @@ function(input, output, session) {
     }
   })
 
-  showingPittsburgh = function(town) #### townSharesCheckbox_Observer should be irrelevant
-    (isPittsburgh(town) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
+  showingPittsburgh = function() #### townSharesCheckbox_Observer should be irrelevant
+    (isPittsburgh(rV$savedTract) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
 
   showAllTractsContaining = function(town=rV$selectedTown){
     if(input$Id_ToggleTownTract != 'towns')
       simpleError('showAllTractsContaining only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) town %in% t))
-    if(showingPittsburgh(town))
-      rownumbersForTown = which(sapply(twt$twt, isPittsburgh))
+    if(showingPittsburgh())   {
+      rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
+      print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
+    }
     showTheseTracts(rownumbersForTown)
   }
 
@@ -168,8 +175,9 @@ function(input, output, session) {
       simpleError('showAllTractsWithOnly only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
-    if(showingPittsburgh(town)) {
-      rownumbersForTown = which(sapply(twt$twt, isPittsburgh))
+    if(showingPittsburgh())   {
+      rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
+      print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
     }
     showTheseTracts(rownumbersForTown)
   }
@@ -220,13 +228,16 @@ function(input, output, session) {
     if(! is.null(rV$selectedTown)) {
       print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
                   rV$selectedTown, '  tract:', rV$selectedTract))
-      print(sys.calls())  ### Error
+      #print(sys.calls())  ### Error
+      return(rV$selectedTown)
     }
     print(paste('getATownFromThisTract: townsForThisTract:',
                 paste(collapse='+', townsForThisTract)))
     ### for now, pick the first town.  Later, pop up to pick a town.
     if(length(townsForThisTract) == 1 ){
       rV$selectedTown = townsForThisTract[1]
+
+
       print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
@@ -257,8 +268,8 @@ function(input, output, session) {
     value2 = (length(value2)>0)
     value  = (value1 | value2)
     if(value) {
-      print(paste('isPittsburgh', town, value))
-      print(paste('isPittsburgh ', value1, value2,  value))
+      # print(paste('isPittsburgh', town, value))
+      # print(paste('isPittsburgh ', value1, value2,  value))
     }
     return(value)
   }
