@@ -62,6 +62,24 @@ function(input, output, session) {
   medianLON= median(as.numeric(twt$lon.tracts), na.rm=T)
   medianLAT= median(as.numeric(twt$lat.tracts), na.rm=T)
 
+  #### fixNbhds ####
+  twt$twtSaved = twt$twt
+  twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
+    gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
+          twt$twtSaved )
+  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
+
+
+  #### getTownsForThisTract ####
+  getTownsForThisTract = function(twtTractString=rV$savedTract)
+    strsplit(split = ',',
+             gsub(' 42.*', '',  #### 42 = Pennsylvania
+                  twtTractString ) ) [[1]]
+
+  #### townsForAllTracts ####
+  townsForAllTracts = lapply(twt$twt, getTownsForThisTract)
+
+
   clickATract = function(tractNumber) {
     if(is.character(tractNumber))
       tractNumber = match(tractNumber, twt$twt)
@@ -257,16 +275,6 @@ function(input, output, session) {
   })
 
 
-  #### getTownsForThisTract ####
-  getTownsForThisTract = function(twtTractString=rV$savedTract)
-    strsplit(split = ',',
-             gsub(' 42.*', '',  #### 42 = Pennsylvania
-                  twtTractString ) ) [[1]]
-
-  #### townsForAllTracts ####
-  townsForAllTracts = lapply(twt$twt, getTownsForThisTract)
-
-  rV = reactiveValues(showingModal = FALSE)
 
   ####   getATownFromThisTract  observeEvent  townsForThisTract -> rV$selectedTown ####
   getATownFromThisTract = function(townsForThisTract)  {
@@ -319,12 +327,6 @@ function(input, output, session) {
     return(value)
   }
 
-  #### fixNbhds ####
-  twt$twtSaved = twt$twt
-  twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
-    gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
-          twt$twtSaved )
-  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
 
   #### leaflet output$map ####
   output$map <- renderLeaflet({
