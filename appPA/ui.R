@@ -90,7 +90,7 @@ fluidPage({
                            column(3,
                                   div(style='color:yellow; background-color:green',
                                       popify(title='Pittsburgh Neighborhood toggle',
-                                             content='When "town" is selected, <br>should Pittsburgh be seen <br>as one "town", <br>or as separate neighborhoods?',
+                                             content='When "town" is selected, <br>should Pittsburgh be seen <br>as one "town", <br>or each neighborhood as an individual "town"?',
 
                                              checkboxInput('IdNbhds', 'See each Pgh nbhd?'
                                                            ,value = TRUE)
