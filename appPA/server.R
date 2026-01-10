@@ -170,6 +170,19 @@ function(input, output, session) {
   showingPittsburgh = function() #### townSharesCheckbox_Observer should be irrelevant
     (isPittsburgh(rV$savedTract) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
 
+  PittsburghObserver = observeEvent(suspended = TRUE,
+    eventExpr = c(rV$savedTract, input$IdNbhds, input$Id_ToggleTownTract), {
+      if(verbose > 1)
+        print(paste('PittsburghObserver: showingPittsburgh()=', showingPittsburgh()))
+      if(showingPittsburgh()){
+        rownumbersForPittsburgh = as.vector(which(sapply(twt$twt, isPittsburgh)) )
+        showTheseTracts(rownumbersForPittsburgh)
+      }
+      else {
+        showTheseTracts(rV$selectedTown)
+      }
+    })
+
   showAllTractsContaining = function(town=rV$selectedTown){
     if(input$Id_ToggleTownTract != 'towns')
       simpleError('showAllTractsContaining only if Id_ToggleTownTract = towns')
@@ -177,7 +190,7 @@ function(input, output, session) {
       which(sapply(  townsForAllTracts, function(t) town %in% t))
     if(showingPittsburgh())   {
       rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
-      print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
+      print(paste( 'Showing all Pittsburgh as one: # tracts = ', length(rownumbersForTown)))
     }
     showTheseTracts(rownumbersForTown)
   }
@@ -214,6 +227,7 @@ function(input, output, session) {
     if(length(rownumbers) == 0) {
       simpleError(paste(
         'showTheseTracts:  length(rownumbers) == 0,  rV$savedTract = ', rV$savedTract))
+      return()
     }
 
     rV$TARGETrownumbers = rownumbers
