@@ -95,10 +95,20 @@ function(input, output, session) {
     tractIsChanged()
   })
 
+  isTowns = function() { input$Id_ToggleTownTract == 'towns'}
+  isTracts = function() { input$Id_ToggleTownTract == 'twt'}
+
   tractIsChanged = function(){
     print(paste('tractIsChanged: ',
                 'rV$savedTract', rV$savedTract))
-    showTheseTracts(rV$savedTract)
+    if(isTowns()) {
+      rV$selectedTown = NULL
+      theseTowns = getTownsForThisTract(rV$savedTract)
+      getATownFromThisTract(theseTowns)
+    }
+    else if(isTracts())
+      showTheseTracts(rV$savedTract)
+
   }
 
  #### clicking updates selectInput ####
