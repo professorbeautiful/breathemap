@@ -158,6 +158,8 @@ function(input, output, session) {
   #### townSharesCheckbox_Observer ####
   townSharesCheckbox_Observer = observeEvent(input$Id_townSharesCheckbox, {
     if(input$Id_ToggleTownTract != 'twt') {
+      print(paste('townSharesCheckbox_Observer', rV$selectedTown,
+                  '  input$Id_townSharesCheckbox', input$Id_townSharesCheckbox))
       if(isTRUE(input$Id_townSharesCheckbox))   ## Town share changed to  ON
         showAllTractsContaining(rV$selectedTown)
       else
@@ -185,11 +187,22 @@ function(input, output, session) {
       simpleError('showAllTractsWithOnly only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
+    print(paste( 'showAllTractsWithOnly: # tracts = ', length(rownumbersForTown),
+                 '   town=', rV$selectedTown))
+
     if(showingPittsburgh())   {
       rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
       print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
     }
-    showTheseTracts(rownumbersForTown)
+    if(length(rownumbersForTown) > 0)
+      showTheseTracts(rownumbersForTown)
+    else {
+      showModal(modalDialog(title = paste('There are NO tracts where the town ', town, ' is the sole occupant. '),
+                            'Turning "Town shares?" back to YES.',
+                            br(),
+                            "(Try 'Murrysville' for an example.)"))
+      updateCheckboxInput(session = session, inputId = 'Id_townSharesCheckbox', value = TRUE)
+    }
   }
 
   showTheseTracts = function(rownumbers) {
