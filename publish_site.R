@@ -6,14 +6,14 @@ write(file = 'appPA/gitbranch.txt',
 )
 ### Read by server. We can use shinyDebuggingPanel to view it.
 
-appName = 'appPA_deployApp'
-appTitle = 'appPA_deployApp'
+# appName = 'appPA_deployApp'
+# appTitle = 'appPA_deployApp'
 appName = 'appPA'
 appTitle = 'appPA'
 logLevel = c("normal", "quiet", "verbose") [3]
 
-launch.browser.bad = getOption("rsconnect.launch.browser",
-                           is_interactive())
+# launch.browser.bad = getOption("rsconnect.launch.browser",
+#                            is_interactive())
 ###----- Deployment error -----
 # Error in is_interactive() : could not find function "is_interactive"
 
