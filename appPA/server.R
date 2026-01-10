@@ -195,6 +195,14 @@ function(input, output, session) {
   showTheseTracts = function(rownumbers) {
     if(is.character(rownumbers))  ## might be a twt (tract), or several tracts
       rownumbers = which(twt$twt %in% rownumbers)  ### notice the order!!
+    print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
+                'dim rV$TARGETdatarows',
+                paste(collapse=',', dim(rV$TARGETdatarows ))))
+    if(length(rownumbers) == 0) {
+      simpleError(paste(
+        'showTheseTracts:  length(rownumbers) == 0,  rV$savedTract = ', rV$savedTract))
+    }
+
     rV$TARGETrownumbers = rownumbers
     rV$TARGETdatarows = twt[rownumbers, ]
     print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
