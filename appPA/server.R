@@ -375,13 +375,13 @@ function(input, output, session) {
   featureSummaryFunctionTable = data.frame(
     feature=featureList,
     func= c(
-      'feat.countsPerPerson', #"Myocardial Infarctions",
-      'feat.countsPerPerson', #"COPD Deaths",
-      'feat.countsPerPerson', #"Ischemic Heart Disease Deaths",
-      'feat.countsPerPerson', # "All-cause deaths", # (avg Krewski, Laden)
-      'feat.countsPerPerson', # "Low Birth Weight Babies",
-      'feat.countsPerPerson', # "Preterm Births",
-      'feat.countsPerPerson', # "Stillbirths",
+      'feat.weightedRate', #"Myocardial Infarctions",
+      'feat.weightedRate', #"COPD Deaths",
+      'feat.weightedRate', #"Ischemic Heart Disease Deaths",
+      'feat.weightedRate', # "All-cause deaths", # (avg Krewski, Laden)
+      'feat.weightedRate', # "Low Birth Weight Babies",
+      'feat.weightedRate', # "Preterm Births",
+      'feat.weightedRate', # "Stillbirths",
       'feat.sum', # "Total Population (2019)",
       'feat.countsPerPerson' # "PM2.5 average"
     ))
