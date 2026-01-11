@@ -188,7 +188,7 @@ function(input, output, session) {
   showingPittsburgh = function() #### townSharesCheckbox_Observer should be irrelevant
     (isPittsburgh(rV$savedTract) & (! input$IdNbhds) & (input$Id_ToggleTownTract == 'towns'))
 
-  PittsburghObserver = observeEvent(suspended = TRUE,
+  PittsburghObserver = observeEvent(#suspended = TRUE,
     eventExpr = c(rV$savedTract, input$IdNbhds, input$Id_ToggleTownTract), {
       if(verbose > 1)
         print(paste('PittsburghObserver: showingPittsburgh()=', showingPittsburgh()))
@@ -197,7 +197,7 @@ function(input, output, session) {
         showTheseTracts(rownumbersForPittsburgh)
       }
       else {
-        showTheseTracts(rV$selectedTown)
+        showTheseTracts(rV$savedTract)
       }
     })
 
