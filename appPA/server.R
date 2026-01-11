@@ -391,12 +391,12 @@ function(input, output, session) {
   getThisAreaFeature = reactive({
     # thisFeature = as.numeric(twt[[input$idFeature]])
     # return(thisFeature[TARGETrownumbers(TARGETstring())])
-    return(rV$TARGETdatarows[[input$idFeature]])
+    return(as.numeric(rV$TARGETdatarows[[input$idFeature]]))
   })
   getThisAreaPopulation = reactive({
     # thisFeature = as.numeric(twt[["Total Population (2019)"]])
     # return(thisFeature[TARGETrownumbers(TARGETstring())])
-    return(rV$TARGETdatarows[["Total Population (2019)"]])
+    return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
   })
   thisAreaFeatureSummary = reactive({
     featureName = input$idFeature
