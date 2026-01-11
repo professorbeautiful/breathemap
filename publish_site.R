@@ -1,3 +1,8 @@
+
+### you may need shinyDebuggingPanel installed fresh
+#  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
+
+
 #  git push --set-upstream origin jan8
 gitbranchOutput =
   print( grep(v=T, '^\\*', system("git branch -v",  intern = T) ) )
@@ -17,7 +22,7 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ###----- Deployment error -----
 # Error in is_interactive() : could not find function "is_interactive"
 
-deployApp(
+rsconnect::deployApp(
   appDir = ifelse(basename(getwd()) == 'appPA', '.', 'appPA'),
   appFiles = NULL,
   appFileManifest = NULL,
