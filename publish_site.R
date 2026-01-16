@@ -3,7 +3,7 @@
 #  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 
 
-#  git push --set-upstream origin jan8
+#  git push --set-upstream origin BreatheMap
 gitbranchOutput =
   print( grep(v=T, '^\\*', system("git branch -v",  intern = T) ) )
 write(file = 'appPA/gitbranch.txt',
@@ -13,8 +13,10 @@ write(file = 'appPA/gitbranch.txt',
 
 # appName = 'appPA_deployApp'
 # appTitle = 'appPA_deployApp'
-appName = 'appPA'
-appTitle = 'appPA'
+# appName = 'appPA'
+# appTitle = 'appPA'
+appName = 'BreatheMap'
+appTitle = 'BreatheMap for southwestern Pennsylvania'
 logLevel = c("normal", "quiet", "verbose") [3]
 
 # launch.browser.bad = getOption("rsconnect.launch.browser",
