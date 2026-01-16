@@ -63,26 +63,26 @@ fluidPage({
                 fluidRow(
                   column(7,
                          fluidRow(
-                           column(7,
+                           column(5,
                                   div(style='color:yellow; background-color:green',
-                                      popify(placement = 'right', title = 'Towns and Census Tracts',
+                                      popify(placement = 'right', title = 'Communities and Census Tracts',
                                              content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
                                              el =
-                                               selectInput("areaSelectorId", 'Towns and Census Tracts',
+                                               selectInput("areaSelectorId", 'Communities and Census Tracts',
                                                            twt$areaField,
                                                            selected = twt$areaField[1])))),
-                           column(2,
+                           column(4,
 
                                     div(style='color:yellow; background-color:green',
                                         popify(title='Area shown:',
-                                               content=HTML(paste('"tracts":  show one tract.<hr>',
-                                                                  '"towns":',
-                                                                  ' You pick one town in this tract,<br>',
-                                                                  ' and we show tracts for that town',
-                                                                  ' <hr>See "Town shares" checkbox for details'
+                                               content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
+                                                                  '"communities":',
+                                                                  ' <br>_____You pick one community in this tract,<br>',
+                                                                  ' and we show tracts for that community',
+                                                                  ' <hr>See "Community shares" checkbox for details'
                                                ) ),
-                                               radioButtons("Id_ToggleTownTract", "Area shown:",
-                                                            choiceNames=c('towns ', 'tracts'),
+                                               radioButtons("Id_ToggleTownTract", "Areas shown:",
+                                                            choiceNames=c('communities', 'tracts'),
                                                             choiceValues=c('towns', 'twt'),
                                                             selected='twt')
                                         )
@@ -90,18 +90,18 @@ fluidPage({
                            column(3,
                                   div(style='color:yellow; background-color:green',
                                       popify(title='Pittsburgh Neighborhood toggle',
-                                             content='When "town" is selected, <br>should Pittsburgh be seen <br>as one "town", <br>or each neighborhood as an individual "town"?',
+                                             content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
                                              checkboxInput('IdNbhds', 'See each Pgh nbhd?'
                                                            ,value = TRUE)
                                       ),
-                                      popify(title='Selecting one town in a tract:',
+                                      popify(title='Selecting one community in a tract:',
                                              content=
                                                div(style='font-size:6px !important; container:body !important',
-                                                   HTML('With "Town shares?" = YES<br>  ____ show ALL tracts that include this town.<hr>With "Town shares?" = NO<br>   ____ show ONLY tracts where this is the only town.'
+                                                   HTML('With "Community shares?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community shares?" = NO<br>   ____ show ONLY tracts where this is the only community.'
                                                    )),
                                                checkboxInput("Id_townSharesCheckbox",
-                                                    "Town shares?",value = TRUE)
+                                                    "Community shares?",value = TRUE)
                                       )
                                       ))
                          ),

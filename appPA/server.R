@@ -417,7 +417,7 @@ function(input, output, session) {
       else
         firstLine = "Selected town:"
     }
-    else firstLine = "Selected town/tract:"
+    else firstLine = "Selected community/tract:"
 
     div(hr(),
         span(
