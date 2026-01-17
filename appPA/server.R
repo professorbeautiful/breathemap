@@ -415,7 +415,7 @@ function(input, output, session) {
       if(isTRUE(rV$showingPittsburgh))
              firstLine = 'Selected all Pittsburgh from selecting...'
       else
-        firstLine = "Selected town:"
+        firstLine = "Selected community:"
     }
     else firstLine = "Selected community/tract:"
 
