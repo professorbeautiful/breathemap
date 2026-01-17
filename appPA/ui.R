@@ -74,7 +74,7 @@ fluidPage({
                            column(4,
 
                                     div(style='color:yellow; background-color:green',
-                                        popify(title='Area shown:',
+                                        popify(title='Areas shown:',
                                                content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
                                                                   '"communities":',
                                                                   ' <br>_____You pick one community in this tract,<br>',
