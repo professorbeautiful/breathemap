@@ -409,6 +409,15 @@ function(input, output, session) {
 
   addSpaces = function(n) rep('&nbsp;', n)
 
+  rvIdMakeReferenceCommunity = reactiveValues(referenceCommunity=NULL)
+
+  observeEvent(input$IdMakeReferenceCommunity, {
+
+  })
+  output$IdReferenceCommunity = renderText( {
+    rvIdMakeReferenceCommunity$referenceCommunity
+  })
+
   output$histTitle = renderUI( {
     thisFeature = as.numeric(twt[[input$idFeature]])
     if(get_areaFieldName()=='towns') {
@@ -430,6 +439,14 @@ function(input, output, session) {
                       towns=rV$selectedTown,
                       twt=rV$savedTract)))),
         br(),
+        ### MAYBE LATER
+        # fluidRow(
+        #   column(3,
+        #          actionButton('IdMakeReferenceCommunity', label = "Make this a reference community?")),
+        #   column(7,
+        #           textOutput(outputId = 'IdReferenceCommunity')
+        #   )
+        # ),
         span(strong("Selected feature: "),
              span(
                style='color:green', input$idFeature, ' = ',
