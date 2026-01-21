@@ -452,9 +452,13 @@ function(input, output, session) {
           paste(switch(get_areaFieldName(),
                       towns=rV$selectedTown,
                       twt=rV$savedTract)))),
-        actionButton('IdMakeReferenceCommunity',
+        fluidRow(
+          column(8, offset=4,
+                 actionButton('IdMakeReferenceCommunity',
                      label =
-                       "Set this as reference community?"),
+                       span(style='color:red',
+                            "Set this as reference community?"))
+                 )),
         br(),
 
         span(strong("Selected feature: "),
