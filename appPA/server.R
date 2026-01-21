@@ -457,10 +457,13 @@ function(input, output, session) {
                  actionButton('IdMakeReferenceCommunity',
                      label =
                        span(style='color:red',
-                            "Set this as reference community?"))
-                 )),
-        br(),
-
+                            ifelse(
+                              identical(rV$savedTract,
+                                        rvIdMakeReferenceCommunity$referenceCommunity),
+                                   "(Currently the reference community)",
+                            "Set this as the reference community?")
+                       )
+                 ))),
         span(strong("Selected feature: "),
              span(
                style='color:green', input$idFeature, ' = ',
