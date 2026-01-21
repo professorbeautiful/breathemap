@@ -360,6 +360,19 @@ function(input, output, session) {
   )
 
 
+  output$IdUiForReferenceCommunity = renderUI( {
+    if(is.null(rvIdMakeReferenceCommunity$referenceCommunity))
+      return(
+           div(
+      strong(
+                    "No reference community chosen."))
+      )
+    else return(
+      span(
+        "Current reference community:",
+            textOutput(outputId = 'IdReferenceCommunity')
+    ))
+  })
 
   #### featureList  functions ####
   #feat.countsPerPerson presumes that feature is in counts of people.
@@ -412,7 +425,8 @@ function(input, output, session) {
   rvIdMakeReferenceCommunity = reactiveValues(referenceCommunity=NULL)
 
   observeEvent(input$IdMakeReferenceCommunity, {
-
+    rvIdMakeReferenceCommunity$referenceCommunity =
+      input$areaSelectorId
   })
   output$IdReferenceCommunity = renderText( {
     rvIdMakeReferenceCommunity$referenceCommunity
@@ -438,15 +452,11 @@ function(input, output, session) {
           paste(switch(get_areaFieldName(),
                       towns=rV$selectedTown,
                       twt=rV$savedTract)))),
+        actionButton('IdMakeReferenceCommunity',
+                     label =
+                       "Set this as reference community?"),
         br(),
-        ### MAYBE LATER
-        # fluidRow(
-        #   column(3,
-        #          actionButton('IdMakeReferenceCommunity', label = "Make this a reference community?")),
-        #   column(7,
-        #           textOutput(outputId = 'IdReferenceCommunity')
-        #   )
-        # ),
+
         span(strong("Selected feature: "),
              span(
                style='color:green', input$idFeature, ' = ',
@@ -490,6 +500,7 @@ function(input, output, session) {
            col='green', lwd=3)
 
   })
+
   ### popovers--  popify or tipify work, but these don't.
   # addPopover(session, id='IdNbhds',title = 'Pittsburgh Neighborhood toggle',
   #            content = '...in progress.', placement='top', trigger='hover')
