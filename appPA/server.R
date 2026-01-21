@@ -396,7 +396,7 @@ function(input, output, session) {
       'feat.weightedRate', # "Preterm Births",
       'feat.weightedRate', # "Stillbirths",
       'feat.sum', # "Total Population (2019)",
-      'feat.countsPerPerson' # "PM2.5 average"
+      'feat.weightedRate' # "PM2.5 average"
     ))
   rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
 
