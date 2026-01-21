@@ -364,14 +364,14 @@ function(input, output, session) {
     if(is.null(rvIdMakeReferenceCommunity$referenceCommunity))
       return(
            div(
-      strong(
-                    "No reference community chosen."))
+             strong(
+               "No reference community chosen."))
       )
     else return(
-      span(
-        "Current reference community:",
-            textOutput(outputId = 'IdReferenceCommunity')
-    ))
+      fluidRow(style='color:red',
+        column(5, strong("Current reference community (red dot):")),
+        column(7,   textOutput(outputId = 'IdReferenceCommunity')
+    )))
   })
 
   #### featureList  functions ####
@@ -486,6 +486,7 @@ function(input, output, session) {
   })
 
   output$featurePlot <- renderPlot({
+
     thisFeature = as.numeric(twt[[input$idFeature]])
     thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
@@ -498,7 +499,17 @@ function(input, output, session) {
     arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
            x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
            col='green', lwd=3)
+    if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
+      REFERENCEdatarows =   ### now just the ref tract.
+        which(twt$twt ==
+                rvIdMakeReferenceCommunity$referenceCommunity)
+      print(paste('REFERENCEdatarows', REFERENCEdatarows))
+      refValue = as.numeric(
+        twt[[input$idFeature]]  [REFERENCEdatarows])
+      print(paste('refValue', refValue))
+      points( refValue, 0, cex=15, col='red', pch='.')
 
+    }
   })
 
   ### popovers--  popify or tipify work, but these don't.
