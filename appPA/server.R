@@ -149,7 +149,7 @@ function(input, output, session) {
       cat("lonBad: Using medianLON, zoom = 7\n")
       lon = medianLON
       lat = medianLAT
-      zoom=7  ## full out?
+      zoom=7  ## lost;  go full out.
     }
     returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
     return(returnVal)
