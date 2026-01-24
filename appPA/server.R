@@ -116,9 +116,41 @@ function(input, output, session) {
   isTowns = function() { input$Id_ToggleTownTract == 'towns'}
   isTracts = function() { input$Id_ToggleTownTract == 'twt'}
 
+  getLonLat = function(tract) {
+    datarow = which(tract == twt$areaField)
+    zoom = 10
+    lon = twt$lon.tracts[datarow]
+    lat = twt$lat.tracts[datarow]
+    if(is.na(lon)) {
+      lon = twt$lon.places[datarow]
+      lat = twt$lat.places[datarow]
+    }
+    if(is.na(lon)) {   # still missing
+      lon = twt$lon.places[datarow]
+      lat = twt$lat.places[datarow]
+      lon = twt$lon.places.x[datarow]
+      lat = twt$lat.places.x[datarow]
+    }
+    if(is.na(lon)) {  # if  STILL missing
+      lon = medianLON
+      lat = medianLAT
+      zoom=7  ## full out?
+    }
+    return(list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
+  }
   tractIsChanged = function(){
+    locateMe = getLonLat(rV$savedTract)
+
     print(paste('tractIsChanged: ',
-                'rV$savedTract', rV$savedTract))
+                'input$areaSelectorId', input$areaSelectorId,
+                'rV$savedTract', rV$savedTract,
+                '   datarow', locateMe$datarow,
+                locateMe$lon, locateMe$lat, locateMe$zoom))
+
+    leafletProxy("map", session) %>%
+      flyTo(lng = locateMe$lon,
+            lat = locateMe$lat, zoom=locateMe$zoom)
+
     if(isTowns()) {
       rV$selectedTown = NULL
       theseTowns = getTownsForThisTract(rV$savedTract)
@@ -239,6 +271,14 @@ function(input, output, session) {
   showTheseTracts = function(rownumbers) {
     if(is.character(rownumbers))  ## might be a twt (tract), or several tracts
       rownumbers = which(twt$twt %in% rownumbers)  ### notice the order!!
+    locateMe = getLonLat(rV$savedTract)
+
+    print(paste('tractIsChanged: ',
+                'input$areaSelectorId', input$areaSelectorId,
+                'rV$savedTract', rV$savedTract,
+                '   datarow', locateMe$datarow,
+                locateMe$lon, locateMe$lat, locateMe$zoom))
+
     print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
                 paste(collapse=',', dim(rV$TARGETdatarows ))))
@@ -252,11 +292,12 @@ function(input, output, session) {
     rV$TARGETdatarows = twt[rownumbers, ]
     print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
-                paste(collapse=',', dim(rV$TARGETdatarows ))))
+                paste(collapse=',', dim(rV$TARGETdatarows )),
+                ' lat lon: ', rV$TARGETdatarows$lat.places[1], rV$TARGETdatarows$lon.places[1]))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
-      flyTo(lng = rV$TARGETdatarows$lon.places[1],
-            lat = rV$TARGETdatarows$lat.places[1], zoom=10) %>%
+      flyTo(lng = locateMe$lon,
+            lat = locateMe$lat, zoom=locateMe$zoom) %>%
       clearGroup("selectedTractGroup") %>%
       addPolygons(data=rV$TARGETdatarows, weight = 1,
                   color="Red", fillColor="yellow",
