@@ -117,26 +117,42 @@ function(input, output, session) {
   isTracts = function() { input$Id_ToggleTownTract == 'twt'}
 
   getLonLat = function(tract) {
-    datarow = which(tract == twt$areaField)
+    tract = tract[1]
+    if(is.character(tract))
+      datarow = which(tract == twt$twt)
+    else
+      datarow = tract
+
     zoom = 10
     lon = twt$lon.tracts[datarow]
     lat = twt$lat.tracts[datarow]
-    if(is.na(lon)) {
-      lon = twt$lon.places[datarow]
-      lat = twt$lat.places[datarow]
+    cat('=====getLonLat:\n')
+    print(tract)
+    print(datarow)
+    print(twt[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')])
+    lonBad = function(lon){
+      if(length(lon)==0) return(TRUE)
+      if(is.na(lon)) return(TRUE)
+      return(FALSE)
     }
-    if(is.na(lon)) {   # still missing
+    if(lonBad(lon)) {
       lon = twt$lon.places[datarow]
       lat = twt$lat.places[datarow]
+      cat("lonBad: Trying lon.places\n")
+    }
+    if(lonBad(lon)) {   # still missing
+      cat("lonBad: Trying lon.places.x\n")
       lon = twt$lon.places.x[datarow]
       lat = twt$lat.places.x[datarow]
     }
-    if(is.na(lon)) {  # if  STILL missing
+    if(lonBad(lon)) {  # if  STILL missing
+      cat("lonBad: Using medianLON, zoom = 7\n")
       lon = medianLON
       lat = medianLAT
       zoom=7  ## full out?
     }
-    return(list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
+    returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
+    return(returnVal)
   }
   tractIsChanged = function(){
     locateMe = getLonLat(rV$savedTract)
@@ -293,7 +309,7 @@ function(input, output, session) {
     print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
                 paste(collapse=',', dim(rV$TARGETdatarows )),
-                ' lat lon: ', rV$TARGETdatarows$lat.places[1], rV$TARGETdatarows$lon.places[1]))
+                ' lat lon: ', locateMe$lat, locateMe$lon))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
       flyTo(lng = locateMe$lon,
