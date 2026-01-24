@@ -9,11 +9,11 @@ countymap = data.frame(COUNTYFP =
                        county=
                          strsplit(split=' ', 'Allegheny Armstrong Beaver Butler Fayette Lawrence Washington Westmoreland')[[1]]
 )
-PAtowndata[ PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD, c('COUNTYFP', 'NAME')]
-twoCounties = PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD &
-             PAtowndata$COUNTYFP=='003'
-PAtowndata[twoCounties, c('COUNTYFP', 'NAME')]
-###  So one allegheny per pair.   We can remove the others.
-PAtowndata.reduced = PAtowndata[  ! (PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD)
-                        | PAtowndata$COUNTYFP=='003', ]
+# PAtowndata[ PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD, c('COUNTYFP', 'NAME')]
+# twoCounties = PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD &
+#              PAtowndata$COUNTYFP=='003'
+# PAtowndata[twoCounties, c('COUNTYFP', 'NAME')]
+# ###  So one allegheny per pair.   We can remove the others.
+# PAtowndata.reduced = PAtowndata[  ! (PAtowndata$NAMELSAD %in%  duplicatedNAMELSAD)
+#                         | PAtowndata$COUNTYFP=='003', ]
 ##  "not duplicated or Allegheny".   dropped 7.
