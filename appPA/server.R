@@ -401,7 +401,7 @@ function(input, output, session) {
                   label = ~twt,
                   layerId = ~twt, ## initially.
                   highlight = highlightOptions(
-                    fillColor = 'blue',
+                    fillColor = 'lightblue',
                     color = "red",
                     weight = 2,
                     fillOpacity = 1,
