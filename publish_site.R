@@ -1,6 +1,7 @@
 
 ### you may need shinyDebuggingPanel installed fresh
 #  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
+# Not a package!  devtools::install_github('professorbeautiful/BreatheMap')
 
 
 #  git push --set-upstream origin BreatheMap
