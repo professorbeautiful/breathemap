@@ -556,7 +556,7 @@ function(input, output, session) {
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
                 input$idFeature)
     hist(thisFeature,
-         xlab=xlab, ylab = 'count',
+         xlab=xlab, ylab = '# tracts in this bin',
          main = '')
     abline(v=thisAreaFeatureSummary(),
                         lwd=3, col='green')
