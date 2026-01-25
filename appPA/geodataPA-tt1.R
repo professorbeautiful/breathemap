@@ -12,11 +12,16 @@ library(dplyr)
 options(tigris_use_cache = TRUE)
 source('appPA/moveColumns.R', local = T)
 source('appPA/cq.R', local = T)
-
+countymap = data.frame(COUNTYFP =
+                         strsplit(split=' ', '003 005 007 019 051 073 125 129 ')[[1]],
+                       county=
+                         strsplit(split=' ', 'Allegheny Armstrong Beaver Butler Fayette Lawrence Washington Westmoreland')[[1]]
+)
 #### Download Pennsylvania census tracts ####
 source('appPA/get_pa_tracts_sw.R', local = T)
 # Creates pa_tracts_sw.   752 rows.  Tracts are unique.
 length(unique(pa_tracts_sw$tracts))
+st_crs(pa_tracts_sw) #NAD83
 
 #### Add Luke tracts ####
 pa_tracts_sw.pre_luke <- pa_tracts_sw  #752
