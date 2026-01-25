@@ -164,6 +164,7 @@ function(input, output, session) {
                 locateMe$lon, locateMe$lat, locateMe$zoom))
 
     leafletProxy("map", session) %>%
+      clearGroup("selectedTractGroup") %>%
       flyTo(lng = locateMe$lon,
             lat = locateMe$lat, zoom=locateMe$zoom)
 
