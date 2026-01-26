@@ -542,19 +542,20 @@ function(input, output, session) {
              '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
         ),
         br(),
-        span(strong("Compared with entire region: "),
-          span(style='color:green', 'proportion smaller = ',
-          textOutput('proportion_smaller')
-          )))
+        uiOutput('proportion_smaller')
+    )
   })
-  output$proportion_smaller <- renderText({
+  output$proportion_smaller <- renderUI({
     howManyLess = try({
       twt[[input$idFeature]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
-    signif(digits=2, mean(na.rm = TRUE, howManyLess ) )
+    span(strong("Compared with entire region: "),
+         span(style='color:green',
+              paste("Ranking among tracts:",
+                    signif(digits=2, mean(na.rm = TRUE, howManyLess ) ) ) ) )
   })
 
   output$featurePlot <- renderPlot({
@@ -564,13 +565,16 @@ function(input, output, session) {
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
                 input$idFeature)
     hist(thisFeature,
-         xlab=xlab, ylab = '# tracts in this bin',
+         xlab=xlab, ylab = 'number of census tracts',
          main = '')
     abline(v=thisAreaFeatureSummary(),
                         lwd=3, col='green')
     arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
            x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
            col='green', lwd=3)
+    text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+         label = signif(digits=3, thisAreaFeatureSummary()),
+         col='green', cex=1.5)
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
