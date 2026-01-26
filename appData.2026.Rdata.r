@@ -45,6 +45,12 @@ samenames = setcompare(names(patown1),
 sapply(samenames, function(n)
   table(patown1[[n]] == patown2[[n]], exclude=NULL))   #### identical.
 
+#####
+appPA='/Users/rogerday/Google Drive/Documents/Fireman Breathe Project/appPA'
+save('patowndata3', file=paste0(appPA,'/patowndata3.Rd'))
+save('patown2', file=paste0(appPA,'/patown2.Rd'))
+
+
 
 
 

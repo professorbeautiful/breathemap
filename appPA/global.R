@@ -21,13 +21,13 @@ library(shinyDebuggingPanel)
 
 
 load('tracts_with_towns.Rd')   ## of type sf
-load('patown1.Rd')   ## 26 fields only
-patown1 = st_transform(patown1, 'WGS84')
-PAtown = patown1
+load('patown2.Rd')   ## 26 fields only
+patown2 = st_transform(patown2, 'WGS84')
+PAtown = patown2
 
-load('patowndata2.Rd' )   # same as
-load('PAtowndata.lukedata.Rd')
-PAtowndata = PAtowndata.lukedata
+load('patowndata3.Rd' )   # same as
+#load('PAtowndata.lukedata.Rd')
+PAtowndata = patowndata3    ### as of Jan 25.
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Krewski Estimate') ])
