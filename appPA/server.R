@@ -434,8 +434,8 @@ function(input, output, session) {
       )
     else return(
       fluidRow(style='color:red',
-        column(5, strong("Current reference community (red dot):")),
-        column(7,   textOutput(outputId = 'IdReferenceCommunity')
+        column(6, strong("Current reference community", br(), strong("(red lozenge):"))),
+        column(6,   textOutput(outputId = 'IdReferenceCommunity')
     )))
   })
 
@@ -492,6 +492,15 @@ function(input, output, session) {
   observeEvent(input$IdMakeReferenceCommunity, {
     rvIdMakeReferenceCommunity$referenceCommunity =
       input$areaSelectorId
+    tractNumber = which(input$areaSelectorId == twt$twt)
+    leafletProxy('map', session) %>%
+      clearGroup("referenceTractGroup") %>%
+      addPolygons(data=twt[tractNumber,], weight = 1,
+                  color="Red", fillColor="red",
+                  label= ~twt,
+                  #layerId = ~twt,
+                  fillOpacity = 1, group="referenceTractGroup")
+
   })
   output$IdReferenceCommunity = renderText( {
     rvIdMakeReferenceCommunity$referenceCommunity
@@ -582,9 +591,7 @@ function(input, output, session) {
       print(paste('REFERENCEdatarows', REFERENCEdatarows))
       refValue = as.numeric(
         twt[[input$idFeature]]  [REFERENCEdatarows])
-      print(paste('refValue', refValue))
-      points( refValue, 0, cex=15, col='red', pch='.')
-
+      points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
     }
   })
 
