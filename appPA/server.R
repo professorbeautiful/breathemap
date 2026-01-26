@@ -117,15 +117,16 @@ function(input, output, session) {
   isTracts = function() { input$Id_ToggleTownTract == 'twt'}
 
   getLonLat = function(tract) {
+    twtNoGeom = as.data.frame(twt)
     tract = tract[1]
     if(is.character(tract))
-      datarow = which(tract == twt$twt)
+      datarow = which(tract == twtNoGeom$twt)
     else
       datarow = tract
 
     zoom = 10
-    lon = twt$lon.tracts[datarow]
-    lat = twt$lat.tracts[datarow]
+    lon = twtNoGeom$lon.tracts[datarow]
+    lat = twtNoGeom$lat.tracts[datarow]
     cat('=====getLonLat:\n')
     print(tract)
     print(datarow)
@@ -136,14 +137,14 @@ function(input, output, session) {
       return(FALSE)
     }
     if(lonBad(lon)) {
-      lon = twt$lon.places[datarow]
-      lat = twt$lat.places[datarow]
+      lon = twtNoGeom$lon.places[datarow]
+      lat = twtNoGeom$lat.places[datarow]
       cat("lonBad: Trying lon.places\n")
     }
     if(lonBad(lon)) {   # still missing
       cat("lonBad: Trying lon.places.x\n")
-      lon = twt$lon.places.x[datarow]
-      lat = twt$lat.places.x[datarow]
+      lon = twtNoGeom$lon.places.x[datarow]
+      lat = twtNoGeom$lat.places.x[datarow]
     }
     if(lonBad(lon)) {  # if  STILL missing
       cat("lonBad: Using medianLON, zoom = 7\n")
