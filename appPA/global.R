@@ -78,12 +78,17 @@ PAtowndata$tracts = PAtowndata$GEOID
 
 #### featureList ####
 
-featureList= c("Myocardial Infarctions", #   "COPD Deaths", dropped.
-               "Ischemic Heart Disease Deaths",
-               "Lung Cancer Deaths",
-               "All-cause deaths", # (avg Lepeule, Laden)
-               "Low Birth Weight Babies", "Preterm Births", "Stillbirths",
-               "Total Population (2019)", "PM2.5 average")
+featureList= c(
+  "PM2.5 average",
+  "All-cause deaths", # (avg Lepeule, Laden)
+  "Ischemic Heart Disease Deaths",
+  "Lung Cancer Deaths",
+  "Myocardial Infarctions", #   "COPD Deaths", dropped.
+  "Low Birth Weight Babies",
+  "Preterm Births",
+  "Stillbirths",
+  "Total Population (2019)"
+  )
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
 tracts_with_towns.wide = merge(
