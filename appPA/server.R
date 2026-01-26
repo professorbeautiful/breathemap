@@ -192,12 +192,12 @@ function(input, output, session) {
     if(is.null(click))
       #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
       updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
-    {
-      rV$click = input$map_shape_click
-      updateSelectInput(session, "areaSelectorId", selected = click$id)
-      rV$savedTract = click$id
-      if(verbose>1)  print(paste('copying click$id to rV$savedTract', rV$savedTract))
-    }
+
+    rV$click = input$map_shape_click
+    updateSelectInput(session, "areaSelectorId", selected = click$id)
+    rV$savedTract = click$id
+    if(verbose>1)  print(paste('copying click$id to rV$savedTract', rV$savedTract))
+
     showTheseTracts(rV$savedTract)
   })
 
