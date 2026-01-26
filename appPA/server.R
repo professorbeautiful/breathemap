@@ -5,7 +5,7 @@ function(input, output, session) {
        session, toolsInitialState = FALSE,
        condition='ctrlDpressed === true'
       )
-
+  includeCSS('highlight.css')
   if(file.exists('gitbranch.txt'))
     gitbranch = readLines('gitbranch.txt')
 
