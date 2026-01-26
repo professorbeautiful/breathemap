@@ -30,7 +30,7 @@ load('patowndata3.Rd' )   # same as
 PAtowndata = patowndata3    ### as of Jan 25.
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
-  'All Cause Deaths, Krewski Estimate') ])
+  'All Cause Deaths, Lepeule Estimate') ])  ### Krewski is out.
 
 PAtown = st_transform(PAtown, "WGS84")
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.

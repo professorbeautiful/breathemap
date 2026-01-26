@@ -561,7 +561,7 @@ function(input, output, session) {
 
     thisFeature = as.numeric(twt[[input$idFeature]])
     thisAreaFeature = thisAreaFeatureSummary()
-    xlab = gsub('All-cause deaths', 'All-cause deaths: avg Krewski & Laden',
+    xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
                 input$idFeature)
     hist(thisFeature,
          xlab=xlab, ylab = '# tracts in this bin',
