@@ -401,17 +401,17 @@ function(input, output, session) {
       addPolygons(data = twt,
                   weight = 1,
                   color = "Black",
-                  fillColor = "blue",
+                  fillColor = "lightblue",
                   fillOpacity = 0.3,
                   # label is the label shown
                   #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
                   label = ~twt,
                   layerId = ~twt, ## initially.
                   highlight = highlightOptions(
-                    fillColor = 'lightblue',
+                    fillColor = '#224488',
                     color = "red",
                     weight = 2,
-                    fillOpacity = 1,
+                    fillOpacity = 0.1,
                     bringToFront = T))
   })
 
