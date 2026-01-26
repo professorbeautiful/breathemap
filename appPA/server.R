@@ -128,9 +128,9 @@ function(input, output, session) {
     lon = twtNoGeom$lon.tracts[datarow]
     lat = twtNoGeom$lat.tracts[datarow]
     cat('=====getLonLat:\n')
-    print(tract)
-    print(datarow)
-    print(twt[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')])
+    whenceLon = 'twt$lon.tracts'
+      print(tract)
+
     lonBad = function(lon){
       if(length(lon)==0) return(TRUE)
       if(is.na(lon)) return(TRUE)
@@ -139,19 +139,24 @@ function(input, output, session) {
     if(lonBad(lon)) {
       lon = twtNoGeom$lon.places[datarow]
       lat = twtNoGeom$lat.places[datarow]
+      whenceLon = 'twt$lon.places'
       cat("lonBad: Trying lon.places\n")
     }
     if(lonBad(lon)) {   # still missing
       cat("lonBad: Trying lon.places.x\n")
       lon = twtNoGeom$lon.places.x[datarow]
       lat = twtNoGeom$lat.places.x[datarow]
+      whenceLon = 'twt$lon.places.x'
     }
     if(lonBad(lon)) {  # if  STILL missing
       cat("lonBad: Using medianLON, zoom = 7\n")
       lon = medianLON
       lat = medianLAT
+      whenceLon = 'no LON'
       zoom=7  ## lost;  go full out.
     }
+    print(paste( datarow, 'whence=', whenceLon, tract, '\nlon.tracts', 'lon.places', 'lon.places.x\n',
+                 twtNoGeom[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')]))
     returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
     return(returnVal)
   }
