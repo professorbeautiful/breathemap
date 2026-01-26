@@ -169,6 +169,7 @@ function(input, output, session) {
                 '   datarow', locateMe$datarow,
                 locateMe$lon, locateMe$lat, locateMe$zoom))
 
+    # removing this flyTo does not help the highlight problem
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
       flyTo(lng = locateMe$lon,
