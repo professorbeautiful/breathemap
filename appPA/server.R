@@ -469,6 +469,7 @@ function(input, output, session) {
   getThisAreaFeature = reactive({
     # thisFeature = as.numeric(twt[[input$idFeature]])
     # return(thisFeature[TARGETrownumbers(TARGETstring())])
+    print(paste('getThisAreaFeature:', input$idFeature, ' rows:', rV$TARGETdatarows))
     return(as.numeric(rV$TARGETdatarows[[input$idFeature]]))
   })
   getThisAreaPopulation = reactive({
@@ -506,7 +507,7 @@ function(input, output, session) {
     rvIdMakeReferenceCommunity$referenceCommunity
   })
 
-  output$histTitle = renderUI( {
+  output$histTitle = renderUI( {  #### histTitle ####
     thisFeature = as.numeric(twt[[input$idFeature]])
     if(get_areaFieldName()=='towns') {
       if(isTRUE(rV$showingPittsburgh))
@@ -538,7 +539,7 @@ function(input, output, session) {
                             "Set this as the reference community?")
                        )
                  ))),
-        span(strong("Selected feature: "),
+        span(strong("Selected feature: "),  #### selected feature ####
              span(
                style='color:green', input$idFeature, ' = ',
              signif(digits=3,

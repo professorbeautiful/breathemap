@@ -126,7 +126,22 @@ fluidPage({
               ), #  final rhs
               column(5,
                      div(style='color:yellow; background-color:green',
-                         strong("Select a feature to show:")),
+                         strong("Show information about this tract or community")),
+                     span(style='font-size:9px', actionButton('IdShowPM2.5',
+                                                              label=' PM2.5 avg in 2016'),
+                          actionButton('IdShowPop', label='Total # of people'),
+                          actionButton('IdShowCohort', label='# in the 2019 birth cohort')
+                     ),
+                     div(style='color:yellow; background-color:green',
+                         strong("Select a feature: what is lost from air pollution")),
+                     radioButtons(inputId='IdCountOrRate',
+                                  label='Show how much harm PM2.5 did in this tract or community',
+                                  choices=c('...in total', '...rate per 100,000'),
+                                  selected=featureList[1],
+                                  inline=TRUE),
+                     hr(),
+                     fluidRow(column(5, offset=4, style='color:yellow; background-color:green',
+                                     "Type of harm:")),
                      fluidRow(
                        column(12, radioButtons(inputId='idFeature',
                                                label=' ',

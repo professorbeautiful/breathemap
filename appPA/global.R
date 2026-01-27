@@ -34,6 +34,8 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
 
 load('cohort.iq.lost.Rd')
 load('cohort.earnings.lost.Rd')
+PAtowndata$`IQ points lost` = cohort.iq.lost
+PAtowndata$`Lifetime earnings lost` = cohort.earnings.lost
 
 PAtown = st_transform(PAtown, "WGS84")
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
@@ -82,15 +84,17 @@ PAtowndata$tracts = PAtowndata$GEOID
 #### featureList ####
 
 featureList= c(
-  "PM2.5 average",
+  #  "PM2.5 average",
+  "IQ points lost",
+  "Lifetime earnings lost",
   "All-cause deaths", # (avg Lepeule, Laden)
   "Ischemic Heart Disease Deaths",
   "Lung Cancer Deaths",
   "Myocardial Infarctions", #   "COPD Deaths", dropped.
   "Low Birth Weight Babies",
   "Preterm Births",
-  "Stillbirths",
-  "Total Population (2019)"
+  "Stillbirths"
+  #"Total Population (2019)"
   )
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
