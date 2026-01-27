@@ -588,10 +588,15 @@ function(input, output, session) {
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
+#    paste("Ranking among tracts:",
+    percentile = round(mean(na.rm = TRUE, howManyLess * 100))
+    percentile = paste0(percentile,
+           switch(paste0('x',
+                         percentile %% 10), x1 = 'st', x2='nd', 'th')
+    )
     span(strong("Compared with entire region: "),
-         span(style='color:green',
-              paste("Ranking among tracts:",
-                    signif(digits=2, mean(na.rm = TRUE, howManyLess ) ) ) ) )
+         span(style='color:green', percentile, 'percentile'
+               ) )
   })
 
 
