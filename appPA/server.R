@@ -438,17 +438,28 @@ function(input, output, session) {
   })
 
   output$IdUiForReferenceCommunity = renderUI( {
-    if(is.null(rvIdMakeReferenceCommunity$referenceCommunity))
-      return(
-           div(
-             strong(
-               "No reference community chosen."))
-      )
-    else return(
-      fluidRow(style='color:red',
-        column(6, strong("Current reference community", br(), strong("(red lozenge):"))),
-        column(6,   textOutput(outputId = 'IdReferenceCommunity')
-    )))
+    if(is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
+      rvIdMakeReferenceCommunity$referenceCommunity =
+        input$areaSelectorId
+    }
+    div(
+    strong(style='color:red',
+           actionButton('IdMakeReferenceCommunity',
+                        label =
+                          span(style='color:red',
+                               "Set selected as reference community? (Red lozenge)"
+                          )
+           )),
+    br(),
+    fluidRow(  style='color:red',  column(3, strong( "Current ref:")),
+                        column(9, textOutput(outputId = 'IdReferenceCommunity')
+                        ))
+    )
+  # else return(
+  #     fluidRow(style='color:red',
+  #       column(6, strong("Current reference community", br(), strong("(red lozenge):"))),
+  #       column(6,   textOutput(outputId = 'IdReferenceCommunity')
+  #   )))
   })
 
   #### featureList  functions ####
@@ -519,38 +530,32 @@ function(input, output, session) {
     rvIdMakeReferenceCommunity$referenceCommunity
   })
 
-  output$histTitle = renderUI( {  #### histTitle ####
-    thisFeature = as.numeric(twt[[input$idFeature]])
+  output$communityShown = renderUI({
+
     if(get_areaFieldName()=='towns') {
       if(isTRUE(rV$showingPittsburgh))
-             firstLine = 'Selected all Pittsburgh from selecting...'
+        firstLine = 'Selected all Pittsburgh from selecting...'
       else
         firstLine = "Selected community:"
     }
     else firstLine = "Selected community/tract:"
 
-    div(hr(),
+    div(
+      span(
+        strong(firstLine
+        ),
         span(
-          strong(firstLine
-
-          ),
-          span(
           style='color:green',
           paste(switch(get_areaFieldName(),
-                      towns=rV$selectedTown,
-                      twt=rV$savedTract)))),
-        fluidRow(
-          column(8, offset=4,
-                 actionButton('IdMakeReferenceCommunity',
-                     label =
-                       span(style='color:red',
-                            ifelse(
-                              identical(rV$savedTract,
-                                        rvIdMakeReferenceCommunity$referenceCommunity),
-                                   "(Currently the reference community)",
-                            "Set this as the reference community?")
-                       )
-                 ))),
+                       towns=rV$selectedTown,
+                       twt=rV$savedTract))))
+
+    )
+  })
+
+  output$histTitle = renderUI( {  #### histTitle ####
+    thisFeature = as.numeric(twt[[input$idFeature]])
+    div(
         span(strong("Selected feature: "),  #### selected feature ####
              span(
                style='color:green', input$idFeature, ' = ',
@@ -567,6 +572,9 @@ function(input, output, session) {
         uiOutput('proportion_smaller')
     )
   })
+
+
+
   output$proportion_smaller <- renderUI({
     howManyLess = try({
       twt[[input$idFeature]] < thisAreaFeatureSummary()
