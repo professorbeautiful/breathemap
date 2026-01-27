@@ -81,7 +81,21 @@ tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs_
 ##
 PAtowndata$tracts = PAtowndata$GEOID
 
-#### featureList ####
+
+#### infoList, for the bottom 3 buttons, handled differently in plot ####
+infoList = c(
+  "Total Population (2019)",
+  "PM2.5 average",
+  "IQ points lost"
+)
+#### infoListIds ####
+infoListIds = data.frame(var = infoList,
+                         id = c("IdShowPM2.5",
+                                "IdShowPop",
+                                "IdShowCohort")
+)
+
+#### featureList  or harmList ####
 
 featureList= c(
   #  "PM2.5 average",

@@ -130,14 +130,7 @@ fluidPage({
               column(5,
                      div(style='color:yellow; background-color:green; text-align:center',
                          strong("Harm that excess PM2.5 did in this tract or community...")),
-                     radioButtons(inputId='IdCountOrRate',
-                                  label='',
-                                  choices=c('...in total', '...rate per 100,000'),
-                                  selected=featureList[1],
-                                  inline=TRUE),
-                     fluidRow(column(5, offset=4,
-                                     style='color:yellow; background-color:green;text-align:center',
-                                     "Type of harm:")),
+                     uiOutput('communityShown'),
                      fluidRow(
                        column(12, radioButtons(inputId='idFeature',
                                                label=NULL,
@@ -145,22 +138,23 @@ fluidPage({
                                                selected=featureList[1],
                                                inline=TRUE)
                        )),
+                     uiOutput('IdRawOrRates'),
                      uiOutput('histTitle'),
                      fluidRow(
                        column(12, plotOutput(outputId="featurePlot",
                                              height=300)
-                              #                  p("*All estimates are based on number of cases per 1,000 population annually"),
+                              # p("*All estimates are based on number of cases per 1,000 population annually"),
                               # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
                        )
                      ),
+                     uiOutput('IdUiForReferenceCommunity'),
                      div(style='color:yellow; background-color:green',
                          strong("Show information about this tract or community")),
                      span(style='font-size:9px', actionButton('IdShowPM2.5',
                                                               label=' PM2.5 avg in 2016'),
                           actionButton('IdShowPop', label='Total # of people'),
                           actionButton('IdShowCohort', label='# in the 2019 birth cohort')
-                     ),
-                     uiOutput('IdUiForReferenceCommunity')
+                     )
               ))
             # ,
             #     fluidRow(
