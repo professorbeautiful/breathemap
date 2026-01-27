@@ -21,16 +21,19 @@ library(shinyDebuggingPanel)
 
 
 load('tracts_with_towns.Rd')   ## of type sf
-load('patown2.Rd')   ## 26 fields only
+load('patown2.Rd')   ##   # 2026-01-24   geometry.
 patown2 = st_transform(patown2, 'WGS84')
 PAtown = patown2
 
-load('patowndata3.Rd' )   # same as
-#load('PAtowndata.lukedata.Rd')
+load('patowndata3.Rd' )   # 2026-01-24
+#load('PAtowndata.lukedata.Rd')  # same as patowndata2.Rd, previous data
 PAtowndata = patowndata3    ### as of Jan 25.
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Lepeule Estimate') ])  ### Krewski is out.
+
+load('cohort.iq.lost.Rd')
+load('cohort.earnings.lost.Rd')
 
 PAtown = st_transform(PAtown, "WGS84")
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
