@@ -622,6 +622,7 @@ function(input, output, session) {
   }
 
   observeEvent(input$idFeature, {
+    print(paste('updating rV$FeatureToPlot: '))
     rV$FeatureToPlot = input$idFeature
   })
 
