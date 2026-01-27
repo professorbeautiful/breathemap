@@ -442,6 +442,8 @@ function(input, output, session) {
     )
   })
 
+  rvIdMakeReferenceCommunity = reactiveValues(referenceCommunity=NULL)
+
   output$IdUiForReferenceCommunity = renderUI( {
     if(is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       rvIdMakeReferenceCommunity$referenceCommunity =
@@ -479,20 +481,24 @@ function(input, output, session) {
     safe.sum(getThisAreaPopulation())
   feat.sum = function() safe.sum(getThisAreaFeature())
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
-  featureSummaryFunctionTable = data.frame(
-    feature=featureList,
-    func= c(
-      'feat.weightedRate', #"Myocardial Infarctions",
-      'feat.weightedRate', #"COPD Deaths",
-      'feat.weightedRate', #"Ischemic Heart Disease Deaths",
-      'feat.weightedRate', # "All-cause deaths", # (avg Krewski, Laden)
-      'feat.weightedRate', # "Low Birth Weight Babies",
-      'feat.weightedRate', # "Preterm Births",
-      'feat.weightedRate', # "Stillbirths",
-      'feat.sum', # "Total Population (2019)",
-      'feat.weightedRate' # "PM2.5 average"
-    ))
-  rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
+
+  getFeatureSummaryFunction = reactive( , {
+    return(safe.sum)
+    }
+  # c(  data.frame(
+  #   feature=c(infoList, featureList),
+  #   func= c(
+  #     'feat.weightedRate', #"Myocardial Infarctions",
+  #     'feat.weightedRate', #"COPD Deaths",
+  #     'feat.weightedRate', #"Ischemic Heart Disease Deaths",
+  #     'feat.weightedRate', # "All-cause deaths", # (avg Krewski, Laden)
+  #     'feat.weightedRate', # "Low Birth Weight Babies",
+  #     'feat.weightedRate', # "Preterm Births",
+  #     'feat.weightedRate', # "Stillbirths",
+  #     'feat.sum', # "Total Population (2019)",
+  #     'feat.weightedRate' # "PM2.5 average"
+  #   ))
+  # rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
 
   #### Bring in featureList.  Careful: renamed PM_avg  ##
   getThisAreaFeature = reactive({
@@ -507,8 +513,12 @@ function(input, output, session) {
     return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
   })
   thisAreaFeatureSummary = reactive({
-    featureName = input$idFeature
-    featureSummaryFunctionName = featureSummaryFunctionTable[featureName, 'func']
+    featureName = rV$FeatureToPlot
+    print(paste('thisAreaFeatureSummary:', featureName))
+    featureSummaryFunctionName = getFeatureSummaryFunction()
+    #    featureSummaryFunctionTable[featureName, 'func']
+    if(is.null(featureSummaryFunctionName))
+      featureSummaryFunctionName = 'safe.sum'
     featureSummaryFunction = get(featureSummaryFunctionName)
     print(paste("featureSummaryFunctionName", featureSummaryFunctionName))
     ### for now.  May also be popWeightedMean or sum
@@ -517,7 +527,6 @@ function(input, output, session) {
 
   addSpaces = function(n) rep('&nbsp;', n)
 
-  rvIdMakeReferenceCommunity = reactiveValues(referenceCommunity=NULL)
 
   observeEvent(input$IdMakeReferenceCommunity, {
     rvIdMakeReferenceCommunity$referenceCommunity =
@@ -560,11 +569,11 @@ function(input, output, session) {
   })
 
   output$histTitle = renderUI( {  #### histTitle ####
-    thisFeature = as.numeric(twt[[input$idFeature]])
+    # thisFeature = (twt[[rV$FeatureToPlot]])
     div(
         span(strong("Selected feature: "),  #### selected feature ####
              span(
-               style='color:green', decorateFeatureName(input$idFeature), ' = ',
+               style='color:green', decorateFeatureName(), ' = ',
              signif(digits=3,
                     thisAreaFeatureSummary() ) )
              #### TODO: which features do we sum, which do we mean?
@@ -583,7 +592,7 @@ function(input, output, session) {
 
   output$proportion_smaller <- renderUI({
     howManyLess = try({
-      twt[[input$idFeature]] < thisAreaFeatureSummary()
+      twt[[rV$FeatureToPlot]] < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
@@ -600,7 +609,10 @@ function(input, output, session) {
   })
 
 
-  decorateFeatureName = function(f) {
+  decorateFeatureName = function() {
+    f = rV$FeatureToPlot
+    if(f=='All-cause deaths')
+      f = 'All-cause deaths: avg Lepeule & Laden'
     if(f %in% infoList) return(f)
     if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
@@ -627,9 +639,8 @@ function(input, output, session) {
 
     thisFeature = as.numeric(twt[[rV$FeatureToPlot]])
     thisAreaFeature = thisAreaFeatureSummary()
-    xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
-                rV$FeatureToPlot)
-    xlab = decorateFeatureName(xlab)
+
+    xlab = decorateFeatureName()
     hist(thisFeature,
          xlab=xlab, ylab = 'number of census tracts',
          main = '',
