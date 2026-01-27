@@ -596,21 +596,27 @@ function(input, output, session) {
 
 
   decorateFeatureName = function(f) {
+    if(f %in% infoList) return(f)
     if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
       paste(f, '(rate per 1000)')
   }
-  output$featurePlot <- renderPlot({
+
+  observeEvent(input$idFeature, {
     rV$FeatureToPlot = input$idFeature
+  })
+
+  observeEvent(input$`IdShowPM2.5`, {
+    rV$FeatureToPlot = infoListIds$var[match(infoListIds$id, 'IdShowPM2.5')]
+  })
+
+  output$featurePlot <- renderPlot({
+
     thisFeature = as.numeric(twt[[rV$FeatureToPlot]])
     thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
                 input$idFeature)
-    if(input$IdTotalOrRate == '...total')
-      xlab = paste(xlab, '(estimated total)')
-    else
-      xlab = paste(xlab, '(rate per 1000)')
     xlab = decorateFeatureName(xlab)
     hist(thisFeature,
          xlab=xlab, ylab = 'number of census tracts',
