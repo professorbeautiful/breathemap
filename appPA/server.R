@@ -424,6 +424,18 @@ function(input, output, session) {
     }
   )
 
+  output$IdRawOrRates = renderUI( {
+    fluidRow(
+      column(5, strong( "As estimates or rates?")),
+      column(7,
+             radioButtons(inputId='IdCountOrRate',
+                          label=NULL,
+                          choices=c('...in total', '...rate per 1000'),
+                          selected=featureList[1],
+                          inline=TRUE)
+      )
+    )
+  })
 
   output$IdUiForReferenceCommunity = renderUI( {
     if(is.null(rvIdMakeReferenceCommunity$referenceCommunity))
