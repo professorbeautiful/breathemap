@@ -93,6 +93,7 @@ title("Allegheny County")
 mtext('correlation = 0.67', side=3)
 abline(0,1)
 
+
   birthsComparison = merge(birthsComparison, data.frame(tract=
   patowndata3$GEOID, pop=patowndata3$`Population in 2019`))
 
