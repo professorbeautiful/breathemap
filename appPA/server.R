@@ -607,8 +607,15 @@ function(input, output, session) {
     rV$FeatureToPlot = input$idFeature
   })
 
+
   observeEvent(input$`IdShowPM2.5`, {
-    rV$FeatureToPlot = infoListIds$var[match(infoListIds$id, 'IdShowPM2.5')]
+    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPM2.5')]
+  })
+  observeEvent(input$`IdShowPop`, {
+    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
+  })
+  observeEvent(input$`IdShowCohort`, {
+    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
 
   output$featurePlot <- renderPlot({
@@ -616,7 +623,7 @@ function(input, output, session) {
     thisFeature = as.numeric(twt[[rV$FeatureToPlot]])
     thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
-                input$idFeature)
+                rV$FeatureToPlot)
     xlab = decorateFeatureName(xlab)
     hist(thisFeature,
          xlab=xlab, ylab = 'number of census tracts',
