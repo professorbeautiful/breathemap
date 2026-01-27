@@ -99,15 +99,17 @@ featureList= c(
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name', c("Total Population (2019)"),
+  PAtowndata[c('tracts', 'Tract Name', "Total Population (2019)",
                'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
+# temporarily replace spaces with __
 names(tracts_with_towns.wide) = gsub(' ', '__', names(tracts_with_towns.wide))
 tracts_with_towns.wide = (tracts_with_towns.wide %>%
                             select(c(tracts:towns.tt1, Tract__Name:geometry)))
 names(tracts_with_towns.wide)
 names(tracts_with_towns.wide) = gsub('__', ' ', names(tracts_with_towns.wide))
+# restore spaces
 names(tracts_with_towns.wide)
 #### Must be a "sf" object. ####
 tracts_with_towns.wide = st_as_sf(tracts_with_towns.wide)
@@ -178,3 +180,17 @@ twt = st_transform(twt, "WGS84")
 eachTown = sort(unique(unlist(strsplit(twt$towns, split=', *'))))
 #eachTown.isNbhd = match(eachTown, twt$towns)
 #twt$lem.tracts
+
+css.radio <- "
+ .radio-inline {
+#   padding: 0 10px;
+#   text-align: center;
+#   margin-left: 0 !important;
+}"
+#
+# .radio-inline input {
+#   top: 20px;
+#   left: 50%;
+#   margin-left: -6px !important;
+# }"
+
