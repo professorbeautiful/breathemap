@@ -9,7 +9,7 @@ fluidPage({
               tags$style(".popover{max-width: 100%; font-size:10px; color:blue}"),
               # style tags used throughout app
               tags$style(type="text/css",
-                          "a{
+                         "a{
                             color:#8a100b;
                             background-color:transparent;
                           }
@@ -55,102 +55,102 @@ fluidPage({
                          }"
               )
             ),
-             shinyDebuggingPanel::withDebuggingPanel(),
+            shinyDebuggingPanel::withDebuggingPanel(),
 
             # all ui components, layout, and element ordering for whole app
             # tabsetPanel(
             #   tabPanel("Map Tool",
-                fluidRow(
-                  column(7,
-                         fluidRow(
-                           column(5,
-                                  div(style='color:yellow; background-color:green',
-                                      popify(placement = 'right', title = 'Communities and Census Tracts',
-                                             content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
-                                             el =
-                                               selectInput("areaSelectorId", 'Communities and Census Tracts',
-                                                           twt$areaField,
-                                                           selected = twt$areaField[1])))),
-                           column(4,
+            fluidRow(
+              column(7,
+                     fluidRow(
+                       column(5,
+                              div(style='color:yellow; background-color:green',
+                                  popify(placement = 'right', title = 'Communities and Census Tracts',
+                                         content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
+                                         el =
+                                           selectInput("areaSelectorId", 'Communities and Census Tracts',
+                                                       twt$areaField,
+                                                       selected = twt$areaField[1])))),
+                       column(4,
 
-                                    div(style='color:yellow; background-color:green',
-                                        popify(title='Areas shown:',
-                                               content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
-                                                                  '"communities":',
-                                                                  ' <br>_____You pick one community in this tract,<br>',
-                                                                  ' and we show tracts for that community',
-                                                                  ' <hr>See "Community shares" checkbox for details'
-                                               ) ),
-                                               radioButtons("Id_ToggleTownTract", "Areas shown:",
-                                                            choiceNames=c('communities', 'tracts'),
-                                                            choiceValues=c('towns', 'twt'),
-                                                            selected='twt')
-                                        )
-                                  )),
-                           column(3,
-                                  div(style='color:yellow; background-color:green',
-                                      popify(title='Pittsburgh Neighborhood toggle',
-                                             content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
+                              div(style='color:yellow; background-color:green',
+                                  popify(title='Areas shown:',
+                                         content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
+                                                            '"communities":',
+                                                            ' <br>_____You pick one community in this tract,<br>',
+                                                            ' and we show tracts for that community',
+                                                            ' <hr>See "Community shares" checkbox for details'
+                                         ) ),
+                                         radioButtons("Id_ToggleTownTract", "Areas shown:",
+                                                      choiceNames=c('communities', 'tracts'),
+                                                      choiceValues=c('towns', 'twt'),
+                                                      selected='twt')
+                                  )
+                              )),
+                       column(3,
+                              div(style='color:yellow; background-color:green',
+                                  popify(title='Pittsburgh Neighborhood toggle',
+                                         content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
-                                             checkboxInput('IdNbhds', 'See each Pgh nbhd?'
-                                                           ,value = TRUE)
-                                      ),
-                                      popify(title='Selecting one community in a tract:',
-                                             content=
-                                               div(style='font-size:6px !important; container:body !important',
-                                                   HTML('With "Community shares?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community shares?" = NO<br>   ____ show ONLY tracts where this is the only community.'
-                                                   )),
-                                               checkboxInput("Id_townSharesCheckbox",
-                                                    "Community shares?",value = TRUE)
-                                      )
-                                      ))
-                         ),
-                         leafletOutput("map", height = 450),
-                         br(),
-                         fluidRow(#style='background:green',  #  final rhs
-                           column(width=4,
-                                  #div(
-                                    actionButton('IdAck', label='Acknowledgments',
-                                                 style='background-color:green; color:yellow')
-                           ),
-                           column(width=4,
-                                  actionButton(inputId='IdMapAdvice',
-                                               style='background-color:green; color:yellow',
-                                               label = 'Navigating the map')
-                           ),
-                           column(width = 2, offset = 0.5,
-                                  downloadButton("downloadData", "Export Data",
-                                                 style='background-color:green; color:yellow')
-                           )
-                         ) #fluidRow
-                  ), #  final rhs
-                  column(5,
-                         div(style='color:yellow; background-color:green',
-                             strong("Select a feature to show:")),
-                       fluidRow(
-                         column(12, radioButtons(inputId='idFeature',
-                                                   label=' ',
-                                                   choices=featureList,
-                                                 selected=featureList[1],
-                                                 inline=TRUE)
-                         )),
-                       uiOutput('histTitle'),
-                       fluidRow(
-                         column(12, plotOutput(outputId="featurePlot",
-                                               height=300)
-                        #                  p("*All estimates are based on number of cases per 1,000 population annually"),
-                        # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
-                        )
+                                         checkboxInput('IdNbhds', 'See each Pgh nbhd?'
+                                                       ,value = TRUE)
+                                  ),
+                                  popify(title='Selecting one community in a tract:',
+                                         content=
+                                           div(style='font-size:6px !important; container:body !important',
+                                               HTML('With "Community shares?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community shares?" = NO<br>   ____ show ONLY tracts where this is the only community.'
+                                               )),
+                                         checkboxInput("Id_townSharesCheckbox",
+                                                       "Community shares?",value = TRUE)
+                                  )
+                              ))
+                     ),
+                     leafletOutput("map", height = 450),
+                     br(),
+                     fluidRow(#style='background:green',  #  final rhs
+                       column(width=4,
+                              #div(
+                              actionButton('IdAck', label='Acknowledgments',
+                                           style='background-color:green; color:yellow')
                        ),
-                       uiOutput('IdUiForReferenceCommunity')
-                ))
+                       column(width=4,
+                              actionButton(inputId='IdMapAdvice',
+                                           style='background-color:green; color:yellow',
+                                           label = 'Navigating the map')
+                       ),
+                       column(width = 2, offset = 0.5,
+                              downloadButton("downloadData", "Export Data",
+                                             style='background-color:green; color:yellow')
+                       )
+                     ) #fluidRow
+              ), #  final rhs
+              column(5,
+                     div(style='color:yellow; background-color:green',
+                         strong("Select a feature to show:")),
+                     fluidRow(
+                       column(12, radioButtons(inputId='idFeature',
+                                               label=' ',
+                                               choices=featureList,
+                                               selected=featureList[1],
+                                               inline=TRUE)
+                       )),
+                     uiOutput('histTitle'),
+                     fluidRow(
+                       column(12, plotOutput(outputId="featurePlot",
+                                             height=300)
+                              #                  p("*All estimates are based on number of cases per 1,000 population annually"),
+                              # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
+                       )
+                     ),
+                     uiOutput('IdUiForReferenceCommunity')
+              ))
             # ,
             #     fluidRow(
             #       #dataTableOutput("tabledemog"),
             #       dataTableOutput("tableest"), br(),
             #       textOutput("hotext"), br(),
             #       p("**Performance IQ is a measure of intelligence related to problem solving skills."))
-            )
+  )
 
 })
 
