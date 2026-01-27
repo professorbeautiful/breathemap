@@ -99,7 +99,8 @@ featureList= c(
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name', featureList)],
+  PAtowndata[c('tracts', 'Tract Name', c("Total Population (2019)"),
+               'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
 names(tracts_with_towns.wide) = gsub(' ', '__', names(tracts_with_towns.wide))
