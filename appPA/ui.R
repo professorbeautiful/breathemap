@@ -140,7 +140,7 @@ fluidPage({
                                      "Type of harm:")),
                      fluidRow(
                        column(12, radioButtons(inputId='idFeature',
-                                               label=' ',
+                                               label=NULL,
                                                choices=featureList,
                                                selected=featureList[1],
                                                inline=TRUE)
