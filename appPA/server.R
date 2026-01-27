@@ -88,7 +88,7 @@ function(input, output, session) {
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
       addPolygons(data=twt[tractNumber,], weight = 1,
-                  color="Red", fillColor="yellow",
+                  color="Red", fillColor="darkgreen",
                   label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="selectedTractGroup")
@@ -324,7 +324,7 @@ function(input, output, session) {
             lat = locateMe$lat, zoom=locateMe$zoom) %>%
       clearGroup("selectedTractGroup") %>%
       addPolygons(data=rV$TARGETdatarows, weight = 1,
-                  color="Red", fillColor="yellow",
+                  color="Red", fillColor="darkgreen",
                   label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="selectedTractGroup")
@@ -423,15 +423,20 @@ function(input, output, session) {
       write.csv(twt, file)
     }
   )
-
+  observeEvent('IdTotalOrRate', {
+    if(identical(input$IdTotalOrRate, '...rate per 1000') ) {
+      # assuming the original # is estimate of # events (per year? lifetime?)
+      # histogram and tract info replace feature by
+    }
+  })
   output$IdRawOrRates = renderUI( {
     fluidRow(
-      column(5, strong( "As estimates or rates?")),
+      column(5, strong( "As total or as rate?")),
       column(7,
-             radioButtons(inputId='IdCountOrRate',
+             radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
-                          choices=c('...in total', '...rate per 1000'),
-                          selected=featureList[1],
+                          choices=c('...total', '...rate per 1000'),
+                          selected='...total',
                           inline=TRUE)
       )
     )
@@ -446,12 +451,13 @@ function(input, output, session) {
     strong(style='color:red',
            actionButton('IdMakeReferenceCommunity',
                         label =
-                          span(style='color:red',
-                               "Set selected as reference community? (Red lozenge)"
-                          )
+                          span(span(style='color:red', "Set"),
+                               span(style='color:darkgreen',"currently selected"),
+                               span(style='color:red', "as reference community? (Red lozenge)"
+                          ))
            )),
     br(),
-    fluidRow(  style='color:red',  column(3, strong( "Current ref:")),
+    fluidRow(  style='color:red',  column(3, strong( "Current reference:")),
                         column(9, textOutput(outputId = 'IdReferenceCommunity')
                         ))
     )
@@ -558,17 +564,17 @@ function(input, output, session) {
     div(
         span(strong("Selected feature: "),  #### selected feature ####
              span(
-               style='color:green', input$idFeature, ' = ',
+               style='color:green', decorateFeatureName(input$idFeature), ' = ',
              signif(digits=3,
                     thisAreaFeatureSummary() ) )
              #### TODO: which features do we sum, which do we mean?
              ### population is char for some reason.
         ),
         br(),
-        span('--------------------',
-             '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
-        ),
-        br(),
+        # span('--------------------',
+        #      '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
+        # ),
+        # br(),
         uiOutput('proportion_smaller')
     )
   })
@@ -588,23 +594,36 @@ function(input, output, session) {
                     signif(digits=2, mean(na.rm = TRUE, howManyLess ) ) ) ) )
   })
 
-  output$featurePlot <- renderPlot({
 
-    thisFeature = as.numeric(twt[[input$idFeature]])
+  decorateFeatureName = function(f) {
+    if(input$IdTotalOrRate == '...total')
+      paste(f, '(estimated total)')
+    else
+      paste(f, '(rate per 1000)')
+  }
+  output$featurePlot <- renderPlot({
+    rV$FeatureToPlot = input$idFeature
+    thisFeature = as.numeric(twt[[rV$FeatureToPlot]])
     thisAreaFeature = thisAreaFeatureSummary()
     xlab = gsub('All-cause deaths', 'All-cause deaths: avg Lepeule & Laden',
                 input$idFeature)
+    if(input$IdTotalOrRate == '...total')
+      xlab = paste(xlab, '(estimated total)')
+    else
+      xlab = paste(xlab, '(rate per 1000)')
+    xlab = decorateFeatureName(xlab)
     hist(thisFeature,
          xlab=xlab, ylab = 'number of census tracts',
-         main = '')
+         main = '',
+         cex.lab=1.5)
     abline(v=thisAreaFeatureSummary(),
-                        lwd=3, col='green')
+                        lwd=3, col='darkgreen')
     arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
            x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
-           col='green', lwd=3)
+           col='darkgreen', lwd=3)
     text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
          label = signif(digits=3, thisAreaFeatureSummary()),
-         col='green', cex=1.5)
+         col='darkgreen', cex=1.5)
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
