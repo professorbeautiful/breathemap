@@ -25,7 +25,8 @@ function(input, output, session) {
 
   zoomLevel = 10
   verbose = 2
-  rV = reactiveValues(selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
+  rV = reactiveValues(FeatureToPlot='IQ points lost',
+    selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
 
   print(paste('======== BEGIN server: #unspecified=',
@@ -482,9 +483,9 @@ function(input, output, session) {
   feat.sum = function() safe.sum(getThisAreaFeature())
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
-  getFeatureSummaryFunction = reactive( , {
+  getFeatureSummaryFunction = reactive( c(rvIdMakeReferenceCommunity), {
     return(safe.sum)
-    }
+    })
   # c(  data.frame(
   #   feature=c(infoList, featureList),
   #   func= c(
