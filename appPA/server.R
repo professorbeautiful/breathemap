@@ -1,16 +1,19 @@
 function(input, output, session) {
 
   #### overkill & then some!  (but why?)  (and guess what, doesn't work)
+  try( {
   patowndata3$`Total Population (2019)` =
     as.numeric(patowndata3$`Total Population (2019)`)
-  PAtowndata$`Total Population (2019)` =
-    as.numeric(PAtowndata$`Total Population (2019)`)
-  twt$`Total Population (2019)` =
-    as.numeric(twt$`Total Population (2019)`)
-  tracts_with_towns$`Total Population (2019)` =
-    as.numeric(tracts_with_towns$`Total Population (2019)`)
-  tracts_with_towns.wide$`Total Population (2019)` =
-    as.numeric(tracts_with_towns.wide$`Total Population (2019)`)
+  # PAtowndata$`Total Population (2019)` =
+  #   as.numeric(PAtowndata$`Total Population (2019)`)
+  # twt$`Total Population (2019)` =
+  #   as.numeric(twt$`Total Population (2019)`)
+  # tracts_with_towns$`Total Population (2019)` =
+  #   as.numeric(tracts_with_towns$`Total Population (2019)`)
+  # tracts_with_towns.wide$`Total Population (2019)` =
+  #   as.numeric(tracts_with_towns.wide$`Total Population (2019)`)
+  })
+
 
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.

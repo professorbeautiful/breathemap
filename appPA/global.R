@@ -119,9 +119,6 @@ PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 PAtowndata$`Total Population (2019)` =
   as.numeric(PAtowndata$`Total Population (2019)`
 )
-tracts_with_towns$`Total Population (2019)` =
-  as.numeric(tracts_with_towns$`Total Population (2019)`
-  )
 
 tracts_with_towns.wide = merge(
   PAtowndata[c('tracts', 'Tract Name',
