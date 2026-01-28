@@ -141,7 +141,7 @@ fluidPage({
                                                selected=featureList[1],
                                                inline=TRUE)
                        )),
-                     uiOutput('IdRawOrRates'),
+                     uiOutput('UITotalOrRates'),
                      uiOutput('histTitle'),
                      fluidRow(
                        column(12, plotOutput(outputId="featurePlot",

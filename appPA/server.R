@@ -425,13 +425,8 @@ function(input, output, session) {
       write.csv(twt, file)
     }
   )
-  observeEvent('IdTotalOrRate', {
-    if(identical(input$IdTotalOrRate, '...rate per 1000') ) {
-      # assuming the original # is estimate of # events (per year? lifetime?)
-      # histogram and tract info replace feature by
-    }
-  })
-  output$IdRawOrRates = renderUI( {
+
+  output$UITotalOrRates = renderUI( {
     fluidRow(
       column(5, strong( "As total or as rate?")),
       column(7,
