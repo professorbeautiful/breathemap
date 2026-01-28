@@ -509,7 +509,8 @@ function(input, output, session) {
       return(feat.sum())   # people;  babies
     if(input$IdTotalOrRate == '...total'){
         return(feat.sum())  # uses safe.sum
-    } else if(input$IdTotalOrRate == '...rate'){
+    } else if(input$IdTotalOrRate == '...rate per 1000'){
+      print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       return(feat.countsPer1000())
     }
   }
