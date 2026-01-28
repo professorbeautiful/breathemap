@@ -1,5 +1,5 @@
 breatheLabelColoring = 'background-color:#75C443; color:white'
-breatheLabelColoring = 'background-color:green; color:white'
+#breatheLabelColoring = 'background-color:green; color:white'
 
 fluidPage({
 
@@ -131,7 +131,7 @@ fluidPage({
                      ) #fluidRow
               ), #  final rhs
               column(5,
-                     div(style='color:white; background-color: #75C443; text-align:center',
+                     div(style=paste(breatheLabelColoring, ';text-align:center'),
                          strong("Harm that excess PM2.5 did in this tract or community...")),
                      uiOutput('communityShown'),
                      fluidRow(
@@ -151,7 +151,7 @@ fluidPage({
                        )
                      ),
                      uiOutput('IdUiForReferenceCommunity'),
-                     div(style='color:white; background-color:#75C443',
+                     div(style=breatheLabelColoring,
                          strong("Show information about this tract or community")),
                      span(style='font-size:9px',
                           actionButton('IdShowPM2.5',
