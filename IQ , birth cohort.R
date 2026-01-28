@@ -8,6 +8,7 @@ head(cohort.pa)
 ## argh, dropping leading zeros despite "c'.
 names(cohort.pa)
 #shd be 130532
+source('appPA/countymap.R')
 cohort.pa[3089,] #  030500  next one empty
 cohort.pa[3090,] #    this one empty
 cohort.pa.sw = cohort.pa[cohort.pa$County %in% countymap$county, ]  ##ok.
@@ -32,6 +33,7 @@ census.allegheny$birth = census.allegheny$lt5/5
 dim(census.allegheny)   # only 394 tracts.  that's just allegheny.  so ok.
 head(census.allegheny)  # tract has '42'
 
+source('appPA/setcompare.R')
 setcompare(cohort.by.tract$tract, twt$tracts)
 # missing in 16.  Zeros?   723 overlapping tracts
 birthmatch = census.allegheny
@@ -51,10 +53,12 @@ twt$births = cohort.by.tract$births[match(twt$tracts, cohort.by.tract$tract)]
 sum(is.na(twt$births))  #16    We will assume they are zeros.
 twt$births [is.na(twt$births)]  = 0
 
-twt.births  = twt$births
+cohort.births  = twt$births
 cohort.iq.lost = twt$`PM2.5 average` * twt$births * 0.27  ## sum
 cohort.earnings.lost = twt$`PM2.5 average` * twt$births * mean(10.6,13.1)
 
+
+save(cohort.births, file = 'cohort.births.Rd')
 save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
 save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
 
