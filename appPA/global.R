@@ -81,16 +81,6 @@ PAtown = st_transform(PAtown, "WGS84")
 
 #  tracts_with_towns = tt1.sw # from geodataPA
 
-# tracts = PAtowndata$NAMELSAD
-# towns = tracts_with_towns$towns[match(tracts, tracts_with_towns$tracts)]
-# towns = tracts_with_towns$towns
-# townOrder = order(towns, na.last=TRUE)  ###
-# # sort everything by towns
-# tracts_with_towns = tracts_with_towns[townOrder, ]
-# towns = towns[townOrder]
-# PAtown = PAtown[townOrder, ]
-# PAtowndata = PAtowndata[townOrder, ]
-
 ####   15 are missing still. ####
 towns = tracts_with_towns$towns
 
@@ -101,17 +91,7 @@ townIs___ =  (towns == '___')
 ### if '___' copy lat and lon from tracts to places
 tracts_with_towns$lat.places[townIs___ ] =  tracts_with_towns$lat.tracts[townIs___ ]
 tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs___ ]
-# PAtownnames = paste(towns, tracts, sep= ', ')
-# PAtown$TOWN = PAtown$NAME = PAtownnames[match(tracts, PAtown$NAMELSAD)]
-# PAtowndata$TOWN =PAtowndata$NAME = PAtownnames[match(tracts, PAtowndata$NAMELSAD)]
-# PAtowndata$lat = lats[match(tracts, PAtowndata$NAMELSAD)]
-# PAtowndata$lon = lons[match(tracts, PAtowndata$NAMELSAD)]
-#
-# PAtown$lat = lats[match(tracts, PAtown$NAMELSAD)]
-# PAtown$lon = lons[match(tracts, PAtown$NAMELSAD)]
-#  these lat and lon do seem to locate correctly.  checking against https://data.jsonline.com/census/total-population/ and US census.
-# But needs more checking.
-##
+
 PAtowndata$tracts = PAtowndata$GEOID
 
 
@@ -150,33 +130,11 @@ names(twt)
 head(twt$areaField)
 
 twt$twtSaved = twt$twt
-# twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
-#   gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
-#         twt$twtSaved )
-
 
 #### move '___' to the end, ####
 which___ = (grep('___', twt$areaField))   ### 1 to 15
 twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
 
-####and create twtFirst ?   no, rely on towns field ####
-# twt$twtFirst = paste(twt$towns.intersects.first, twt$tracts)
-# PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
-# PAtown$towntractName = PAtowndata$TOWN
-# PAtown$noTown = PAtown$townName == '___'
-# table (PAtown$noTown)
-
-# PAtown$townName = gsub(', .*Census Tract.*', '', PAtowndata$TOWN )
-# PAtown$towntractName = PAtowndata$TOWN
-# PAtown$noTown = PAtown$townName == '___'
-# table (PAtown$noTown)
-# PAtown$areaField = PAtown$towntractName  ### until toggled
-# PAtownExtra = setdiff(y=names(PAtown), names(PAtowndata))
-# PAtown[PAtownExtra] = PAtowndata[PAtownExtra]
-# class(PAtown)
-# names(PAtown)
-##  OK, from here on, no more PAtowndata
-# PAtown$`Total Population (2019)` = as.numeric(PAtown$`Total Population (2019)`)
 
 # creates headers for the datatables. Referenced in server.R
 demogcaption <- htmltools::tags$caption(
@@ -200,8 +158,6 @@ twt = st_transform(twt, "WGS84")
 #st_crs(twt) <- 4326
 
 eachTown = sort(unique(unlist(strsplit(twt$towns, split=', *'))))
-#eachTown.isNbhd = match(eachTown, twt$towns)
-#twt$lem.tracts
 
 css.radio <- "
  .radio-inline {
