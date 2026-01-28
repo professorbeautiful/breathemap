@@ -490,9 +490,10 @@ function(input, output, session) {
   feat.countsPer1000 = function()
     feat.pop.weightedAverage() * 1000
   #feat.pop.weightedAverage presumes that feature is a rate.
-  feat.pop.weightedAverage = function()
+  feat.pop.weightedAverage = function() {
     safe.sum(getThisAreaFeature()*getThisAreaPopulation()) /
     safe.sum(getThisAreaPopulation())
+  }
   feat.sum = function() safe.sum(getThisAreaFeature())
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
