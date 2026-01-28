@@ -514,31 +514,14 @@ function(input, output, session) {
       return(feat.countsPer1000())
     }
   }
-  # c(  data.frame(
-  #   feature=c(infoList, featureList),
-  #   func= c(
-  #     'feat.pop.weightedAverage', #"Myocardial Infarctions",
-  #     'feat.pop.weightedAverage', #"COPD Deaths",
-  #     'feat.pop.weightedAverage', #"Ischemic Heart Disease Deaths",
-  #     'feat.pop.weightedAverage', # "All-cause deaths", # (avg Krewski, Laden)
-  #     'feat.pop.weightedAverage', # "Low Birth Weight Babies",
-  #     'feat.pop.weightedAverage', # "Preterm Births",
-  #     'feat.pop.weightedAverage', # "Stillbirths",
-  #     'feat.sum', # "Total Population (2019)",
-  #     'feat.pop.weightedAverage' # "PM2.5 average"
-  #   ))
-  # rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
 
-  #### Bring in featureList.  Careful: renamed PM_avg  ##
   getThisAreaFeature = reactive({
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    # return(thisFeature[TARGETrownumbers(TARGETstring())])
     print(paste('getThisAreaFeature:', input$idFeature, ' rows:', rV$TARGETdatarows))
     return(as.numeric(rV$TARGETdatarows[[input$idFeature]]))
   })
+
   getThisAreaPopulation = reactive({
-    # thisFeature = as.numeric(twt[["Total Population (2019)"]])
-    # return(thisFeature[TARGETrownumbers(TARGETstring())])
     return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
   })
 
