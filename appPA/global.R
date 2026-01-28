@@ -56,6 +56,10 @@ PAtown = patown2
 
 load('patowndata3.Rd' )   # 2026-01-24
 #load('PAtowndata.lukedata.Rd')  # same as patowndata2.Rd, previous data
+patowndata3$`Total Population (2019)` =
+  as.numeric(patowndata3$`Total Population (2019)`)
+print(paste('is.numeric(patowndata3$`Total Population (2019)` )',
+      is.numeric(patowndata3$`Total Population (2019)` )))
 PAtowndata = patowndata3    ### as of Jan 25.
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
@@ -112,7 +116,11 @@ PAtowndata$tracts = PAtowndata$GEOID
 
 
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
+PAtowndata$`Total Population (2019)` =
+  as.numeric(PAtowndata$`Total Population (2019)`
 )
+tracts_with_towns$`Total Population (2019)` =
+  as.numeric(tracts_with_towns$`Total Population (2019)`
   )
 
 tracts_with_towns.wide = merge(
