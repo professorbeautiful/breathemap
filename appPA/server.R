@@ -667,6 +667,9 @@ function(input, output, session) {
       print(paste('REFERENCEdatarows', REFERENCEdatarows))
       refValue = as.numeric(
         twt[[input$idFeature]]  [REFERENCEdatarows])
+      if((rV$featureToPlot %in% featureList) & (input$IdTotalOrRate == '...rate per 1000')
+                & (rV$featureToPlot != "PM2.5 average") )
+        refValue = 1000 * refValue
       points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
     }
   })
