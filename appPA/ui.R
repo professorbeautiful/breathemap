@@ -1,3 +1,5 @@
+breatheLabelColoring = 'background-color:#75C443; color:white'
+
 fluidPage({
 
   mainPanel(width = 12,
@@ -67,7 +69,7 @@ fluidPage({
               column(7,
                      fluidRow(
                        column(5,
-                              div(style='color:yellow; background-color:green',
+                              div(style='color:white; background-color: #75C443',
                                   popify(placement = 'right', title = 'Communities and Census Tracts',
                                          content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
                                          el =
@@ -76,7 +78,7 @@ fluidPage({
                                                        selected = twt$areaField[1])))),
                        column(4,
 
-                              div(style='color:yellow; background-color:green',
+                              div(style='color:white; background-color: #75C443',
                                   popify(title='Areas shown:',
                                          content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
                                                             '"communities":',
@@ -91,7 +93,7 @@ fluidPage({
                                   )
                               )),
                        column(3,
-                              div(style='color:yellow; background-color:green',
+                              div(style='color:white; background-color: #75C443',
                                   popify(title='Pittsburgh Neighborhood toggle',
                                          content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
@@ -110,25 +112,25 @@ fluidPage({
                      ),
                      leafletOutput("map", height = 450),
                      br(),
-                     fluidRow(#style='background:green',  #  final rhs
+                     fluidRow(#style='background:#75C443',  #  final rhs
                        column(width=4,
                               #div(
                               actionButton('IdAck', label='Acknowledgments',
-                                           style='background-color:green; color:yellow')
+                                           style=breatheLabelColoring)
                        ),
                        column(width=4,
                               actionButton(inputId='IdMapAdvice',
-                                           style='background-color:green; color:yellow',
+                                           style=breatheLabelColoring,
                                            label = 'Navigating the map')
                        ),
                        column(width = 2, offset = 0.5,
                               downloadButton("downloadData", "Export Data",
-                                             style='background-color:green; color:yellow')
+                                             style=breatheLabelColoring)
                        )
                      ) #fluidRow
               ), #  final rhs
               column(5,
-                     div(style='color:yellow; background-color:green; text-align:center',
+                     div(style='color:white; background-color: #75C443; text-align:center',
                          strong("Harm that excess PM2.5 did in this tract or community...")),
                      uiOutput('communityShown'),
                      fluidRow(
@@ -148,7 +150,7 @@ fluidPage({
                        )
                      ),
                      uiOutput('IdUiForReferenceCommunity'),
-                     div(style='color:yellow; background-color:green',
+                     div(style='color:white; background-color:#75C443',
                          strong("Show information about this tract or community")),
                      span(style='font-size:9px',
                           actionButton('IdShowPM2.5',
