@@ -23,12 +23,12 @@ library(shinyDebuggingPanel)
 infoList = c(
   "Total Population (2019)",
   "PM2.5 average",
-  "IQ points lost"
+  "Births in 2019"
 )
 #### infoListIds ####
 infoListIds = data.frame(var = infoList,
-                         id = c("IdShowPM2.5",
-                                "IdShowPop",
+                         id = c("IdShowPop",
+                                "IdShowPM2.5",
                                 "IdShowCohort")
 )
 
@@ -65,8 +65,10 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Lepeule Estimate') ])  ### Krewski is out.
 
+load('cohort.births.Rd')
 load('cohort.iq.lost.Rd')
 load('cohort.earnings.lost.Rd')
+PAtowndata$`Births in 2019` = cohort.births
 PAtowndata$`IQ points lost` = cohort.iq.lost
 PAtowndata$`Lifetime earnings lost` = cohort.earnings.lost
 

@@ -26,7 +26,7 @@ function(input, output, session) {
 
   zoomLevel = 10
   verbose = 2
-  rV = reactiveValues(FeatureToPlot='IQ points lost',
+  rV = reactiveValues(featureToPlot='IQ points lost',
     selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
 
@@ -487,12 +487,23 @@ function(input, output, session) {
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
 
+  thisAreaFeatureDistribution = function(var = rV$featureToPlot) {
+    distribution = twt[[rV$featureToPlot]]
+    if((rV$featureToPlot %in% featureList) & (input$IdTotalOrRate == '...rate per 1000')
+       & (rV$featureToPlot != "PM2.5 average") )
+      distribution = distribution * 1000
+    return(distribution)
+  }
 
-  thisAreaFeatureSummary = function(var = rV$FeatureToPlot) {
-    featureName = rV$FeatureToPlot
-    data = twt[[featureName]] [rV$TARGETrownumbers]
-    print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
-    print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
+  thisAreaFeatureSummary = function(var = rV$featureToPlot,
+                                    applyTo= rV$TARGETrownumbers,
+                                    verbose=T) {
+    featureName = rV$featureToPlot
+    data = twt[[featureName]] [applyTo]
+    if(verbose){
+      print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
+      print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
+    }
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage())
     else if(var %in% infoList)
@@ -506,15 +517,15 @@ function(input, output, session) {
     else stop('ERROR in thisAreaFeatureSummary')
   }
 
-  getThisAreaFeature = reactive({
+  getThisAreaFeature = function(){
     # thisFeature = as.numeric(twt[[input$idFeature]])
     print(paste('getThisAreaFeature:', input$idFeature, ' rows:', rV$TARGETdatarows))
-    return(as.numeric(rV$TARGETdatarows[[input$idFeature]]))
-  })
+    return(as.numeric(rV$TARGETdatarows[[rV$featureToPlot]]))
+  }
 
-  getThisAreaPopulation = reactive({
+  getThisAreaPopulation = function(){
     return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
-  })
+  }
 
 
   addSpaces = function(n) rep('&nbsp;', n)
@@ -561,7 +572,7 @@ function(input, output, session) {
   })
 
   output$histTitle = renderUI( {  #### histTitle ####
-    # thisFeature = (twt[[rV$FeatureToPlot]])
+    # thisFeature = (twt[[rV$featureToPlot]])
     div(
         span(strong("Selected feature: "),  #### selected feature ####
              span(
@@ -584,7 +595,7 @@ function(input, output, session) {
 
   output$proportion_smaller <- renderUI({
     howManyLess = try({
-      twt[[rV$FeatureToPlot]] < thisAreaFeatureSummary()
+      thisAreaFeatureDistribution() < thisAreaFeatureSummary()
 #        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
@@ -602,7 +613,7 @@ function(input, output, session) {
 
 
   decorateFeatureName = function() {
-    f = rV$FeatureToPlot
+    f = rV$featureToPlot
     if(f=='All-cause deaths')
       f = 'All-cause deaths: avg Lepeule & Laden'
     if(f %in% infoList) return(f)
@@ -613,28 +624,31 @@ function(input, output, session) {
   }
 
   observeEvent(input$idFeature, {
-    print(paste('updating rV$FeatureToPlot: '))
-    rV$FeatureToPlot = input$idFeature
+    print(paste('updating rV$featureToPlot: '))
+    rV$featureToPlot = input$idFeature
   })
 
 
   observeEvent(input$`IdShowPM2.5`, {
-    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPM2.5')]
+    print('changing rV$featureToPlot via IdShowPM2.5'   )
+    rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPM2.5')]
   })
   observeEvent(input$`IdShowPop`, {
-    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
+    print('changing rV$featureToPlot via IdShowPop'   )
+    rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
   })
   observeEvent(input$`IdShowCohort`, {
-    rV$FeatureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
+    print('changing rV$featureToPlot via IdShowCohort'   )
+    rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
 
   output$featurePlot <- renderPlot({
 
-    thisFeature = as.numeric(twt[[rV$FeatureToPlot]])
+    thisFeature = as.numeric(twt[[rV$featureToPlot]])
     thisAreaFeature = thisAreaFeatureSummary()
 
     xlab = decorateFeatureName()
-    hist(thisFeature,
+    hist(thisAreaFeatureDistribution(),
          xlab=xlab, ylab = 'number of census tracts',
          main = '',
          cex.lab=1.5)
