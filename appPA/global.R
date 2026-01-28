@@ -47,8 +47,8 @@ featureList= c(
 )
 
 load('tracts_with_towns.Rd')   ## of type sf
-tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% infoList))]
-tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% featureList))]
+# tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% infoList))]
+# tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% featureList))]
 
 load('patown2.Rd')   ##   # 2026-01-24   geometry.
 patown2 = st_transform(patown2, 'WGS84')
@@ -101,7 +101,7 @@ PAtowndata$`Total Population (2019)` =
 )
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name',
+  PAtowndata[c('tracts', 'Tract Name', 'Total Population (2019)',
                'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
