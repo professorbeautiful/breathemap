@@ -98,7 +98,6 @@ infoListIds = data.frame(var = infoList,
 #### featureList  or harmList ####
 
 featureList= c(
-  #  "PM2.5 average",
   "IQ points lost",
   "Lifetime earnings lost",
   "All-cause deaths", # (avg Lepeule, Laden)
@@ -108,7 +107,6 @@ featureList= c(
   "Low Birth Weight Babies",
   "Preterm Births",
   "Stillbirths"
-  #"Total Population (2019)"
   )
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
 
