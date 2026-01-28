@@ -472,32 +472,46 @@ function(input, output, session) {
   })
 
   #### featureList  functions ####
-  #feat.countsPerPerson presumes that feature is in counts of people.
+  #feat.countsPer1000 presumes that feature is in counts of people.
   safe.sum = function(x) sum(as.numeric(x), na.rm=T)
-  feat.countsPerPerson = function()
-    safe.sum(getThisAreaFeature()) / safe.sum(getThisAreaPopulation())
-  #feat.weightedRate presumes that feature is a rate.
-  feat.weightedRate = function()
+  feat.countsPer1000 = function()
+    feat.pop.weightedAverage() * 1000
+  #feat.pop.weightedAverage presumes that feature is a rate.
+  feat.pop.weightedAverage = function()
     safe.sum(getThisAreaFeature()*getThisAreaPopulation()) /
     safe.sum(getThisAreaPopulation())
   feat.sum = function() safe.sum(getThisAreaFeature())
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
-  getFeatureSummaryFunction = reactive( c(rvIdMakeReferenceCommunity), {
-    return(safe.sum)
-    })
+  cq = function(s, split=',') strsplit(split=split, s)[[1]]
+
+
+  thisAreaFeatureSummary = function(var = rV$FeatureToPlot) {
+    featureName = rV$FeatureToPlot
+    data = twt[[featureName]] [rV$TARGETrownumbers]
+
+    if(var %in% "PM2.5 average")
+      return(feat.pop.weightedAverage())
+    else if(var %in% infoList)
+      return(feat.sum())   # people;  babies
+    if(input$IdTotalOrRate == '...total'){
+        return(feat.sum())  # uses safe.sum
+    } else if(input$IdTotalOrRate == '...rate'){
+      return(feat.countsPer1000())
+    }
+  }
   # c(  data.frame(
   #   feature=c(infoList, featureList),
   #   func= c(
-  #     'feat.weightedRate', #"Myocardial Infarctions",
-  #     'feat.weightedRate', #"COPD Deaths",
-  #     'feat.weightedRate', #"Ischemic Heart Disease Deaths",
-  #     'feat.weightedRate', # "All-cause deaths", # (avg Krewski, Laden)
-  #     'feat.weightedRate', # "Low Birth Weight Babies",
-  #     'feat.weightedRate', # "Preterm Births",
-  #     'feat.weightedRate', # "Stillbirths",
+  #     'feat.pop.weightedAverage', #"Myocardial Infarctions",
+  #     'feat.pop.weightedAverage', #"COPD Deaths",
+  #     'feat.pop.weightedAverage', #"Ischemic Heart Disease Deaths",
+  #     'feat.pop.weightedAverage', # "All-cause deaths", # (avg Krewski, Laden)
+  #     'feat.pop.weightedAverage', # "Low Birth Weight Babies",
+  #     'feat.pop.weightedAverage', # "Preterm Births",
+  #     'feat.pop.weightedAverage', # "Stillbirths",
   #     'feat.sum', # "Total Population (2019)",
-  #     'feat.weightedRate' # "PM2.5 average"
+  #     'feat.pop.weightedAverage' # "PM2.5 average"
   #   ))
   # rownames(featureSummaryFunctionTable) = featureSummaryFunctionTable[['feature']]
 
@@ -513,18 +527,7 @@ function(input, output, session) {
     # return(thisFeature[TARGETrownumbers(TARGETstring())])
     return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
   })
-  thisAreaFeatureSummary = reactive({
-    featureName = rV$FeatureToPlot
-    print(paste('thisAreaFeatureSummary:', featureName))
-    featureSummaryFunctionName = getFeatureSummaryFunction()
-    #    featureSummaryFunctionTable[featureName, 'func']
-    if(is.null(featureSummaryFunctionName))
-      featureSummaryFunctionName = 'safe.sum'
-    featureSummaryFunction = get(featureSummaryFunctionName)
-    print(paste("featureSummaryFunctionName", featureSummaryFunctionName))
-    ### for now.  May also be popWeightedMean or sum
-    return(featureSummaryFunction())
-  })
+
 
   addSpaces = function(n) rep('&nbsp;', n)
 
