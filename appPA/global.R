@@ -19,8 +19,37 @@ if(!require(shinyDebuggingPanel))
 library(shinyDebuggingPanel)
 
 
+#### infoList, for the bottom 3 buttons, handled differently in plot ####
+infoList = c(
+  "Total Population (2019)",
+  "PM2.5 average",
+  "IQ points lost"
+)
+#### infoListIds ####
+infoListIds = data.frame(var = infoList,
+                         id = c("IdShowPM2.5",
+                                "IdShowPop",
+                                "IdShowCohort")
+)
+
+#### featureList  or harmList ####
+
+featureList= c(
+  "IQ points lost",
+  "Lifetime earnings lost",
+  "All-cause deaths", # (avg Lepeule, Laden)
+  "Ischemic Heart Disease Deaths",
+  "Lung Cancer Deaths",
+  "Myocardial Infarctions", #   "COPD Deaths", dropped.
+  "Low Birth Weight Babies",
+  "Preterm Births",
+  "Stillbirths"
+)
 
 load('tracts_with_towns.Rd')   ## of type sf
+tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% infoList))]
+tracts_with_towns = tracts_with_towns[- (which(names(tracts_with_towns) %in% featureList))]
+
 load('patown2.Rd')   ##   # 2026-01-24   geometry.
 patown2 = st_transform(patown2, 'WGS84')
 PAtown = patown2
@@ -82,36 +111,12 @@ tracts_with_towns$lon.places[townIs___ ] =  tracts_with_towns$lon.tracts[townIs_
 PAtowndata$tracts = PAtowndata$GEOID
 
 
-#### infoList, for the bottom 3 buttons, handled differently in plot ####
-infoList = c(
-  "Total Population (2019)",
-  "PM2.5 average",
-  "IQ points lost"
-)
-#### infoListIds ####
-infoListIds = data.frame(var = infoList,
-                         id = c("IdShowPM2.5",
-                                "IdShowPop",
-                                "IdShowCohort")
-)
-
-#### featureList  or harmList ####
-
-featureList= c(
-  "IQ points lost",
-  "Lifetime earnings lost",
-  "All-cause deaths", # (avg Lepeule, Laden)
-  "Ischemic Heart Disease Deaths",
-  "Lung Cancer Deaths",
-  "Myocardial Infarctions", #   "COPD Deaths", dropped.
-  "Low Birth Weight Babies",
-  "Preterm Births",
-  "Stillbirths"
-  )
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
+)
+  )
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name', "Total Population (2019)",
+  PAtowndata[c('tracts', 'Tract Name',
                'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
