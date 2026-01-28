@@ -503,7 +503,8 @@ function(input, output, session) {
   thisAreaFeatureSummary = function(var = rV$FeatureToPlot) {
     featureName = rV$FeatureToPlot
     data = twt[[featureName]] [rV$TARGETrownumbers]
-
+    print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
+    print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage())
     else if(var %in% infoList)
@@ -514,6 +515,7 @@ function(input, output, session) {
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       return(feat.countsPer1000())
     }
+    else stop('ERROR in thisAreaFeatureSummary')
   }
 
   getThisAreaFeature = reactive({
