@@ -1,4 +1,5 @@
 breatheLabelColoring = 'background-color:#75C443; color:white'
+breatheLabelColoring = 'background-color:green; color:white'
 
 fluidPage({
 
@@ -69,7 +70,7 @@ fluidPage({
               column(7,
                      fluidRow(
                        column(5,
-                              div(style='color:white; background-color: #75C443',
+                              div(style=breatheLabelColoring,
                                   popify(placement = 'right', title = 'Communities and Census Tracts',
                                          content = 'To search for an area: <br>click the box, press "delete" <br> and type your search string. ',
                                          el =
@@ -78,7 +79,7 @@ fluidPage({
                                                        selected = twt$areaField[1])))),
                        column(4,
 
-                              div(style='color:white; background-color: #75C443',
+                              div(style=breatheLabelColoring,
                                   popify(title='Areas shown:',
                                          content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
                                                             '"communities":',
@@ -93,7 +94,7 @@ fluidPage({
                                   )
                               )),
                        column(3,
-                              div(style='color:white; background-color: #75C443',
+                              div(style=breatheLabelColoring,
                                   popify(title='Pittsburgh Neighborhood toggle',
                                          content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
