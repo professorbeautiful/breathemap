@@ -103,7 +103,7 @@ PAtowndata$`Total Population (2019)` =
 )
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name', 'Total Population (2019)',
+  PAtowndata[c('tracts', 'Tract Name', 'Total Population (2019)', 'Births in 2019',
                'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
