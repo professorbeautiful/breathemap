@@ -129,9 +129,9 @@ function(input, output, session) {
     zoom = 10
     lon = twtNoGeom$lon.tracts[datarow]
     lat = twtNoGeom$lat.tracts[datarow]
-    cat('=====getLonLat:\n')
+    if(verbose > 1) cat('=====getLonLat:\n')
     whenceLon = 'twt$lon.tracts'
-      print(tract)
+    if(verbose > 1)   print(tract)
 
     lonBad = function(lon){
       if(length(lon)==0) return(TRUE)
@@ -142,22 +142,22 @@ function(input, output, session) {
       lon = twtNoGeom$lon.places[datarow]
       lat = twtNoGeom$lat.places[datarow]
       whenceLon = 'twt$lon.places'
-      cat("lonBad: Trying lon.places\n")
+      if(verbose > 1) cat("lonBad: Trying lon.places\n")
     }
     if(lonBad(lon)) {   # still missing
-      cat("lonBad: Trying lon.places.x\n")
+      if(verbose > 1) cat("lonBad: Trying lon.places.x\n")
       lon = twtNoGeom$lon.places.x[datarow]
       lat = twtNoGeom$lat.places.x[datarow]
       whenceLon = 'twt$lon.places.x'
     }
     if(lonBad(lon)) {  # if  STILL missing
-      cat("lonBad: Using medianLON, zoom = 7\n")
+      if(verbose > 1) cat("lonBad: Using medianLON, zoom = 7\n")
       lon = medianLON
       lat = medianLAT
       whenceLon = 'no LON'
       zoom=7  ## lost;  go full out.
     }
-    print(paste( datarow, 'whence=', whenceLon, tract, '\nlon.tracts', 'lon.places', 'lon.places.x\n',
+    if(verbose > 1) print(paste( datarow, 'whence=', whenceLon, tract, '\nlon.tracts', 'lon.places', 'lon.places.x\n',
                  twtNoGeom[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')]))
     returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
     return(returnVal)
@@ -165,7 +165,7 @@ function(input, output, session) {
   tractIsChanged = function(){
     locateMe = getLonLat(rV$savedTract)
 
-    print(paste('tractIsChanged: ',
+    if(verbose > 1) print(paste('tractIsChanged: ',
                 'input$areaSelectorId', input$areaSelectorId,
                 'rV$savedTract', rV$savedTract,
                 '   datarow', locateMe$datarow,
