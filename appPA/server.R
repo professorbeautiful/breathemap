@@ -484,7 +484,7 @@ function(input, output, session) {
     safe.sum(getThisAreaFeature(rows)*getThisAreaPopulation(rows)) /
     safe.sum(getThisAreaPopulation(rows))
   }
-  feat.sum = function() safe.sum(getThisAreaFeature(rows=rV$TARGETrownumbers))
+  feat.sum = function(rows=rV$TARGETrownumbers) safe.sum(getThisAreaFeature(rows))
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
@@ -523,11 +523,11 @@ function(input, output, session) {
       'var: ', var, ' data: ', paste(data, collapse=',')))
     }
     if(var %in% "PM2.5 average")
-      return(feat.pop.weightedAverage())
+      return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
-      return(feat.sum())   # people;  babies; but not PM2.5
+      return(feat.sum(data))   # people;  babies; but not PM2.5
     if(input$IdTotalOrRate == '...total'){
-        return(feat.sum())  # uses safe.sum
+        return(feat.sum(data))  # uses safe.sum
     } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       return( data * 1000 / twt[["Total Population (2019)"]][applyTo])
