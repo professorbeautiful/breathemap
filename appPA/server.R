@@ -1,5 +1,5 @@
 function(input, output, session) {
-
+  source('coloring.R')
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
@@ -17,7 +17,8 @@ function(input, output, session) {
       areaFieldName = input$Id_ToggleTownTract
     else
       areaFieldName = 'twt'
-    print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
+    if(verbose>2)
+      print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
     twt[['areaField']] <<-twt[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
     # updateSelectInput(session, "areaSelectorId", choices = PAtown)
@@ -319,7 +320,8 @@ function(input, output, session) {
 
     rV$TARGETrownumbers = rownumbers
     rV$TARGETdatarows = twt[rownumbers, ]
-    print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
+    if(verbose>2)
+      print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
                 paste(collapse=',', dim(rV$TARGETdatarows )),
                 ' lat lon: ', locateMe$lat, locateMe$lon))
@@ -516,8 +518,9 @@ function(input, output, session) {
     featureName = rV$featureToPlot
     data = twt[[featureName]] [applyTo]
     if(verbose> 0){
-      print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
-      print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
+      print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
+      ' applyTo',  paste(collapse=',', applyTo),
+      'var: ', var, ' data: ', paste(data, collapse=',')))
     }
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage())
@@ -739,12 +742,13 @@ function(input, output, session) {
          label = signif(digits=3, thisAreaFeatureSummary()),
          col='darkgreen', cex=1.5)
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
-      REFERENCEdatarows =   ### now just the ref tract.
+      rV$REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
                 rvIdMakeReferenceCommunity$referenceCommunity)
-      print(paste('REFERENCE:  datarows', REFERENCEdatarows,
+      print(paste('REFERENCE:  datarows', rV$REFERENCEdatarows,
                   'Community', rvIdMakeReferenceCommunity$referenceCommunity))
-      refValue = thisAreaFeatureSummary(applyTo = REFERENCEdatarows)
+      refValue = thisAreaFeatureSummary(applyTo = rV$REFERENCEdatarows)
+      print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
     }
