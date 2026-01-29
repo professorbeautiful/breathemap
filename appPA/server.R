@@ -105,7 +105,8 @@ function(input, output, session) {
       updateSelectInput(inputId='areaSelectorId', selected = 1)     #### default before area is selected ####
     #if(input$areaSelectorId != rV$savedTract)
     rV$savedTract = input$areaSelectorId
-    print(paste('areaSelectorObserver: ',
+    if(verbose>2)
+      print(paste('areaSelectorObserver: ',
                 'input$areaSelectorId', input$areaSelectorId))
     tractIsChanged()
   })
@@ -299,13 +300,15 @@ function(input, output, session) {
       rownumbers = which(twt$twt %in% rownumbers)  ### notice the order!!
     locateMe = getLonLat(rV$savedTract)
 
-    print(paste('tractIsChanged: ',
+    if(verbose > 1)
+      print(paste('tractIsChanged: ',
                 'input$areaSelectorId', input$areaSelectorId,
                 'rV$savedTract', rV$savedTract,
                 '   datarow', locateMe$datarow,
                 locateMe$lon, locateMe$lat, locateMe$zoom))
 
-    print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
+    if(verbose > 1)
+      print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
                 paste(collapse=',', dim(rV$TARGETdatarows ))))
     if(length(rownumbers) == 0) {
@@ -512,7 +515,7 @@ function(input, output, session) {
                                     verbose=T) {
     featureName = rV$featureToPlot
     data = twt[[featureName]] [applyTo]
-    if(verbose> 1){
+    if(verbose> 0){
       print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
       print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
     }
@@ -739,7 +742,8 @@ function(input, output, session) {
       REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
                 rvIdMakeReferenceCommunity$referenceCommunity)
-      print(paste('REFERENCEdatarows', REFERENCEdatarows))
+      print(paste('REFERENCE:  datarows', REFERENCEdatarows,
+                  'Community', rvIdMakeReferenceCommunity$referenceCommunity))
       refValue = thisAreaFeatureSummary(applyTo = REFERENCEdatarows)
       ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
