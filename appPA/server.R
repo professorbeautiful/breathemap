@@ -470,23 +470,40 @@ function(input, output, session) {
   #### featureList  functions ####
   #feat.countsPer1000 presumes that feature is in counts of people.
   safe.sum = function(x) sum(as.numeric(x), na.rm=T)
-  feat.countsPer1000 = function()
-    feat.pop.weightedAverage() * 1000
+  feat.countsPer1000 = function(rows=rV$TARGETrownumbers)
+    1000 * safe.sum(getThisAreaFeature(rows)) /
+    safe.sum(getThisAreaPopulation(rows))
+
   #feat.pop.weightedAverage presumes that feature is a rate.
-  feat.pop.weightedAverage = function() {
-    safe.sum(getThisAreaFeature()*getThisAreaPopulation()) /
-    safe.sum(getThisAreaPopulation())
+  feat.pop.weightedAverage = function(rows=rV$TARGETrownumbers) { ## used only for PM2.5.
+    safe.sum(getThisAreaFeature(rows)*getThisAreaPopulation(rows)) /
+    safe.sum(getThisAreaPopulation(rows))
   }
-  feat.sum = function() safe.sum(getThisAreaFeature())
+  feat.sum = function() safe.sum(getThisAreaFeature(rows=rV$TARGETrownumbers))
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
 
-  thisAreaFeatureDistribution = function(var = rV$featureToPlot) {
-    distribution = twt[[rV$featureToPlot]]
-    if((rV$featureToPlot %in% featureList) & (input$IdTotalOrRate == '...rate per 1000')
-       & (rV$featureToPlot != "PM2.5 average") )
-      distribution = distribution * 1000
+  makeItARate = function(){
+    (rV$featureToPlot %in% featureList) &
+      (input$IdTotalOrRate == '...rate per 1000') &
+      (rV$featureToPlot != "PM2.5 average")
+  }
+
+  popIsZero = function()
+    which(twt[["Total Population (2019)"]] == 0)
+
+  thisAreaFeatureDistribution = function() {  ### ALL rows
+    distribution = twt[[rV$featureToPlot]]   ### values for all tracts
+    if(makeItARate() ) {
+      distribution = distribution * 1000 / twt[["Total Population (2019)"]]
+      distribution = distribution[ - c(378, 140, popIsZero() )  ]
+      # 126 323 459 490 518 529 603 607 624
+         ### Also 2 outliers, see 1/29 entries in  NOTES 2026-01-28
+
+    }
+    # if(! length(distribution) == nrow(twt))
+    #   stop("error in thisAreaFeatureDistribution")
     return(distribution)
   }
 
@@ -502,24 +519,29 @@ function(input, output, session) {
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage())
     else if(var %in% infoList)
-      return(feat.sum())   # people;  babies
+      return(feat.sum())   # people;  babies; but not PM2.5
     if(input$IdTotalOrRate == '...total'){
         return(feat.sum())  # uses safe.sum
-    } else if(input$IdTotalOrRate == '...rate per 1000'){
+    } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
-      return(feat.countsPer1000())
+      return( data * 1000 / twt[["Total Population (2019)"]][applyTo])
+
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
 
-  getThisAreaFeature = function(){
+  getThisAreaFeature = function(rows=rV$TARGETrownumbers){    ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    print(paste('getThisAreaFeature:', input$idFeature, ' rows:', rV$TARGETdatarows))
-    return(as.numeric(rV$TARGETdatarows[[rV$featureToPlot]]))
+    print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
+                paste(collapse = ',',  rows)) )
+    return(as.numeric(twt[rows, rV$featureToPlot]))
   }
 
-  getThisAreaPopulation = function(){
-    return(as.numeric(rV$TARGETdatarows[["Total Population (2019)"]]))
+  getThisAreaPopulation = function(rows=rV$TARGETrownumbers){
+    ### we can call with rows=rV$referenceRow
+    ### length of TARGETrownumbers
+    ### NOT safe.sum  here.
+    return((as.numeric(twt[rows, "Total Population (2019)"])))
   }
 
 
@@ -633,6 +655,7 @@ function(input, output, session) {
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
   })
   observeEvent(input$`IdShowCohort`, {
+    # Total Population (2019)
     print('changing rV$featureToPlot via IdShowCohort'   )
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
@@ -662,8 +685,7 @@ function(input, output, session) {
       print(paste('REFERENCEdatarows', REFERENCEdatarows))
       refValue = as.numeric(
         twt[[input$idFeature]]  [REFERENCEdatarows])
-      if((rV$featureToPlot %in% featureList) & (input$IdTotalOrRate == '...rate per 1000')
-                & (rV$featureToPlot != "PM2.5 average") )
+      if(makeItARate() )
         refValue = 1000 * refValue
       points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
     }
