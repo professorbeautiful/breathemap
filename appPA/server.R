@@ -25,7 +25,7 @@ function(input, output, session) {
 
 
   zoomLevel = 10
-  verbose = 2
+  verbose = 3
   rV = reactiveValues(featureToPlot='IQ points lost',
     selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
@@ -512,7 +512,7 @@ function(input, output, session) {
                                     verbose=T) {
     featureName = rV$featureToPlot
     data = twt[[featureName]] [applyTo]
-    if(verbose){
+    if(verbose> 1){
       print(paste('thisAreaFeatureSummary: input$IdTotalOrRate: ', input$IdTotalOrRate))
       print(paste('thisAreaFeatureSummary: var: ', var, ' data: ', paste(data, collapse=',')))
     }
@@ -534,7 +534,8 @@ function(input, output, session) {
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
+    if(verbose>2)
+      print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
                 paste(collapse = ',',  rows)) )
     return(as.numeric(twt[rows, rV$featureToPlot]))
   }
