@@ -567,6 +567,28 @@ function(input, output, session) {
     rvIdMakeReferenceCommunity$referenceCommunity
   })
 
+  makeFeatureActionButtonObserver = function(feat) {
+    thisId = paste0('idFeature', gsub(' ', '_', feat))
+    observerName = paste('featureActionButtonObserver:', feat)
+    print(paste('makeFeatureActionButtonObserver: thisId=', thisId,
+                'observerName=', observerName))
+    assign(observerName,
+           observeEvent(input[[ thisId ]],
+                 {
+                   print(paste('updating rV$featureToPlot: '))
+                   rV$featureToPlot = feat
+                 }
+           )
+    )
+  }
+
+  makeFeatureActionButton = function(feat) {
+    actionButton(inputId = paste0('idFeature', gsub(' ', '_', feat)) )
+
+  }
+  output$uiFeatureList = renderUI({
+    lapply(featureList, function(feat) makeFeatureActionButton)
+  })
   output$communityShown = renderUI({
 
     if(get_areaFieldName()=='towns') {

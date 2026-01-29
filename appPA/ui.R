@@ -135,7 +135,8 @@ fluidPage({
                          strong("Harm that excess PM2.5 did in this tract or community...")),
                      uiOutput('communityShown'),
                      fluidRow(
-                       column(12, radioButtons(inputId='idFeature',
+                       column(12, uiOutput('uiFeatureList'),
+                              radioButtons(inputId='idFeature',
                                                label=NULL,
                                                choices=featureList,
                                                selected=featureList[1],
