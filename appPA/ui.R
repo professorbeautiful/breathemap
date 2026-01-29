@@ -155,11 +155,14 @@ fluidPage({
                      uiOutput('IdUiForReferenceCommunity'),
                      div(style=breatheLabelColoring,
                          strong("Show information about this tract or community")),
-                     span(style='font-size:9px',
-                          actionButton('IdShowPM2.5',
+                     div(style='text-align: center; margin:auto',
+                          actionButton(style=rightSideButtonStyle,
+                                       'IdShowPM2.5',
                                        label=' PM2.5 avg in 2016'),
-                          actionButton('IdShowPop', label='Total # of people'),
-                          actionButton('IdShowCohort', label='# in the 2019 birth cohort')
+                          actionButton(style=rightSideButtonStyle,
+                                       'IdShowPop', label='Total # of people'),
+                          actionButton(style=rightSideButtonStyle,
+                                       'IdShowCohort', label='# in the 2019 birth cohort')
                      )
               ))
             # ,

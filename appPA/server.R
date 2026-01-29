@@ -567,7 +567,7 @@ function(input, output, session) {
   output$IdReferenceCommunity = renderText( {
     rvIdMakeReferenceCommunity$referenceCommunity
   })
-
+#### makeFeatureActionButtonObserver####
   makeFeatureActionButtonObserver = function(feat) {
     thisId = paste0('idFeature', gsub(' ', '_', feat))
     observerName = paste('featureActionButtonObserver_', thisId)
@@ -586,29 +586,36 @@ function(input, output, session) {
 
   sapply(featureList, makeFeatureActionButtonObserver)
 
+  #### makeFeatureActionButton ####
   makeFeatureActionButton = function(feat) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
-    size='sm'
-    feat = gsub('Babies', '', feat)
+    size='sm'  # no effect.
+#    feat = gsub('Childbirth', '', feat)
+    if(feat %in% c("All-cause deaths", "Ischemic Heart Disease Deaths",
+                   "Lung Cancer Deaths", "Myocardial Infarctions"))
+      ButtonStyle =
+      paste(rightSideButtonStyle, '; font-size:8px')
+    else ButtonStyle = rightSideButtonStyle
     feat = gsub('[dD]eaths', '', feat)
-    actionButton(style=rightSideButtonStyle,
+    actionButton(style=ButtonStyle,
                  inputId = inputId,
                  label=feat)
   }
 
+#### uiFeatureList button panel ####
   output$uiFeatureList = renderUI({
     buttons = lapply(featureList, function(feat) {
       makeFeatureActionButton(feat)
     })
     buttonsFixed =
-      div(div(style='text-align: center; margin:auto',
-                          buttons[1:2]),
+      div(
+                      div(style='text-align: center; margin:auto',
+                          "Birth cohort", buttons[1:2]),
                      div(style='text-align: center; margin:auto',
-                          "Babies:" , buttons[7:9]),
-                     div(style='text-align: center; margin:auto',
-                          "Death:", buttons[3:5]),
-                     div(style='text-align: center; margin:auto',
-                          buttons[6])
+                          "Perinatal:" , buttons[7:9]),
+                     div(style='text-align: center; margin:auto; ',
+                          "Death, disease:", buttons[3:6])
+
     )
 
       # style=' border-radius: 0px; margin:0px;
