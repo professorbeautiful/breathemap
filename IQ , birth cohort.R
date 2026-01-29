@@ -1,5 +1,7 @@
 #### IQ , birth cohort
 
+#' from ella: 2019 PA birth cohort_censustracts_county .xlsx'
+
 cohort.pa = readr::read_csv('2019-counties-tracts - Pennsylvania_Birth_2019.csv.csv', col_types = 'cccc')
 #ok, noread.csv()#ok, now character.
 #### for searching, gsheet is better.
@@ -18,6 +20,7 @@ cohort.by.tract = paste0(cohort.pa.sw$countynum, cohort.pa.sw$Tract)
 cohort.by.tract = table(cohort.by.tract)
 cohort.by.tract = data.frame(tract = names(cohort.by.tract), births = as.vector(cohort.by.tract))
 head(cohort.by.tract)
+dim(cohort.by.tract)
 cohort.by.tract$tract = paste0('42', cohort.by.tract$tract)
 
 ### compare with census?
@@ -57,10 +60,34 @@ cohort.births  = twt$births
 cohort.iq.lost = twt$`PM2.5 average` * twt$births * 0.27  ## sum
 cohort.earnings.lost = twt$`PM2.5 average` * twt$births * mean(10.6,13.1)
 
-
 save(cohort.births, file = 'cohort.births.Rd')
 save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
 save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
+
+births.by.county = sapply(split(cohort.births, twt$county.tracts), sum)
+names(births.by.county) = countymap$county[ match(names(births.by.county), countymap$COUNTYFP)]
+as.data.frame(births.by.county)
+# tabulated from ohort.by.tract$births[match(twt$tracts, cohort.by.tract$tract)]
+# See also 2019-counties-tracts - Pennsylvania_Birth_2019.csv.csv,
+# Allegheny               12718
+# Armstrong                 569
+# Beaver                   1503
+# Butler                   1582
+# Fayette                   960
+# Lawrence                  760
+# Washington               1890
+# Westmoreland             2879
+## births.ella.by.county, pasted from Ella's table, using read.delim(file=pipe('pbpaste'))
+# Allegheny	12834
+# Armstrong	2092
+# Beaver	1906
+# Butler	1683
+# Fayette	3202
+# Lawrence	903
+# Washington	1339
+# Westmoreland	645
+# Pittsburgh MSA	24604
+read.table(file=pipe('pbpaste'), header = F)
 
 #'A 0.27-point loss in full-scale IQ (FSIQ) per 1 µg/m³ increase in PM₂.₅ (Alter et al.)
 #'The monetary valuation of an IQ point, estimated at USD 10,600–13,100 per point in the United States (Grosse et al.).
