@@ -1,4 +1,10 @@
 breatheLabelColoring = 'background-color:#75C443; color:white'
+leftSideButtonStyle = breatheLabelColoring
+rightSideButtonStyle = paste(breatheLabelColoring,
+                             '; border-radius: 15px;
+                             height: 50% !important;
+                             padding:4px; font-size:80%')
+# margin and height do not help.
 #breatheLabelColoring = 'background-color:green; color:white'
 
 fluidPage({
@@ -113,20 +119,20 @@ fluidPage({
                      ),
                      leafletOutput("map", height = 450),
                      br(),
-                     fluidRow(#style='background:#75C443',  #  final rhs
+                     fluidRow(
                        column(width=4,
                               #div(
                               actionButton('IdAck', label='Acknowledgments',
-                                           style=breatheLabelColoring)
+                                           style=leftSideButtonStyle)
                        ),
                        column(width=4,
                               actionButton(inputId='IdMapAdvice',
-                                           style=breatheLabelColoring,
+                                           style=leftSideButtonStyle,
                                            label = 'Navigating the map')
                        ),
                        column(width = 2, offset = 0.5,
                               downloadButton("downloadData", "Export Data",
-                                             style=breatheLabelColoring)
+                                             style=leftSideButtonStyle)
                        )
                      ) #fluidRow
               ), #  final rhs

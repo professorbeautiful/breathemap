@@ -8,11 +8,13 @@ library(tigris)
 library(sf)
 library(dplyr)
 library(shinyBS)
+library(shinyWidgets)
 
 # if(basename(getwd()) != 'appPA')
 #   setwd('appPA')
 source('moveColumns.R')
 source('cq.R')
+
 
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')

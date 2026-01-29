@@ -587,15 +587,36 @@ function(input, output, session) {
   sapply(featureList, makeFeatureActionButtonObserver)
 
   makeFeatureActionButton = function(feat) {
-    actionButton(inputId = paste0('idFeature', gsub(' ', '_', feat)) ,
+    inputId = paste0('idFeature', gsub(' ', '_', feat))
+    size='sm'
+    feat = gsub('Babies', '', feat)
+    feat = gsub('[dD]eaths', '', feat)
+    actionButton(style=rightSideButtonStyle,
+                 inputId = inputId,
                  label=feat)
-
   }
-  output$uiFeatureList = renderUI({
-    lapply(featureList, function(feat) makeFeatureActionButton(feat))
-  })
-  output$communityShown = renderUI({
 
+  output$uiFeatureList = renderUI({
+    buttons = lapply(featureList, function(feat) {
+      makeFeatureActionButton(feat)
+    })
+    buttonsFixed =
+      div(div(style='text-align: center; margin:auto',
+                          buttons[1:2]),
+                     div(style='text-align: center; margin:auto',
+                          "Babies:" , buttons[7:9]),
+                     div(style='text-align: center; margin:auto',
+                          "Death:", buttons[3:5]),
+                     div(style='text-align: center; margin:auto',
+                          buttons[6])
+    )
+
+      # style=' border-radius: 0px; margin:0px;
+      #       justify-content: space-between;',
+
+  })
+
+  output$communityShown = renderUI({
     if(get_areaFieldName()=='towns') {
       if(isTRUE(rV$showingPittsburgh))
         firstLine = 'Selected all Pittsburgh from selecting...'
