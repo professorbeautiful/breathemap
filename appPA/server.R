@@ -683,10 +683,8 @@ function(input, output, session) {
         which(twt$twt ==
                 rvIdMakeReferenceCommunity$referenceCommunity)
       print(paste('REFERENCEdatarows', REFERENCEdatarows))
-      refValue = as.numeric(
-        twt[[input$idFeature]]  [REFERENCEdatarows])
-      if(makeItARate() )
-        refValue = 1000 * refValue
+      refValue = thisAreaFeatureSummary(applyTo = REFERENCEdatarows)
+      ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
     }
   })
