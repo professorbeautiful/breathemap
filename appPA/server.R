@@ -530,7 +530,9 @@ function(input, output, session) {
     else stop('ERROR in thisAreaFeatureSummary')
   }
 
-  getThisAreaFeature = function(rows=rV$TARGETrownumbers){    ### length of TARGETrownumbers
+  getThisAreaFeature = function(rows=rV$TARGETrownumbers){
+    ### total, not rate
+    ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
     print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
                 paste(collapse = ',',  rows)) )
