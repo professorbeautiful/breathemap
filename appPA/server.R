@@ -25,7 +25,7 @@ function(input, output, session) {
 
 
   zoomLevel = 10
-  verbose = 3
+  verbose = 1
   rV = reactiveValues(featureToPlot='IQ points lost',
     selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
@@ -570,10 +570,10 @@ function(input, output, session) {
 
   makeFeatureActionButtonObserver = function(feat) {
     thisId = paste0('idFeature', gsub(' ', '_', feat))
-    observerName = paste('featureActionButtonObserver:', feat)
-    print(paste('makeFeatureActionButtonObserver: thisId=', thisId,
-                'observerName=', observerName))
-    assign(observerName,
+    observerName = paste('featureActionButtonObserver_', thisId)
+    print(paste('makeFeatureActionButtonObserver: \nthisId=', thisId,
+                '\nobserverName=', observerName))
+    assign(observerName,  inherits=TRUE,
            observeEvent(input[[ thisId ]],
                  {
                    print(paste('updating rV$featureToPlot: '))
@@ -581,14 +581,18 @@ function(input, output, session) {
                  }
            )
     )
+    print(paste('find observerName:', find(observerName)))
   }
 
+  sapply(featureList, makeFeatureActionButtonObserver)
+
   makeFeatureActionButton = function(feat) {
-    actionButton(inputId = paste0('idFeature', gsub(' ', '_', feat)) )
+    actionButton(inputId = paste0('idFeature', gsub(' ', '_', feat)) ,
+                 label=feat)
 
   }
   output$uiFeatureList = renderUI({
-    lapply(featureList, function(feat) makeFeatureActionButton)
+    lapply(featureList, function(feat) makeFeatureActionButton(feat))
   })
   output$communityShown = renderUI({
 
