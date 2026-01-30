@@ -1,1 +1,3 @@
-* BreatheMap   5517a76 just a comment. zoom=7  ## lost;  go full out.
+Fri Jan 30 12:20:45 2026 
+ * 1-29plus     2e2be3c fixed name for 'All-cause deaths' 
+ * 1-29         3da0555 Fixed the "red doesn't stay fixed" problem.
