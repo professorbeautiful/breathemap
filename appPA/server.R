@@ -23,7 +23,6 @@ function(input, output, session) {
       print(paste('get_areaFieldName: areaFieldName=', (areaFieldName)))
     twt[['areaField']] <<-twt[[areaFieldName]]
     return(areaFieldName)   ## get_areaFieldName
-    # updateSelectInput(session, "areaSelectorId", choices = PAtown)
   }
 
 
@@ -473,7 +472,7 @@ function(input, output, session) {
   #feat.countsPer1000 presumes that feature is in counts of people.
   safe.sum = function(x) sum(as.numeric(x), na.rm=T)
   feat.countsPer1000 = function(rows=rV$TARGETrownumbers)
-    1000 * safe.sum(getThisAreaFeature(rows)) /
+    1000 * safe.sum(getThisAreaFeature(rows, rV$featureToPlot)) /
     safe.sum(getThisAreaPopulation(rows))
 
   #feat.pop.weightedAverage presumes that feature is a rate.
@@ -481,7 +480,8 @@ function(input, output, session) {
     safe.sum(getThisAreaFeature(rows)*getThisAreaPopulation(rows)) /
     safe.sum(getThisAreaPopulation(rows))
   }
-  feat.sum = function(rows=rV$TARGETrownumbers) safe.sum(getThisAreaFeature(rows))
+  feat.sum = function(rows=rV$TARGETrownumbers)
+    safe.sum(getThisAreaFeature(rows))
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
@@ -496,12 +496,12 @@ function(input, output, session) {
     which(twt[["Population in 2019"]] == 0)  ##  ok.
 
   thisAreaFeatureDistribution = function() {  ### ALL rows
-    distribution = PAtowndata[[rV$featureToPlot]]   ### values for all tracts
+    distribution = data.frame(twt)[[toDots(rV$featureToPlot)]]   ### values for all tracts
     if(makeItARate() ) {
-      distribution = distribution * 1000 / PAtowndata[["Population in 2019"]]
-      distribution = distribution[ - c(378, 140, popIsZero() )  ]
+      distribution = distribution * 1000 / data.frame(twt)[[toDots("Population in 2019")]]
+      distribution = distribution[ - c(popIsZero() )  ]
       # 126 323 459 490 518 529 603 607 624
-         ### Also 2 outliers, see 1/29 entries in  NOTES 2026-01-28
+         ### Also 2 outliers?  ignore outliers for now, see 1/29 entries in  NOTES 2026-01-28
 
     }
     # if(! length(distribution) == nrow(twt))
@@ -512,8 +512,8 @@ function(input, output, session) {
   thisAreaFeatureSummary = function(var = rV$featureToPlot,
                                     applyTo= rV$TARGETrownumbers,
                                     verbose=T) {
-    featureName = rV$featureToPlot
-    data = twt[[featureName]] [applyTo]
+    featureName = toDots(rV$featureToPlot)
+    data = data.frame(twt)[[featureName]] [applyTo]
     if(verbose> 0){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
       ' applyTo',  paste(collapse=',', applyTo),
@@ -527,30 +527,42 @@ function(input, output, session) {
         return(feat.sum(data))  # uses safe.sum
     } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
-      return( data * 1000 / PAtowndata[["Population in 2019"]][applyTo])
+      return( data * 1000 / data.frame(twt)[[toDots("Population in 2019")]][applyTo])
 
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
 
-  getThisAreaFeature = function(rows=rV$TARGETrownumbers){
+
+  getThisAreaFeature = function(rows=rV$TARGETrownumbers, feature=rV$featureToPlot){
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    returnValue = as.numeric(PAtowndata[rows, rV$featureToPlot])
+    print((traceback()))
+    print(paste('getThisAreaFeature: with twt', feature, ' rows:',
+                paste(collapse = ',',  rows)))
+
+    feature = toDots(feature)   #### yikes!
+    #print(toDots(feature))
+    returnValue = as.numeric(data.frame(twt)[[feature]][rows])
     if(verbose>0)
-      print(paste('getThisAreaFeature:', rV$featureToPlot, ' rows:',
+      print(paste('getThisAreaFeature: with twt', feature, ' rows:',
                 paste(collapse = ',',  rows),
                 '  returnValue: ', paste(collapse = ',', returnValue)
       ) )
     return(returnValue)
   }
 
+  getThisAreaFeatureOK = function(rows=rV$TARGETrownumbers,
+                                feature=rV$featureToPlot){
+    return((as.numeric(twt[[feature]] [rows])))
+  }
+
   getThisAreaPopulation = function(rows=rV$TARGETrownumbers){
     ### we can call with rows=rV$referenceRow
     ### length of TARGETrownumbers
     ### NOT safe.sum  here.
-    return((as.numeric(PAtowndata[rows, "Population in 2019"])))
+    return((as.numeric(twt[["Population in 2019"]] [rows])))
   }
 
 
@@ -677,7 +689,6 @@ function(input, output, session) {
   output$proportion_smaller <- renderUI({
     howManyLess = try({
       thisAreaFeatureDistribution() < thisAreaFeatureSummary()
-#        PAtown[[input$idFeature]] [PAtown$areaField==input$areaSelectorId]
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
@@ -698,6 +709,10 @@ function(input, output, session) {
     if(f=='All-cause deaths')
       f = 'All-cause deaths: avg Lepeule & Laden'
     if(f %in% infoList) return(f)
+    print(paste('input$IdTotalOrRate', length(input$IdTotalOrRate)))
+    if(length(input$IdTotalOrRate) == 0)
+      updateRadioButtons(session, 'IdTotalOrRate',
+                         selected = 1)
     if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
@@ -724,9 +739,11 @@ function(input, output, session) {
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
 
+  toDots = function(s) gsub(' ', '.', s)
+
   output$featurePlot <- renderPlot({
 
-    thisFeature = as.numeric(twt[[rV$featureToPlot]])
+    thisFeature = as.numeric(twt[[toDots(rV$featureToPlot)]])
     thisAreaFeature = thisAreaFeatureSummary()
 
     xlab = decorateFeatureName()
