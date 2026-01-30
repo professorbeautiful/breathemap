@@ -513,7 +513,7 @@ function(input, output, session) {
                                     applyTo= rV$TARGETrownumbers,
                                     verbose=T) {
     featureName = rV$featureToPlot
-    data = PAtowndata[[featureName]] [applyTo]
+    data = twt[[featureName]] [applyTo]
     if(verbose> 0){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
       ' applyTo',  paste(collapse=',', applyTo),
