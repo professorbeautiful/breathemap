@@ -746,7 +746,7 @@ function(input, output, session) {
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
 
-  toDots = function(s) gsub(' ', '.', s)
+  toDots = function(s) gsub('[ -]', '.', s)
 
   output$featurePlot <- renderPlot({
 
