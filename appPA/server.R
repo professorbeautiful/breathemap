@@ -87,7 +87,7 @@ function(input, output, session) {
   clickATract = function(tractNumber) {
     if(is.character(tractNumber))
       tractNumber = match(tractNumber, twt$twt)
-    if(verbose>0)
+    if(verbose>1)
       print(paste('clickATract: ', tractNumber))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
@@ -98,7 +98,7 @@ function(input, output, session) {
                   fillOpacity = 1, group="selectedTractGroup")
     updateSelectInput(session, "areaSelectorId",
                       selected = twt[['areaField']] [tractNumber])
-    if(verbose>0)
+    if(verbose>1)
       print(paste('clickATract: areaSelectorId: ', input$areaSelectorId))
   }
 
@@ -269,7 +269,8 @@ function(input, output, session) {
       which(sapply(  townsForAllTracts, function(t) town %in% t))
     if(showingPittsburgh())   {
       rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
-      print(paste( 'Showing all Pittsburgh as one: # tracts = ', length(rownumbersForTown)))
+      if(verbose>0)
+        print(paste( 'Showing all Pittsburgh as one: # tracts = ', length(rownumbersForTown)))
     }
     showTheseTracts(rownumbersForTown)
   }
@@ -279,12 +280,14 @@ function(input, output, session) {
       simpleError('showAllTractsWithOnly only if Id_ToggleTownTract = towns')
     rownumbersForTown =
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
-    print(paste( 'showAllTractsWithOnly: # tracts = ', length(rownumbersForTown),
+    if(verbose>0)
+      print(paste( 'showAllTractsWithOnly: # tracts = ', length(rownumbersForTown),
                  '   town=', rV$selectedTown))
 
     if(showingPittsburgh())   {
       rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
-      print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
+      if(verbose>0)
+        print(paste( 'showingPittsburgh: # tracts = ', length(rownumbersForTown)))
     }
     if(length(rownumbersForTown) > 0)
       showTheseTracts(rownumbersForTown)
@@ -485,8 +488,9 @@ function(input, output, session) {
       safe.sum(getThisAreaPopulation(rows))
   }
   feat.sum = function(rows=rV$TARGETrownumbers){
-    print(paste('feat.sum: rows=' ,  rows))
-    print(sys.call())
+    if(verbose>2)
+      print(paste('feat.sum: rows=' ,  rows))
+    #print(sys.call())
     safe.sum(getThisAreaFeature(rows, whoCalled='feat.sum'))
   }
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
@@ -526,7 +530,7 @@ function(input, output, session) {
                                     verbose=T) {
     featureName = toDots(rV$featureToPlot)
     data = data.frame(twt)[[featureName]] [applyTo]
-    if(verbose> 0){
+    if(verbose> 2){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
                   ' applyTo',  paste(collapse=',', applyTo),
                   'var: ', var, ' data: ', paste(data, collapse=',')))
@@ -759,30 +763,38 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  removeOutliers = function(x) {
-    x [ pnorm((distr - mean(distr, na.rm=T)) /sd(distr, na.rm=T) ) < 0.99]
+  removeOutliers = function(x, quantile = 0.995) {
+    x [ pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) < quantile]
   }
 
   output$featurePlot <- renderPlot({
 
-    referenceDistribution = as.numeric(twt[[toDots(rV$featureToPlot)]])
+    referenceDistribution = thisAreaFeatureDistribution()
+      #as.numeric(twt[[(rV$featureToPlot)]])
+    print(paste('featurePlot:', 'referenceDistribution:'))
+    print('before:')
+    print(summary(referenceDistribution))
     referenceDistribution = removeOutliers(referenceDistribution)
+    print('after:')
+    print(summary(referenceDistribution))
+
+    numberOfOutliers = nrow(twt) - length(referenceDistribution)
+    print(paste("# outliers = ", numberOfOutliers) )
 
     thisAreaFeature = thisAreaFeatureSummary()
 
-
     xlab = decorateFeatureName()
-    hist(referenceDistribution,
+    histReturn = hist(referenceDistribution,
          xlab=xlab, ylab = 'number of census tracts',
          main = '',
          cex.lab=1.5)
-    abline(v=thisAreaFeatureSummary(),
+    abline(v=thisAreaFeature,
            lwd=3, col='darkgreen')
-    arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
-           x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
+    arrows(x0 = thisAreaFeature, y0 = 0,
+           x1 = thisAreaFeature, y1= par('usr')[4]*1.2, xpd=NA,
            col='darkgreen', lwd=3)
-    text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
-         label = signif(digits=3, thisAreaFeatureSummary()),
+    text(x = thisAreaFeature, y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+         label = signif(digits=3, thisAreaFeature),
          col='darkgreen', cex=1.5)
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
@@ -794,6 +806,15 @@ function(input, output, session) {
       print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
+    }
+    if(numberOfOutliers > 0 ) {
+      pars = par()$usr  ### 0 1 0 1  for histogram!?
+      outlierLabel = paste('#outliers➡\n',numberOfOutliers)
+      print(paste(outlierLabel))
+      print(histReturn)
+      text.default(x = max(referenceDistribution), y = max(histReturn$counts), xpd=NA, adj=c(0,0),
+                   labels = outlierLabel)
+
     }
   })
 
