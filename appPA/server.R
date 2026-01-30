@@ -3,9 +3,9 @@ function(input, output, session) {
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
-       session, toolsInitialState = FALSE,
-       condition='ctrlDpressed === true'
-      )
+    session, toolsInitialState = FALSE,
+    condition='ctrlDpressed === true'
+  )
   includeCSS('highlight.css')
   includeCSS('buttons.css')
 
@@ -29,7 +29,7 @@ function(input, output, session) {
   zoomLevel = 10
   verbose = 1
   rV = reactiveValues(featureToPlot='IQ points lost',
-    selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
+                      selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
 
   print(paste('======== BEGIN server: #unspecified=',
@@ -58,8 +58,8 @@ function(input, output, session) {
         'To zoom the map, scroll over the map',
         '<br>or use the buttons at top left.',
         '<br><br>To move around,  click and drag.')
-      # el="Hover to see tips for the map"
-    ))))
+        # el="Hover to see tips for the map"
+      ))))
   })
 
   # for centering map at the start.
@@ -109,7 +109,7 @@ function(input, output, session) {
     rV$savedTract = input$areaSelectorId
     if(verbose>2)
       print(paste('areaSelectorObserver: ',
-                'input$areaSelectorId', input$areaSelectorId))
+                  'input$areaSelectorId', input$areaSelectorId))
     tractIsChanged()
   })
   savedTractObserver = observeEvent(rV$savedTract, {
@@ -122,7 +122,7 @@ function(input, output, session) {
   isTracts = function() { input$Id_ToggleTownTract == 'twt'}
 
   getLonLat = function(tract) {
-    twtNoGeom = as.data.frame(twt)
+    twtNoGeom = data.frame(twt)
     tract = tract[1]
     if(is.character(tract))
       datarow = which(tract == twtNoGeom$twt)
@@ -161,7 +161,7 @@ function(input, output, session) {
       zoom=7  ## lost;  go full out.
     }
     if(verbose > 1) print(paste( datarow, 'whence=', whenceLon, tract, '\nlon.tracts', 'lon.places', 'lon.places.x\n',
-                 twtNoGeom[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')]))
+                                 twtNoGeom[datarow, c('lon.tracts', 'lon.places', 'lon.places.x')]))
     returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
     return(returnVal)
   }
@@ -169,10 +169,10 @@ function(input, output, session) {
     locateMe = getLonLat(rV$savedTract)
 
     if(verbose > 1) print(paste('tractIsChanged: ',
-                'input$areaSelectorId', input$areaSelectorId,
-                'rV$savedTract', rV$savedTract,
-                '   datarow', locateMe$datarow,
-                locateMe$lon, locateMe$lat, locateMe$zoom))
+                                'input$areaSelectorId', input$areaSelectorId,
+                                'rV$savedTract', rV$savedTract,
+                                '   datarow', locateMe$datarow,
+                                locateMe$lon, locateMe$lat, locateMe$zoom))
 
     # removing this flyTo does not help the highlight problem
     leafletProxy("map", session) %>%
@@ -190,7 +190,7 @@ function(input, output, session) {
 
   }
 
- #### clicking updates selectInput ####
+  #### clicking updates selectInput ####
   observeMapClick = observeEvent(c(input$map_shape_click), {
     click = input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
@@ -229,9 +229,9 @@ function(input, output, session) {
       theseTowns = getTownsForThisTract(rV$savedTract)
       getATownFromThisTract(theseTowns)
     }
-      # Because of the towns Modal, rely on rV$selectedTown, not a return value.
-      # Now rV$selectedTown = NULL is no longer NULL, I hope.
-      ### use haveTownObserver to continue  ###
+    # Because of the towns Modal, rely on rV$selectedTown, not a return value.
+    # Now rV$selectedTown = NULL is no longer NULL, I hope.
+    ### use haveTownObserver to continue  ###
   })
 
   #### townSharesCheckbox_Observer ####
@@ -304,15 +304,15 @@ function(input, output, session) {
 
     if(verbose > 1)
       print(paste('tractIsChanged: ',
-                'input$areaSelectorId', input$areaSelectorId,
-                'rV$savedTract', rV$savedTract,
-                '   datarow', locateMe$datarow,
-                locateMe$lon, locateMe$lat, locateMe$zoom))
+                  'input$areaSelectorId', input$areaSelectorId,
+                  'rV$savedTract', rV$savedTract,
+                  '   datarow', locateMe$datarow,
+                  locateMe$lon, locateMe$lat, locateMe$zoom))
 
     if(verbose > 1)
       print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
-                'dim rV$TARGETdatarows',
-                paste(collapse=',', dim(rV$TARGETdatarows ))))
+                  'dim rV$TARGETdatarows',
+                  paste(collapse=',', dim(rV$TARGETdatarows ))))
     if(length(rownumbers) == 0) {
       simpleError(paste(
         'showTheseTracts:  length(rownumbers) == 0,  rV$savedTract = ', rV$savedTract))
@@ -323,9 +323,9 @@ function(input, output, session) {
     rV$TARGETdatarows = twt[rownumbers, ]  # must be twt not PAtowndata
     if(verbose>2)
       print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
-                'dim rV$TARGETdatarows',
-                paste(collapse=',', dim(rV$TARGETdatarows )),
-                ' lat lon: ', locateMe$lat, locateMe$lon))
+                  'dim rV$TARGETdatarows',
+                  paste(collapse=',', dim(rV$TARGETdatarows )),
+                  ' lat lon: ', locateMe$lat, locateMe$lon))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
       flyTo(lng = locateMe$lon,
@@ -367,17 +367,17 @@ function(input, output, session) {
       print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
-        townsString = paste(collapse="+", townsForThisTract)
-        print(paste('showModal: townsForThisTract:', townsString))
-        showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
-          title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
-          selectInput(inputId = "modalId", label = "select a town ",
-                      choices = townsForThisTract
-          ),
-          footer=actionButton("ok", "OK")
-        ))
-      }
+      townsString = paste(collapse="+", townsForThisTract)
+      print(paste('showModal: townsForThisTract:', townsString))
+      showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
+        title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
+        selectInput(inputId = "modalId", label = "select a town ",
+                    choices = townsForThisTract
+        ),
+        footer=actionButton("ok", "OK")
+      ))
     }
+  }
 
   #### modal OK ####
   observeEvent(input$ok, handlerExpr = {
@@ -453,18 +453,18 @@ function(input, output, session) {
         input$areaSelectorId
     }
     div(
-    strong(class='reference',
-           actionButton('IdMakeReferenceCommunity',
-                        label =
-                          span(span(style=referenceColorStyle, "Set"),
-                               span(style='color:darkgreen',"currently selected"),
-                               span(style=referenceColorStyle, "as reference community? (Red lozenge)"
-                          ))
-           )),
-    br(),
-    fluidRow(  class='reference',  column(3, strong( "Current reference:")),
-                        column(9, textOutput(outputId = 'IdReferenceCommunity')
-                        ))
+      strong(class='reference',
+             actionButton('IdMakeReferenceCommunity',
+                          label =
+                            span(span(style=referenceColorStyle, "Set"),
+                                 span(style='color:darkgreen',"currently selected"),
+                                 span(style=referenceColorStyle, "as reference community? (Red lozenge)"
+                                 ))
+             )),
+      br(),
+      fluidRow(  class='reference',  column(3, strong( "Current reference:")),
+                 column(9, textOutput(outputId = 'IdReferenceCommunity')
+                 ))
     )
   })
 
@@ -528,15 +528,15 @@ function(input, output, session) {
     data = data.frame(twt)[[featureName]] [applyTo]
     if(verbose> 0){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
-      ' applyTo',  paste(collapse=',', applyTo),
-      'var: ', var, ' data: ', paste(data, collapse=',')))
+                  ' applyTo',  paste(collapse=',', applyTo),
+                  'var: ', var, ' data: ', paste(data, collapse=',')))
     }
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
       return(feat.sum())   # people;  babies; but not PM2.5
     if(input$IdTotalOrRate == '...total'){
-        return(feat.sum())  # uses safe.sum
+      return(feat.sum())  # uses safe.sum
     } else if(makeItARate()){
       if(verbose>1)
         print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
@@ -554,25 +554,25 @@ function(input, output, session) {
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    if(verbose>0)
+    if(verbose>1)
       print(paste('whoCalled: ', whoCalled))
     if(verbose>2)
       print(paste('getThisAreaFeature: with twt', feature, ' rows:',
-                paste(collapse = ',',  rows)))
+                  paste(collapse = ',',  rows)))
 
     feature = toDots(feature)   #### yikes!
     #print(toDots(feature))
     returnValue = as.numeric(data.frame(twt)[[feature]][rows])
     if(verbose>2)
       print(paste('getThisAreaFeature: with twt', feature, ' rows:',
-                paste(collapse = ',',  rows),
-                '  returnValue: ', paste(collapse = ',', returnValue)
+                  paste(collapse = ',',  rows),
+                  '  returnValue: ', paste(collapse = ',', returnValue)
       ) )
     return(returnValue)
   }
 
   getThisAreaFeatureOK = function(rows=rV$TARGETrownumbers,
-                                feature=rV$featureToPlot){
+                                  feature=rV$featureToPlot){
     return((as.numeric(twt[[feature]] [rows])))
   }
 
@@ -603,7 +603,7 @@ function(input, output, session) {
   output$IdReferenceCommunity = renderText( {
     rvIdMakeReferenceCommunity$referenceCommunity
   })
-#### makeFeatureActionButtonObserver####
+  #### makeFeatureActionButtonObserver####
   makeFeatureActionButtonObserver = function(feat) {
     thisId = paste0('idFeature', gsub(' ', '_', feat))
     observerName = paste('featureActionButtonObserver_', thisId)
@@ -611,11 +611,11 @@ function(input, output, session) {
                 '\nobserverName=', observerName))
     assign(observerName,  inherits=TRUE,
            observeEvent(input[[ thisId ]],
-                 {
-                   print(paste('updating rV$featureToPlot: '))
-                   rV$featureToPlot = feat
-                   shinyjs::addCssClass(thisId, class='buttonPressed')
-                 }
+                        {
+                          print(paste('updating rV$featureToPlot: '))
+                          rV$featureToPlot = feat
+                          shinyjs::addCssClass(thisId, class='buttonPressed')
+                        }
            )
     )
     print(paste('find observerName:', find(observerName)))
@@ -627,7 +627,7 @@ function(input, output, session) {
   makeFeatureActionButton = function(feat) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
     size='sm'  # no effect.
-#    feat = gsub('Childbirth', '', feat)
+    #    feat = gsub('Childbirth', '', feat)
     if(feat %in% c("All-cause deaths", "Ischemic Heart Disease Deaths",
                    "Lung Cancer Deaths", "Myocardial Infarctions"))
       ButtonStyle =
@@ -639,24 +639,24 @@ function(input, output, session) {
                  label=feat)
   }
 
-#### uiFeatureList button panel ####
+  #### uiFeatureList button panel ####
   output$uiFeatureList = renderUI({
     buttons = lapply(featureList, function(feat) {
       makeFeatureActionButton(feat)
     })
     buttonsFixed =
       div(
-                      div(style='text-align: center; margin:auto',
-                          "Birth cohort", buttons[1:2]),
-                     div(style='text-align: center; margin:auto',
-                          "Perinatal:" , buttons[7:9]),
-                     div(style='text-align: center; margin:auto; ',
-                          "Death, disease:", buttons[3:6])
+        div(style='text-align: center; margin:auto',
+            "Birth cohort", buttons[1:2]),
+        div(style='text-align: center; margin:auto',
+            "Perinatal:" , buttons[7:9]),
+        div(style='text-align: center; margin:auto; ',
+            "Death, disease:", buttons[3:6])
 
-    )
+      )
 
-      # style=' border-radius: 0px; margin:0px;
-      #       justify-content: space-between;',
+    # style=' border-radius: 0px; margin:0px;
+    #       justify-content: space-between;',
 
   })
 
@@ -685,20 +685,20 @@ function(input, output, session) {
   output$histTitle = renderUI( {  #### histTitle ####
     # thisFeature = (twt[[rV$featureToPlot]])
     div(
-        span(strong("Selected feature: "),  #### selected feature ####
-             span(
-               style='color:green', decorateFeatureName(), ' = ',
+      span(strong("Selected feature: "),  #### selected feature ####
+           span(
+             style='color:green', decorateFeatureName(), ' = ',
              signif(digits=3,
                     thisAreaFeatureSummary() ) )
-             #### TODO: which features do we sum, which do we mean?
-             ### population is char for some reason.
-        ),
-        br(),
-        # span('--------------------',
-        #      '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
-        # ),
-        # br(),
-        uiOutput('proportion_smaller')
+           #### TODO: which features do we sum, which do we mean?
+           ### population is char for some reason.
+      ),
+      br(),
+      # span('--------------------',
+      #      '(summarized by ', strong(gsub('^feat.', '', featureSummaryFunctionTable[input$idFeature, 'func'])), ')'
+      # ),
+      # br(),
+      uiOutput('proportion_smaller')
     )
   })
 
@@ -710,15 +710,15 @@ function(input, output, session) {
     })
     if (class(howManyLess) == 'try-error')
       howManyLess = 0
-#    paste("Ranking among tracts:",
+    #    paste("Ranking among tracts:",
     percentile = round(mean(na.rm = TRUE, howManyLess * 100))
     percentile = paste0(percentile,
-           switch(paste0('x',
-                         percentile %% 10), x1 = 'st', x2='nd', 'th')
+                        switch(paste0('x',
+                                      percentile %% 10), x1 = 'st', x2='nd', 'th')
     )
     span(strong("Compared with entire region: "),
          span(style='color:green', percentile, 'percentile'
-               ) )
+         ) )
   })
 
 
@@ -759,18 +759,25 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
+  removeOutliers = function(x) {
+    x [ pnorm((distr - mean(distr, na.rm=T)) /sd(distr, na.rm=T) ) < 0.99]
+  }
+
   output$featurePlot <- renderPlot({
 
-    thisFeature = as.numeric(twt[[toDots(rV$featureToPlot)]])
+    referenceDistribution = as.numeric(twt[[toDots(rV$featureToPlot)]])
+    referenceDistribution = removeOutliers(referenceDistribution)
+
     thisAreaFeature = thisAreaFeatureSummary()
 
+
     xlab = decorateFeatureName()
-    hist(thisAreaFeatureDistribution(),
+    hist(referenceDistribution,
          xlab=xlab, ylab = 'number of census tracts',
          main = '',
          cex.lab=1.5)
     abline(v=thisAreaFeatureSummary(),
-                        lwd=3, col='darkgreen')
+           lwd=3, col='darkgreen')
     arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
            x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
            col='darkgreen', lwd=3)
