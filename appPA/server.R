@@ -537,10 +537,13 @@ function(input, output, session) {
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
+    returnValue = as.numeric(PAtowndata[rows, rV$featureToPlot])
     if(verbose>0)
-      print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
-                paste(collapse = ',',  rows)) )
-    return(as.numeric(PAtowndata[rows, rV$featureToPlot]))
+      print(paste('getThisAreaFeature:', rV$featureToPlot, ' rows:',
+                paste(collapse = ',',  rows),
+                '  returnValue: ', paste(collapse = ',', returnValue)
+      ) )
+    return(returnValue)
   }
 
   getThisAreaPopulation = function(rows=rV$TARGETrownumbers){
@@ -700,11 +703,11 @@ function(input, output, session) {
     else
       paste(f, '(rate per 1000)')
   }
-
-  observeEvent(input$idFeature, {
-    print(paste('updating rV$featureToPlot: '))
-    rV$featureToPlot = input$idFeature
-  })
+  #
+  # observeEvent(input$idFeature, {
+  #   # print(paste('updating rV$featureToPlot: '))
+  #   rV$featureToPlot = input$idFeature
+  # })
 
 
   observeEvent(input$`IdShowPM2.5`, {
