@@ -493,12 +493,12 @@ function(input, output, session) {
   }
 
   popIsZero = function()
-    which(twt[["Total Population (2019)"]] == 0)  ##  ok.
+    which(twt[["Population in 2019"]] == 0)  ##  ok.
 
   thisAreaFeatureDistribution = function() {  ### ALL rows
     distribution = PAtowndata[[rV$featureToPlot]]   ### values for all tracts
     if(makeItARate() ) {
-      distribution = distribution * 1000 / PAtowndata[["Total Population (2019)"]]
+      distribution = distribution * 1000 / PAtowndata[["Population in 2019"]]
       distribution = distribution[ - c(378, 140, popIsZero() )  ]
       # 126 323 459 490 518 529 603 607 624
          ### Also 2 outliers, see 1/29 entries in  NOTES 2026-01-28
@@ -527,7 +527,7 @@ function(input, output, session) {
         return(feat.sum(data))  # uses safe.sum
     } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
-      return( data * 1000 / PAtowndata[["Total Population (2019)"]][applyTo])
+      return( data * 1000 / PAtowndata[["Population in 2019"]][applyTo])
 
     }
     else stop('ERROR in thisAreaFeatureSummary')
@@ -547,7 +547,7 @@ function(input, output, session) {
     ### we can call with rows=rV$referenceRow
     ### length of TARGETrownumbers
     ### NOT safe.sum  here.
-    return((as.numeric(PAtowndata[rows, "Total Population (2019)"])))
+    return((as.numeric(PAtowndata[rows, "Population in 2019"])))
   }
 
 
@@ -716,7 +716,7 @@ function(input, output, session) {
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
   })
   observeEvent(input$`IdShowCohort`, {
-    # Total Population (2019)
+    # Population in 2019
     print('changing rV$featureToPlot via IdShowCohort'   )
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })

@@ -23,7 +23,7 @@ library(shinyDebuggingPanel)
 
 #### infoList, for the bottom 3 buttons, handled differently in plot ####
 infoList = c(
-  "Total Population (2019)",
+  "Population in 2019",
   "PM2.5 average",
   "Births in 2019"
 )
@@ -58,10 +58,10 @@ PAtown = patown2
 
 load('patowndata3.Rd' )   # 2026-01-24
 #load('PAtowndata.lukedata.Rd')  # same as patowndata2.Rd, previous data
-patowndata3$`Total Population (2019)` =
+patowndata3$`Population in 2019` =
   as.numeric(patowndata3$`Total Population (2019)`)
-print(paste('is.numeric(patowndata3$`Total Population (2019)` )',
-      is.numeric(patowndata3$`Total Population (2019)` )))
+print(paste('is.numeric(patowndata3$`Population in 2019` )',
+      is.numeric(patowndata3$`Population in 2019` )))
 PAtowndata = patowndata3    ### as of Jan 25.
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
@@ -100,12 +100,12 @@ PAtowndata$tracts = PAtowndata$GEOID
 
 
 PAtowndata$`PM2.5 average` = PAtowndata$PM_avg
-PAtowndata$`Total Population (2019)` =
-  as.numeric(PAtowndata$`Total Population (2019)`
+PAtowndata$`Population in 2019` =
+  as.numeric(PAtowndata$`Population in 2019`
 )
 
 tracts_with_towns.wide = merge(
-  PAtowndata[c('tracts', 'Tract Name', 'Total Population (2019)', 'Births in 2019',
+  PAtowndata[c('tracts', 'Tract Name', 'Population in 2019', 'Births in 2019',
                'PM2.5 average', featureList)],
   tracts_with_towns, by='tracts' )
 
