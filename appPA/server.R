@@ -471,10 +471,12 @@ function(input, output, session) {
   #### featureList  functions ####
   #feat.countsPer1000 presumes that feature is in counts of people.
   safe.sum = function(x) sum(as.numeric(x), na.rm=T)
+
   feat.countsPer1000 = function(rows=rV$TARGETrownumbers)
-    1000 * safe.sum(getThisAreaFeature(rows=rows, rV$featureToPlot,
-                                       whoCalled='feat.countsPer1000')) /
-    safe.sum(getThisAreaPopulation(rows=rows))
+    1000 * safe.sum(getThisAreaFeature(
+      rows=rows, rV$featureToPlot,
+      whoCalled='feat.countsPer1000') /
+        safe.sum(getThisAreaPopulation(rows=rows)) )
 
   #feat.pop.weightedAverage presumes that feature is a rate.
   feat.pop.weightedAverage = function(rows=rV$TARGETrownumbers) { ## used only for PM2.5.
@@ -503,12 +505,17 @@ function(input, output, session) {
   thisAreaFeatureDistribution = function() {  ### ALL rows
     distribution = data.frame(twt)[[toDots(rV$featureToPlot)]]   ### values for all tracts
     if(makeItARate() ) {
-      distribution = distribution * 1000 / data.frame(twt)[[toDots("Population in 2019")]]
-      distribution = distribution[ - c(popIsZero() )  ]
-      # 126 323 459 490 518 529 603 607 624
-         ### Also 2 outliers?  ignore outliers for now, see 1/29 entries in  NOTES 2026-01-28
-
+      distribution = sapply(1:nrow(twt),
+                            function(row)
+                              feat.countsPer1000(row)
+      )
     }
+
+    distribution = distribution[ - c(popIsZero() )  ]
+    # 126 323 459 490 518 529 603 607 624
+    ### Also 2 outliers?  ignore outliers for now, see 1/29 entries in  NOTES 2026-01-28
+
+
     # if(! length(distribution) == nrow(twt))
     #   stop("error in thisAreaFeatureDistribution")
     return(distribution)
@@ -531,9 +538,11 @@ function(input, output, session) {
     if(input$IdTotalOrRate == '...total'){
         return(feat.sum())  # uses safe.sum
     } else if(makeItARate()){
-      print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
-      return( data * 1000 / data.frame(twt)[[toDots("Population in 2019")]][applyTo])
+      if(verbose>1)
+        print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
+      pops = data.frame(twt)[[toDots("Population in 2019")]][applyTo]
 
+      return( 1000 * safe.sum(data) / safe.sum(pops) )
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
@@ -545,14 +554,16 @@ function(input, output, session) {
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    print(paste('whoCalled: ', whoCalled))
-    print(paste('getThisAreaFeature: with twt', feature, ' rows:',
+    if(verbose>0)
+      print(paste('whoCalled: ', whoCalled))
+    if(verbose>2)
+      print(paste('getThisAreaFeature: with twt', feature, ' rows:',
                 paste(collapse = ',',  rows)))
 
     feature = toDots(feature)   #### yikes!
     #print(toDots(feature))
     returnValue = as.numeric(data.frame(twt)[[feature]][rows])
-    if(verbose>0)
+    if(verbose>2)
       print(paste('getThisAreaFeature: with twt', feature, ' rows:',
                 paste(collapse = ',',  rows),
                 '  returnValue: ', paste(collapse = ',', returnValue)
