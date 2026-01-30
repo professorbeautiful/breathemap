@@ -1,3 +1,6 @@
+breatheGreen = '#7E0023';   # dark red!
+referenceColor = breatheGreen;
+referenceColorStyle = paste0('color:', referenceColor)
 breatheLabelColoring = 'background-color:#75C443; color:white'
 leftSideButtonStyle = breatheLabelColoring
 rightSideButtonStyle = paste(breatheLabelColoring,

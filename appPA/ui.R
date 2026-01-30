@@ -16,6 +16,7 @@ fluidPage({
               #uiOutput('JSstopPopups'),
               tags$style(".popover{max-width: 100%; font-size:10px; color:blue}"),
               # style tags used throughout app
+
               tags$style(type="text/css",
                          "a{
                             color:#8a100b;
@@ -148,8 +149,8 @@ fluidPage({
                               # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
                        )
                      ),
-                     uiOutput('IdUiForReferenceCommunity'),
-                     div(style=breatheLabelColoring,
+                     fluidRow(column(offset=1, 11, uiOutput('IdUiForReferenceCommunity'))),
+                     div(style=paste(breatheLabelColoring, ';text-align:center'),
                          strong("Show information about this tract or community")),
                      div(style='text-align: center; margin:auto',
                           actionButton(style=rightSideButtonStyle,

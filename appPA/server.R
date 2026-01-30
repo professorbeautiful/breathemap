@@ -7,6 +7,8 @@ function(input, output, session) {
        condition='ctrlDpressed === true'
       )
   includeCSS('highlight.css')
+  includeCSS('buttons.css')
+
   if(file.exists('gitbranch.txt'))
     gitbranch = readLines('gitbranch.txt')
 
@@ -452,24 +454,19 @@ function(input, output, session) {
         input$areaSelectorId
     }
     div(
-    strong(style='color:red',
+    strong(class='reference',
            actionButton('IdMakeReferenceCommunity',
                         label =
-                          span(span(style='color:red', "Set"),
+                          span(span(style=referenceColorStyle, "Set"),
                                span(style='color:darkgreen',"currently selected"),
-                               span(style='color:red', "as reference community? (Red lozenge)"
+                               span(style=referenceColorStyle, "as reference community? (Red lozenge)"
                           ))
            )),
     br(),
-    fluidRow(  style='color:red',  column(3, strong( "Current reference:")),
+    fluidRow(  class='reference',  column(3, strong( "Current reference:")),
                         column(9, textOutput(outputId = 'IdReferenceCommunity')
                         ))
     )
-  # else return(
-  #     fluidRow(style='color:red',
-  #       column(6, strong("Current reference community", br(), strong("(red lozenge):"))),
-  #       column(6,   textOutput(outputId = 'IdReferenceCommunity')
-  #   )))
   })
 
   #### featureList  functions ####
@@ -564,7 +561,7 @@ function(input, output, session) {
     leafletProxy('map', session) %>%
       clearGroup("referenceTractGroup") %>%
       addPolygons(data=twt[tractNumber,], weight = 1,
-                  color="Red", fillColor="red",
+                  color=referenceColor, fillColor=referenceColor,
                   label= ~twt,
                   #layerId = ~twt,
                   fillOpacity = 1, group="referenceTractGroup")
@@ -584,6 +581,7 @@ function(input, output, session) {
                  {
                    print(paste('updating rV$featureToPlot: '))
                    rV$featureToPlot = feat
+                   shinyjs::addCssClass(thisId, class='buttonPressed')
                  }
            )
     )
@@ -750,7 +748,7 @@ function(input, output, session) {
       refValue = thisAreaFeatureSummary(applyTo = rV$REFERENCEdatarows)
       print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
-      points( refValue, 0, cex=2, col='red', pch='⬧', xpd=NA)
+      points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
     }
   })
 
