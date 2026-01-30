@@ -156,8 +156,8 @@ fluidPage({
                           actionButton(style=rightSideButtonStyle,
                                        'IdShowPM2.5',
                                        label=' PM2.5 avg in 2016'),
-                          actionButton(style=rightSideButtonStyle,
-                                       'IdShowPop', label='Total # of people'),
+                          # actionButton(style=rightSideButtonStyle,
+                          #              'IdShowPop', label='Total # of people'),
                           actionButton(style=rightSideButtonStyle,
                                        'IdShowCohort', label='# in the 2019 birth cohort')
                      )
