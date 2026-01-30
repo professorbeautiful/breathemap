@@ -92,7 +92,7 @@ function(input, output, session) {
       print(paste('clickATract: ', tractNumber))
     leafletProxy("map", session) %>%
       clearGroup("selectedTractGroup") %>%
-      addPolygons(data=twt[tractNumber,], weight = 1,
+      addPolygons(data=twt[tractNumber,], weight = 1,  #  twt has the geom data
                   color="Red", fillColor="darkgreen",
                   label= ~twt,
                   #layerId = ~twt,
@@ -321,7 +321,7 @@ function(input, output, session) {
     }
 
     rV$TARGETrownumbers = rownumbers
-    rV$TARGETdatarows = twt[rownumbers, ]
+    rV$TARGETdatarows = twt[rownumbers, ]  # must be twt not PAtowndata
     if(verbose>2)
       print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                 'dim rV$TARGETdatarows',
@@ -493,12 +493,12 @@ function(input, output, session) {
   }
 
   popIsZero = function()
-    which(twt[["Total Population (2019)"]] == 0)
+    which(twt[["Total Population (2019)"]] == 0)  ##  ok.
 
   thisAreaFeatureDistribution = function() {  ### ALL rows
-    distribution = twt[[rV$featureToPlot]]   ### values for all tracts
+    distribution = PAtowndata[[rV$featureToPlot]]   ### values for all tracts
     if(makeItARate() ) {
-      distribution = distribution * 1000 / twt[["Total Population (2019)"]]
+      distribution = distribution * 1000 / PAtowndata[["Total Population (2019)"]]
       distribution = distribution[ - c(378, 140, popIsZero() )  ]
       # 126 323 459 490 518 529 603 607 624
          ### Also 2 outliers, see 1/29 entries in  NOTES 2026-01-28
@@ -513,7 +513,7 @@ function(input, output, session) {
                                     applyTo= rV$TARGETrownumbers,
                                     verbose=T) {
     featureName = rV$featureToPlot
-    data = twt[[featureName]] [applyTo]
+    data = PAtowndata[[featureName]] [applyTo]
     if(verbose> 0){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
       ' applyTo',  paste(collapse=',', applyTo),
@@ -527,7 +527,7 @@ function(input, output, session) {
         return(feat.sum(data))  # uses safe.sum
     } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
-      return( data * 1000 / twt[["Total Population (2019)"]][applyTo])
+      return( data * 1000 / PAtowndata[["Total Population (2019)"]][applyTo])
 
     }
     else stop('ERROR in thisAreaFeatureSummary')
@@ -537,17 +537,17 @@ function(input, output, session) {
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    if(verbose>2)
+    if(verbose>0)
       print(paste('getThisAreaFeature:', input$idFeature, ' rows:',
                 paste(collapse = ',',  rows)) )
-    return(as.numeric(twt[rows, rV$featureToPlot]))
+    return(as.numeric(PAtowndata[rows, rV$featureToPlot]))
   }
 
   getThisAreaPopulation = function(rows=rV$TARGETrownumbers){
     ### we can call with rows=rV$referenceRow
     ### length of TARGETrownumbers
     ### NOT safe.sum  here.
-    return((as.numeric(twt[rows, "Total Population (2019)"])))
+    return((as.numeric(PAtowndata[rows, "Total Population (2019)"])))
   }
 
 
