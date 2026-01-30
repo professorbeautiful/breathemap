@@ -716,7 +716,7 @@ function(input, output, session) {
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowPop')]
   })
   observeEvent(input$`IdShowCohort`, {
-    # Population in 2019
+    # Birth Cohort in 2019
     print('changing rV$featureToPlot via IdShowCohort'   )
     rV$featureToPlot = infoListIds$var[which(infoListIds$id == 'IdShowCohort')]
   })
