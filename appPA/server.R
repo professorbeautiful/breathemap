@@ -472,16 +472,21 @@ function(input, output, session) {
   #feat.countsPer1000 presumes that feature is in counts of people.
   safe.sum = function(x) sum(as.numeric(x), na.rm=T)
   feat.countsPer1000 = function(rows=rV$TARGETrownumbers)
-    1000 * safe.sum(getThisAreaFeature(rows, rV$featureToPlot)) /
-    safe.sum(getThisAreaPopulation(rows))
+    1000 * safe.sum(getThisAreaFeature(rows=rows, rV$featureToPlot,
+                                       whoCalled='feat.countsPer1000')) /
+    safe.sum(getThisAreaPopulation(rows=rows))
 
   #feat.pop.weightedAverage presumes that feature is a rate.
   feat.pop.weightedAverage = function(rows=rV$TARGETrownumbers) { ## used only for PM2.5.
-    safe.sum(getThisAreaFeature(rows)*getThisAreaPopulation(rows)) /
-    safe.sum(getThisAreaPopulation(rows))
+    safe.sum(getThisAreaFeature(rows,whoCalled = 'feat.pop.weightedAverage')*
+               getThisAreaPopulation(rows)) /
+      safe.sum(getThisAreaPopulation(rows))
   }
-  feat.sum = function(rows=rV$TARGETrownumbers)
-    safe.sum(getThisAreaFeature(rows))
+  feat.sum = function(rows=rV$TARGETrownumbers){
+    print(paste('feat.sum: rows=' ,  rows))
+    print(sys.call())
+    safe.sum(getThisAreaFeature(rows, whoCalled='feat.sum'))
+  }
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
@@ -522,9 +527,9 @@ function(input, output, session) {
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
-      return(feat.sum(data))   # people;  babies; but not PM2.5
+      return(feat.sum())   # people;  babies; but not PM2.5
     if(input$IdTotalOrRate == '...total'){
-        return(feat.sum(data))  # uses safe.sum
+        return(feat.sum())  # uses safe.sum
     } else if(makeItARate()){
       print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       return( data * 1000 / data.frame(twt)[[toDots("Population in 2019")]][applyTo])
@@ -534,11 +539,13 @@ function(input, output, session) {
   }
 
 
-  getThisAreaFeature = function(rows=rV$TARGETrownumbers, feature=rV$featureToPlot){
+  getThisAreaFeature = function(rows=rV$TARGETrownumbers,
+                                feature=rV$featureToPlot,
+                                whoCalled='unknown'){
     ### total, not rate
     ### length of TARGETrownumbers
     # thisFeature = as.numeric(twt[[input$idFeature]])
-    print((traceback()))
+    print(paste('whoCalled: ', whoCalled))
     print(paste('getThisAreaFeature: with twt', feature, ' rows:',
                 paste(collapse = ',',  rows)))
 
