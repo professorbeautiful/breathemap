@@ -5,11 +5,17 @@
 
 
 #  git push --set-upstream origin BreatheMap
-gitbranchOutput =
-  print( grep(v=T, '^\\*', system("git branch -v",  intern = T) ) )
+
+gitbranch.txt = readLines('appPA/gitbranch.txt')
+
+gitbranch.txt =  print(paste( date(), '\n',
+                              grep(v=T, '^\\*', system("git branch -v",  intern = T) ),
+                              '\n', gitbranch.txt))
+
 write(file = 'appPA/gitbranch.txt',
-      grep(v=T, '^\\*', system("git branch -v",  intern = T) )
-)
+      gitbranch.txt )
+
+
 ### Read by server. We can use shinyDebuggingPanel to view it.
 
 # appName = 'appPA_deployApp'
