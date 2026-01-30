@@ -811,7 +811,7 @@ function(input, output, session) {
       pars = par()$usr  ### 0 1 0 1  for histogram!?
       outlierLabel = paste('#outliers➡\n',numberOfOutliers)
       print(paste(outlierLabel))
-      print(histReturn)
+      #print(histReturn)
       text.default(x = max(referenceDistribution), y = max(histReturn$counts), xpd=NA, adj=c(0,0),
                    labels = outlierLabel)
 
