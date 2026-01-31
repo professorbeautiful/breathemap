@@ -728,9 +728,9 @@ function(input, output, session) {
       f = 'All-cause deaths: avg Lepeule & Laden'
     if(f %in% infoList) return(f)
     print(paste('input$IdTotalOrRate', length(input$IdTotalOrRate)))
-    if(length(input$IdTotalOrRate) == 0)
+    if(is.na(input$IdTotalOrRate) | length(input$IdTotalOrRate) == 0)
       updateRadioButtons(session, 'IdTotalOrRate',
-                         selected = 1)
+                         selected = '...total')
     if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
