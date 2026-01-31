@@ -766,6 +766,7 @@ function(input, output, session) {
                )
 
   observeEvent(input$keys, {
+    ### great!  you can type in NA also.  Instant response.
     switch (input$keys, 'O' =
               showModal(modalDialog(
                 numericInput(inputId = 'IdQuantile',
