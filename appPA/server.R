@@ -759,7 +759,8 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  rV$removeOutliersQuantile = NA
+  rV$removeOutliersQuantile = 0.999
+
 
   theOutliers = function(x, quantile =  rV$removeOutliersQuantile) {
     print(paste('call to theOutliers: rV$removeOutliersQuantile=',
@@ -834,10 +835,17 @@ function(input, output, session) {
 
     if(numberOfOutliers > 0 ) {
       pars = par()$usr  ### 0 1 0 1  for histogram!?
-      outlierLabel = paste('#outliers➡\n',numberOfOutliers)
+      nToShow = 4
+      biggestOutliers = sort(outliers, decreasing = T)
+      if(length(biggestOutliers) > nToShow)
+        biggestOutliers = c(biggestOutliers[1:nToShow], '...')
+      outlierLabel = paste0('#outliers\n',numberOfOutliers, '  ➡\n',
+                           paste(biggestOutliers, collapse='\n'
+                             ))
       print(paste(outlierLabel))
       #print(histReturn)
-      text.default(x = max(referenceDistribution), y = max(histReturn$counts), xpd=NA, adj=c(0,0),
+      text.default(x = max(referenceDistribution), y = max(histReturn$counts),
+                   xpd=NA, adj=c(0,0.5),
                    labels = outlierLabel)
 
     }
