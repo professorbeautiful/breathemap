@@ -761,6 +761,19 @@ function(input, output, session) {
 
   rV$removeOutliersQuantile = 0.999
 
+  observeEvent(input$IdQuantile,handlerExpr = {
+               rV$removeOutliersQuantile = input$IdQuantile}
+               )
+
+  observeEvent(input$keys, {
+    switch (input$keys, 'O' =
+              showModal(modalDialog(
+                numericInput(inputId = 'IdQuantile',
+                             label='outlier quantile (e.g. NA, 0.99, 0.999...',
+                value = rV$removeOutliersQuantile
+              )))
+    )
+  })
 
   theOutliers = function(x, quantile =  rV$removeOutliersQuantile) {
     print(paste('call to theOutliers: rV$removeOutliersQuantile=',

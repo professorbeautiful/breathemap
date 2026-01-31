@@ -3,9 +3,11 @@ source('coloring.R')
 # margin and height do not help.
 #breatheLabelColoring = 'background-color:green; color:white'
 
-fluidPage({
-
-  mainPanel(width = 12,
+fluidPage(
+  useKeys(),
+  keysInput("keys", c("O")),
+  {
+    mainPanel(width = 12,
             # tags$head(
             #   tags$style(HTML(css.radio))
             # ),
