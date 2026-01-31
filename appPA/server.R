@@ -465,7 +465,7 @@ function(input, output, session) {
                                  ))
              )),
       br(),
-      fluidRow(  class='reference',  column(3, strong( "Current reference:")),
+      fluidRow( style=referenceColorStyle,  class='reference',  column(3, strong( "Current reference:")),
                  column(9, textOutput(outputId = 'IdReferenceCommunity')
                  ))
     )
