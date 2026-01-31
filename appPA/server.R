@@ -521,6 +521,8 @@ function(input, output, session) {
     return(distribution)
   }
 
+  # total.communities()
+
   thisAreaFeatureList = function(var = rV$featureToPlot,
                                     applyTo= rV$TARGETrownumbers,
                                     verbose=T) {
@@ -723,6 +725,8 @@ function(input, output, session) {
 
 
   output$proportion_smaller <- renderUI({
+    if(  total.communities()  & length(thisAreaFeatureList() > 1) )
+      return('') #### proportion_smaller would not make sense
     howManyLess = try({
       thisAreaFeatureDistribution() < thisAreaFeatureSummary()
     })
@@ -802,13 +806,14 @@ function(input, output, session) {
     which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
   }
 
+  total.communities = reactive((input$IdTotalOrRate == '...total')
+           & (input$Id_ToggleTownTract == 'communities'))
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
 
-    if( (input$IdTotalOrRate == '...total')
-       & (input$Id_ToggleTownTract == 'communities')) {
-      thisAreaFeature = thisAreaFeatureSummary()      ### TODO
+    if( total.communities()) {
+      thisAreaFeature = thisAreaFeatureList()
     }  #### display all individual towns in this area
 
     else   #### for rates or tracts, just the one.
