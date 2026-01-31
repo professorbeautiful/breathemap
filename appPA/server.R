@@ -521,16 +521,31 @@ function(input, output, session) {
     return(distribution)
   }
 
-  thisAreaFeatureSummary = function(var = rV$featureToPlot,
+  thisAreaFeatureList = function(var = rV$featureToPlot,
                                     applyTo= rV$TARGETrownumbers,
                                     verbose=T) {
     featureName = toDots(rV$featureToPlot)
     data = data.frame(twt)[[featureName]] [applyTo]
+    if(makeItARate()){
+      if(verbose>1)
+        print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
+      pops = data.frame(twt)[[toDots("Population in 2019")]][applyTo]
+
+      data = ( 1000 * (data) / (pops) )
+      data = data[ - popIsZero()]
+    }
     if(verbose> 2){
       print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
                   ' applyTo',  paste(collapse=',', applyTo),
                   'var: ', var, ' data: ', paste(data, collapse=',')))
     }
+    return(data)
+  }
+  thisAreaFeatureSummary = function(var = rV$featureToPlot,
+                                 applyTo= rV$TARGETrownumbers,
+                                 verbose=T) {
+    #### Combines the numbers from thisAreaFeatureList into a single number.
+    data = thisAreaFeatureList(var, applyTo, verbose)
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
@@ -541,8 +556,11 @@ function(input, output, session) {
       if(verbose>1)
         print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       pops = data.frame(twt)[[toDots("Population in 2019")]][applyTo]
-
-      return( 1000 * safe.sum(data) / safe.sum(pops) )
+      pops =  pops [- popIsZero()]
+      # data are already rates per 1000,
+      #  and pops is already cleaned in thisAreaFeatureList, so...
+      #  return( safe.sum(data * pops) / safe.sum(pops) )
+      return( (data * pops) / (pops) )
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
