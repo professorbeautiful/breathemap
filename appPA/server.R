@@ -834,30 +834,34 @@ function(input, output, session) {
     if(!is.na(rV$removeOutliersQuantile) ) {
       outlierRows = theOutlierRows(referenceDistribution,
                              rV$removeOutliersQuantile)
-      print(paste('initial outlier rows ', paste(collapse=',', outlierRows)))
+      if(verbose>1)
+        print(paste('initial outlier rows ', paste(collapse=',', outlierRows)))
       outliers = referenceDistribution[outlierRows]
-      print(paste('initial outliers ',
+      if(verbose>1)
+        print(paste('initial outliers ',
                   paste(collapse=',',
                         signif(digits=3, outliers))) )
       rowsToDrop = which(outliers < max(thisAreaFeature, na.rm=T) )
         # These outliers are too small!
         ### thisAreaFeature should appear on the plot, so drop smaller ones.
-      print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
+      if(verbose>1)
+        print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
                   'Removing these outliers if any',
                   outliers[rowsToDrop]))
 
       if(length(rowsToDrop) > 0) {
         outliers = outliers[-rowsToDrop]   ## take out the ones too small.
       }
-      print(paste('intersection:',
-                  paste(collapse=',',
-                        intersect(referenceDistribution, outliers))))
+      # print(paste('intersection:',
+      #             paste(collapse=',',
+      #                   intersect(referenceDistribution, outliers))))
       referenceDistribution = setdiff(referenceDistribution, outliers)
-      print(paste('final outliers ', paste(collapse=', ',
+      if(verbose>1)
+        print(paste('final outliers ', paste(collapse=', ',
                                            signif(digits=3,outliers))))
     }
-    print('after:')
-    print(summary(referenceDistribution))
+    if(verbose>0)print('after:')
+    if(verbose>0)print(summary(referenceDistribution))
 
     xlab = decorateFeatureName()
 
