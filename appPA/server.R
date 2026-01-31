@@ -763,26 +763,38 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  removeOutliers = function(x, quantile = 0.995) {
-    x [ pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) < quantile]
+  theOutliers = function(x, quantile = 0.999) {
+    which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) < quantile)
   }
 
+  rV$removeOutliersYesNo = 'yes'
+
+  #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
+
+    if(input$IdTotalOrRate == '...total'
+       & input$Id_ToggleTownTract == 'communities') {
+      thisAreaFeature = thisAreaFeatureSummary()
+    }  #### display all individual towns in this area
+    else   #### for rates or tracts, just the one.
+      thisAreaFeature = thisAreaFeatureSummary()
 
     referenceDistribution = thisAreaFeatureDistribution()
       #as.numeric(twt[[(rV$featureToPlot)]])
     print(paste('featurePlot:', 'referenceDistribution:'))
     print('before:')
     print(summary(referenceDistribution))
-    referenceDistribution = removeOutliers(referenceDistribution)
-    print('after:')
-    print(summary(referenceDistribution))
+    if(rV$removeOutliersYesNo == 'yes') {
+      outliers = theOutliers(referenceDistribution)
+      outliers = outliers[outliers > max(thisAreaFeature, na.rm=T)]
+      referenceDistribution = referenceDistribution[-outliers]
+      print('after:')
+      print(outliers)
+      print(summary(referenceDistribution))
 
-    numberOfOutliers = nrow(twt) - length(referenceDistribution)
-    print(paste("# outliers = ", numberOfOutliers) )
-
-    thisAreaFeature = thisAreaFeatureSummary()
-
+      numberOfOutliers = nrow(twt) - length(referenceDistribution)
+      print(paste("# outliers hidden = ", numberOfOutliers) )
+    }
     xlab = decorateFeatureName()
     histReturn = hist(referenceDistribution,
          xlab=xlab, ylab = 'number of census tracts',
@@ -790,12 +802,14 @@ function(input, output, session) {
          cex.lab=1.5)
     abline(v=thisAreaFeature,
            lwd=3, col='darkgreen')
-    arrows(x0 = thisAreaFeature, y0 = 0,
-           x1 = thisAreaFeature, y1= par('usr')[4]*1.2, xpd=NA,
-           col='darkgreen', lwd=3)
-    text(x = thisAreaFeature, y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
-         label = signif(digits=3, thisAreaFeature),
-         col='darkgreen', cex=1.5)
+    for(feature in thisAreaFeature) {
+      arrows(x0 = feature, y0 = 0,
+             x1 = feature, y1= par('usr')[4]*1.2, xpd=NA,
+             col='darkgreen', lwd=3)
+      text(x = feature, y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+           label = signif(digits=3, feature),
+           col='darkgreen', cex=1.5)
+    }
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
