@@ -513,15 +513,11 @@ function(input, output, session) {
                             function(row)
                               feat.countsPer1000(row)
       )
+      # you can't have a rate with no population.
+      distribution = distribution[ - popIsZero()  ]
+
+      # 126 323 459 490 518 529 603 607 624
     }
-
-    distribution = distribution[ - c(popIsZero() )  ]
-    # 126 323 459 490 518 529 603 607 624
-    ### Also 2 outliers?  ignore outliers for now, see 1/29 entries in  NOTES 2026-01-28
-
-
-    # if(! length(distribution) == nrow(twt))
-    #   stop("error in thisAreaFeatureDistribution")
     return(distribution)
   }
 
