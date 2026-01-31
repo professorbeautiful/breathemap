@@ -759,38 +759,49 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  theOutliers = function(x, quantile = 0.999) {
-    which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) < quantile)
+  rV$removeOutliersQuantile = NA
+
+  theOutliers = function(x, quantile =  rV$removeOutliersQuantile) {
+    print(paste('call to theOutliers: rV$removeOutliersQuantile=',
+                rV$removeOutliersQuantile))
+    if(is.na(rV$removeOutliersQuantile))
+      stop('rV$removeOutliersQuantile should not be NA')
+    which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
   }
 
-  rV$removeOutliersYesNo = 'yes'
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
 
-    if(input$IdTotalOrRate == '...total'
-       & input$Id_ToggleTownTract == 'communities') {
-      thisAreaFeature = thisAreaFeatureSummary()
+    if( (input$IdTotalOrRate == '...total')
+       & (input$Id_ToggleTownTract == 'communities')) {
+      thisAreaFeature = thisAreaFeatureSummary()      ### TODO
     }  #### display all individual towns in this area
+
     else   #### for rates or tracts, just the one.
       thisAreaFeature = thisAreaFeatureSummary()
 
     referenceDistribution = thisAreaFeatureDistribution()
-      #as.numeric(twt[[(rV$featureToPlot)]])
+    initialreferenceDistribution = referenceDistribution
+    #as.numeric(twt[[(rV$featureToPlot)]])
     print(paste('featurePlot:', 'referenceDistribution:'))
     print('before:')
     print(summary(referenceDistribution))
-    if(rV$removeOutliersYesNo == 'yes') {
-      outliers = theOutliers(referenceDistribution)
-      outliers = outliers[outliers > max(thisAreaFeature, na.rm=T)]
-      referenceDistribution = referenceDistribution[-outliers]
-      print('after:')
-      print(outliers)
-      print(summary(referenceDistribution))
-
-      numberOfOutliers = nrow(twt) - length(referenceDistribution)
-      print(paste("# outliers hidden = ", numberOfOutliers) )
+    if(!is.na(rV$removeOutliersQuantile) ) {
+      outliers = theOutliers(referenceDistribution,
+                             rV$removeOutliersQuantile)
+      print(paste('initial outliers ', paste(collapse=',', outliers)))
+      toKeep = which(outliers > max(thisAreaFeature, na.rm=T) )
+      print(paste('toKeep ', paste(collapse=',', toKeep)))
+      if(length(toKeep) > 0) {   ### thisAreaFeature should be on plot.
+        outliers = outliers[toKeep]
+        referenceDistribution = referenceDistribution[-outliers]
+      }
+      print(paste('final outliers ', paste(collapse=',', outliers)))
     }
+    print('after:')
+    print(summary(referenceDistribution))
+
     xlab = decorateFeatureName()
     histReturn = hist(referenceDistribution,
          xlab=xlab, ylab = 'number of census tracts',
@@ -817,6 +828,10 @@ function(input, output, session) {
       ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
     }
+    numberOfOutliers = length(initialreferenceDistribution) -
+      length(referenceDistribution)
+    print(paste("# outliers hidden = ", numberOfOutliers) )
+
     if(numberOfOutliers > 0 ) {
       pars = par()$usr  ### 0 1 0 1  for histogram!?
       outlierLabel = paste('#outliers➡\n',numberOfOutliers)
