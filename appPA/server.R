@@ -812,6 +812,12 @@ function(input, output, session) {
     return(outlierRows)
   }
 
+  printpaste = function(intro, ..., ppverbose=1, ppcollapse=', ') {
+    if(verbose>ppverbose)
+      print(paste(intro, paste(collapse=ppcollapse, ...)))
+  }
+
+
   total.communities = reactive((input$IdTotalOrRate == '...total')
            & (input$Id_ToggleTownTract == 'communities'))
 
