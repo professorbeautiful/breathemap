@@ -537,7 +537,7 @@ function(input, output, session) {
       data = data[ - popIsZero()]
     }
     if(verbose> 2){
-      print(paste('thisAreaFeatureSummary:  ', input$IdTotalOrRate,
+      print(paste('thisAreaFeatureList:  ', input$IdTotalOrRate,
                   ' applyTo',  paste(collapse=',', applyTo),
                   'var: ', var, ' data: ', paste(data, collapse=',')))
     }
@@ -562,7 +562,7 @@ function(input, output, session) {
       # data are already rates per 1000,
       #  and pops is already cleaned in thisAreaFeatureList, so...
       #  return( safe.sum(data * pops) / safe.sum(pops) )
-      return( (data * pops) / (pops) )
+      return( sum(data * pops) / sum(pops) )
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
@@ -726,7 +726,8 @@ function(input, output, session) {
 
   output$proportion_smaller <- renderUI({
     if(  total.communities()  & length(thisAreaFeatureList() > 1) )
-      return('') #### proportion_smaller would not make sense
+      return('proportion_smaller would not make sense ')
+    #### proportion_smaller would not make sense
     howManyLess = try({
       thisAreaFeatureDistribution() < thisAreaFeatureSummary()
     })
@@ -749,7 +750,8 @@ function(input, output, session) {
     if(f=='All-cause deaths')
       f = 'All-cause deaths: avg Lepeule & Laden'
     if(f %in% infoList) return(f)
-    print(paste('input$IdTotalOrRate', length(input$IdTotalOrRate)))
+    if(verbose > 1)
+      print(paste('input$IdTotalOrRate', length(input$IdTotalOrRate)))
     if(is.na(input$IdTotalOrRate) | length(input$IdTotalOrRate) == 0)
       updateRadioButtons(session, 'IdTotalOrRate',
                          selected = '...total')
@@ -784,7 +786,7 @@ function(input, output, session) {
   rV$removeOutliersQuantile = 0.999
 
   observeEvent(input$IdQuantile,handlerExpr = {
-               rV$removeOutliersQuantile = input$IdQuantile}
+               rV$removeOutliersQuantile = eval(input$IdQuantile) }
                )
 
   observeEvent(input$keys, {
@@ -798,12 +800,16 @@ function(input, output, session) {
     )
   })
 
-  theOutliers = function(x, quantile =  rV$removeOutliersQuantile) {
-    print(paste('call to theOutliers: rV$removeOutliersQuantile=',
+  theOutlierRows = function(x, quantile =  rV$removeOutliersQuantile) {
+    print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
                 rV$removeOutliersQuantile))
     if(is.na(rV$removeOutliersQuantile))
       stop('rV$removeOutliersQuantile should not be NA')
-    which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
+    outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
+    print(paste('outlierRows: ', paste(collapse = ',', outlierRows)))
+    print(paste('outlierValues: ', paste(collapse = ',',
+                                         signif(digits=3, x[outlierRows]))))
+    return(outlierRows)
   }
 
   total.communities = reactive((input$IdTotalOrRate == '...total')
@@ -822,32 +828,49 @@ function(input, output, session) {
     referenceDistribution = thisAreaFeatureDistribution()
     initialreferenceDistribution = referenceDistribution
     #as.numeric(twt[[(rV$featureToPlot)]])
-    print(paste('featurePlot:', 'referenceDistribution:'))
+    print(paste('featurePlot: referenceDistribution:'))
     print('before:')
     print(summary(referenceDistribution))
     if(!is.na(rV$removeOutliersQuantile) ) {
-      outliers = theOutliers(referenceDistribution,
+      outlierRows = theOutlierRows(referenceDistribution,
                              rV$removeOutliersQuantile)
-      print(paste('initial outliers ', paste(collapse=',', outliers)))
-      toKeep = which(outliers > max(thisAreaFeature, na.rm=T) )
-      print(paste('toKeep ', paste(collapse=',', toKeep)))
-      if(length(toKeep) > 0) {   ### thisAreaFeature should be on plot.
-        outliers = outliers[toKeep]
-        referenceDistribution = referenceDistribution[-outliers]
+      print(paste('initial outlier rows ', paste(collapse=',', outlierRows)))
+      outliers = referenceDistribution[outlierRows]
+      print(paste('initial outliers ',
+                  paste(collapse=',',
+                        signif(digits=3, outliers))) )
+      rowsToDrop = which(outliers < max(thisAreaFeature, na.rm=T) )
+        # These outliers are too small!
+        ### thisAreaFeature should appear on the plot, so drop smaller ones.
+      print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
+                  'Removing these outliers if any',
+                  outliers[rowsToDrop]))
+
+      if(length(rowsToDrop) > 0) {
+        outliers = outliers[-rowsToDrop]   ## take out the ones too small.
       }
-      print(paste('final outliers ', paste(collapse=',', outliers)))
+      print(paste('intersection:',
+                  paste(collapse=',',
+                        intersect(referenceDistribution, outliers))))
+      referenceDistribution = setdiff(referenceDistribution, outliers)
+      print(paste('final outliers ', paste(collapse=', ',
+                                           signif(digits=3,outliers))))
     }
     print('after:')
     print(summary(referenceDistribution))
 
     xlab = decorateFeatureName()
+
+    #### histogram ####
     histReturn = hist(referenceDistribution,
          xlab=xlab, ylab = 'number of census tracts',
          main = '',
          cex.lab=1.5)
-    abline(v=thisAreaFeature,
-           lwd=3, col='darkgreen')
     for(feature in thisAreaFeature) {
+      #### arrows ####
+      print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
+      abline(v=thisAreaFeature,
+             lwd=3, col='darkgreen')
       arrows(x0 = feature, y0 = 0,
              x1 = feature, y1= par('usr')[4]*1.2, xpd=NA,
              col='darkgreen', lwd=3)
@@ -866,17 +889,18 @@ function(input, output, session) {
       ### thisAreaFeatureSummary accommodates makeItARate()
       points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
     }
-    numberOfOutliers = length(initialreferenceDistribution) -
-      length(referenceDistribution)
-    print(paste("# outliers hidden = ", numberOfOutliers) )
 
-    if(numberOfOutliers > 0 ) {
-      pars = par()$usr  ### 0 1 0 1  for histogram!?
+    if(length(outliers) > 0 ) {  #### prepare table of outliers ####
+      pars = par()$usr  ### 0 1 0 1  for histogram!?  Not useful.
       nToShow = 4
       biggestOutliers = sort(outliers, decreasing = T)
-      if(length(biggestOutliers) > nToShow)
-        biggestOutliers = c(biggestOutliers[1:nToShow], '...')
-      outlierLabel = paste0('#outliers\n',numberOfOutliers, '  ➡\n',
+      biggestOutliers = as.character(
+        signif(digits=3,
+               biggestOutliers[1:min(length(outliers),nToShow)] ))
+      if(length(outliers) > nToShow)
+        biggestOutliers = c(biggestOutliers, '...')
+
+      outlierLabel = paste0('#outliers\n  = ', length(outliers), '  ➡\n',
                            paste(biggestOutliers, collapse='\n'
                              ))
       print(paste(outlierLabel))
