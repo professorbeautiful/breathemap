@@ -9,9 +9,9 @@ install.packages("googlesheets4")
 library("googlesheets4")
 
 # reading the sheet data
-sheet_data <-read_sheet(    ##### doesn't work... Client error: (400) FAILED_PRECONDITION?
-  'https://docs.google.com/spreadsheets/d/1NGwXkJ2TH_sP_O1dwT2Hx1jrawxGWhL0/edit?gid=1240450136#gid=1240450136'
-)
+# sheet_data <-read_sheet(    ##### doesn't work... Client error: (400) FAILED_PRECONDITION?
+#   'https://docs.google.com/spreadsheets/d/1NGwXkJ2TH_sP_O1dwT2Hx1jrawxGWhL0/edit?gid=1240450136#gid=1240450136'
+# )
 
 
 ellaAllBirths.xl = readxl::read_excel(
@@ -27,23 +27,30 @@ head(ellaAllBirths)
 ellaAllBirths$tract = as.character(ellaAllBirths$tract)
 head(ellaAllBirths)
 ellaAllBirths$tract = substr(ellaAllBirths$tract, 6,13)
+head(ellaAllBirths)
+
+
 source('appPA/countymap.R')
 ellaBirths.SW = ellaAllBirths[ellaAllBirths$County %in% countymap$county, ]  ##ok.
 ellaBirths.SW$countynum = countymap$COUNTYFP[match(ellaBirths.SW$County,countymap$county)]
 head(ellaBirths.SW)
 table(ellaBirths.SW$County, ellaBirths.SW$countynum)
 table(ellaBirths.SW$County)
+ellaBirths.SW$tract = paste0('42', ellaBirths.SW$countynum, ellaBirths.SW$tract)
+head(ellaBirths.SW)
 
-which(ellaBirths.SW$Tract=='')  #none!
+#### ok is ready to be used.
 
-install.packages('xlsx')  #This package depends on Java and the rJava package
+which(ellaBirths.SW$tract=='')  #none!
+
+#### this is for the small table ####
+library('xlsx')  #This package depends on Java and the rJava package
 ellaIQ = readxl::read_excel(path = 'IQ Loss in the 2019 Pittsburgh MSA Birth Cohort.xlsx', sheet=1, skip =2, col_names = T)
 
 countyBirthComparison = cbind(table(ellaBirths.SW$County), ellaIQ$`Live Births`[1:8])
 names(countyBirthComparison) =
   c('ellaBirths.SW','ellaIQ')
 #' Armstrong and Fayette and Westmoreland are way off???
-
 
 ### compare ellaBirths.SW with census?
 census.allegheny = read.csv('Census Data ACSST5Y2020.S0101_2026-01-24T130140/ACSST5Y2020.S0101-Data.csv', header=T, skip = 1)
@@ -60,10 +67,6 @@ dim(census.allegheny)   # only 394 tracts.  that's just allegheny.  so ok.
 head(census.allegheny)  # tract has '42'
 
 source('appPA/setcompare.R')
-head(ellaBirths.SW)
-ellaBirths.SW$tract = paste0('42', ellaBirths.SW$countynum, ellaBirths.SW$tract)
-head(ellaBirths.SW)
-
 
 setcompare(ellaBirths.SW$tract, census.allegheny$tract)
 # 351 tracts overlap
@@ -89,38 +92,79 @@ title("Allegheny County")
 mtext('correlation = 0.67', side=3)
 abline(0,1)
 
+  birthsComparison = merge(birthsComparison, data.frame(tract=
+  patowndata3$GEOID, pop=patowndata3$`Population in 2019`))
+
+
+plot(birthsComparison$pop, birthsComparison$oneFifth)
+cor(birthsComparison$pop, birthsComparison$oneFifth)
+GGally::ggpairs(data.frame(
+ pop=birthsComparison$pop, oneFifth=birthsComparison$oneFifth,
+ ellaCounts=birthsComparison$ellaCounts.Freq)
+)
+
+plot(birthsComparison$pop, birthsComparison$ellaCounts.Freq)
+
+plot(twt.df$Population.in.2019[twt.df$county.tracts == '003'],
+     twt.df$Births.in.2019[twt.df$county.tracts == '003']
+     )
+#### bad!
+plot(twt.df$Population.in.2019[twt.df$county.tracts != '003'],
+     twt.df$Births.in.2019[twt.df$county.tracts != '003']
+)
+#### also bad!
+
+
+#### Did we pull in ellaCounts correctly?
+Allegheny = which(twt.df$county.tracts == '003')
+from.twt =   data.frame(tract=twt.df$tracts[Allegheny],
+                        pop=twt.df$Population.in.2019[Allegheny],
+                        twtBirths=twt.df$Births.in.2019[Allegheny])
+comparison.w.twt = merge(from.twt,  birthsComparison)
+####  aha!  I must have messed up reading in births to twt.
+
+names(comparison.w.twt)
+head(comparison.w.twt)
+plot(comparison.w.twt$twtBirths, comparison.w.twt$ellaCounts.Freq)
+
+plot(twt.df$Population.in.2019, twt.df$Births.in.2019, col=twt.df$county.tracts)
+
+
+
 # For all 8 counties:
 # https://data.census.gov/table?g=050XX00US42003,42005,42005$1400000,42007,42019,42051,42073,42125,42129
 
 
 ###   We will use
-twt$births = ellaBirths.SW.counts$ellaCounts.Freq[
-  match(twt$tracts, ellaBirths.SW.counts$tract)]
-sum(is.na(twt$births)) #   16 are missingm we presume no births.
-twt$births [is.na(twt$births)]  = 0
 
-cohort.births.previous  = twt$births
-cohort.iq.lost = twt$`PM2.5 average` * twt$births * 0.27  ## sum
-cohort.earnings.lost = twt$`PM2.5 average` * twt$births * mean(10.6,13.1)
+births.for.twt = ellaBirths.SW.counts$ellaCounts.Freq[
+  match(twt$tracts, ### note tracts is PLURAL
+        ellaBirths.SW.counts$tract)]
+tracts.for.twt = ellaBirths.SW.counts$tract[
+  match(twt$tracts, ### note tracts is PLURAL
+        ellaBirths.SW.counts$tract)]
+sum(tracts.for.twt==twt$tracts, na.rm=T)  ## 723.  So 16 no match?
+setcompare(ellaBirths.SW.counts$tract, twt$tracts)
+## ella has 120 extra tracts.  twt has 16 extra.
+sum(is.na(births.for.twt))  #16
+births.for.twt[is.na(births.for.twt)] = 0
+
+cohort.births = births.for.twt
+plot(twt$`Population in 2019`, cohort.births)
 
 save(cohort.births, file = 'cohort.births.Rd')
+cohort.iq.lost = twt$`PM2.5 average` * twt$births.for.twt * 0.27  ## sum
+cohort.earnings.lost = twt$`PM2.5 average` * twt$births.for.twt * mean(10.6,13.1)
 save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
 save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
+#### check hard links  OK,
+#  We are done!
 
-#######  new census file for 8 counties
-
-
-
-
+##############################
 
 
+#######  new census file for 8 counties?
 
-
-
-
-
-#### where did cohort.births come from?.  yet another table?
-plot(cohort.births, twt$births)
 births.by.county = sapply(split(cohort.births, twt$county.tracts), sum)
 names(births.by.county) = countymap$county[ match(names(births.by.county), countymap$COUNTYFP)]
 as.data.frame(births.by.county)
