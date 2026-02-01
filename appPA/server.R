@@ -551,9 +551,9 @@ function(input, output, session) {
     if(var %in% "PM2.5 average")
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
-      return(feat.sum())   # people;  babies; but not PM2.5
+      return(feat.sum(rows = applyTo))   # people;  babies; but not PM2.5
     if(input$IdTotalOrRate == '...total'){
-      return(feat.sum())  # uses safe.sum
+      return(feat.sum(rows = applyTo))  # uses safe.sum
     } else if(makeItARate()){
       if(verbose>1)
         print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
