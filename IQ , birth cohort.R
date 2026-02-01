@@ -89,13 +89,17 @@ title("Allegheny County")
 mtext('correlation = 0.67', side=3)
 abline(0,1)
 
+# For all 8 counties:
+# https://data.census.gov/table?g=050XX00US42003,42005,42005$1400000,42007,42019,42051,42073,42125,42129
+
+
 ###   We will use
 twt$births = ellaBirths.SW.counts$ellaCounts.Freq[
   match(twt$tracts, ellaBirths.SW.counts$tract)]
 sum(is.na(twt$births)) #   16 are missingm we presume no births.
 twt$births [is.na(twt$births)]  = 0
 
-cohort.births  = twt$births
+cohort.births.previous  = twt$births
 cohort.iq.lost = twt$`PM2.5 average` * twt$births * 0.27  ## sum
 cohort.earnings.lost = twt$`PM2.5 average` * twt$births * mean(10.6,13.1)
 
@@ -103,10 +107,24 @@ save(cohort.births, file = 'cohort.births.Rd')
 save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
 save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
 
+#######  new census file for 8 counties
+
+
+
+
+
+
+
+
+
+
+
+#### where did cohort.births come from?.  yet another table?
+plot(cohort.births, twt$births)
 births.by.county = sapply(split(cohort.births, twt$county.tracts), sum)
 names(births.by.county) = countymap$county[ match(names(births.by.county), countymap$COUNTYFP)]
 as.data.frame(births.by.county)
-# tabulated from ohort.by.tract$births[match(twt$tracts, cohort.by.tract$tract)]
+# tabulated from cohort.by.tract$births[match(twt$tracts, cohort.by.tract$tract)]
 # See also 2019-counties-tracts - Pennsylvania_Birth_2019.csv.csv,
 # Allegheny               12718
 # Armstrong                 569
