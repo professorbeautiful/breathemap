@@ -847,8 +847,8 @@ function(input, output, session) {
         print(paste('initial outliers ',
                   paste(collapse=',',
                         signif(digits=3, outliers))) )
-      rowsToDrop = which(outliers < max(thisAreaFeature, na.rm=T) )
-        # These outliers are too small!
+      rowsToDrop = which(outliers <= max(thisAreaFeature, na.rm=T) )
+        # These outliers are smaller than thisAreaFeature !
         ### thisAreaFeature should appear on the plot, so drop smaller ones.
       if(verbose>1)
         print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
