@@ -82,7 +82,7 @@ fluidPage(
                                            selectInput("areaSelectorId", 'Communities and Census Tracts',
                                                        twt$areaField,
                                                        selected = twt$areaField[1])))),
-                       column(4,
+                       column(3,
 
                               div(style=breatheLabelColoring,
                                   popify(title='Areas shown:',
@@ -98,12 +98,14 @@ fluidPage(
                                                       selected='twt')
                                   )
                               )),
-                       column(3,
+                       column(4,
                               div(style=breatheLabelColoring,
                                   popify(title='Pittsburgh Neighborhood toggle',
                                          content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
-                                         checkboxInput('IdNbhds', 'See each Pgh nbhd?'
+                                         checkboxInput('IdNbhds',
+                                                       'City of Pittsburgh Neighborhoods'
+                                                       #'See each Pgh nbhd?'
                                                        ,value = TRUE)
                                   ),
                                   popify(title='Selecting one community in a tract:',
@@ -112,7 +114,9 @@ fluidPage(
                                                HTML('With "Community shares?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community shares?" = NO<br>   ____ show ONLY tracts where this is the only community.'
                                                )),
                                          checkboxInput("Id_townSharesCheckbox",
-                                                       "Community shares?",value = TRUE)
+                                                       'Community Overlaps'
+                                                       #"Community shares?"
+                                                       ,value = TRUE)
                                   )
                               ))
                      ),
