@@ -140,6 +140,8 @@ twt$twtSaved = twt$twt
 which___ = (grep('___', twt$areaField))   ### 1 to 15
 twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
 twt.df = data.frame(twt)   ### remove the sf class.
+twt.df <<- data.frame(twt)
+twt.df <<- twt.df[ which(names(twt.df) != 'geometry')]
 
 #st_crs(twt) <- "WGS84"
 twt = st_transform(twt, "WGS84")

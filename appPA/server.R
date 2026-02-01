@@ -431,7 +431,7 @@ function(input, output, session) {
   output$downloadData <- downloadHandler(
     filename = "Air-Pollution-PA.csv",
     content = function(file) {
-      write.csv(twt, file)
+      write.csv(twt.df, file)
     }
   )
 
@@ -880,7 +880,7 @@ function(input, output, session) {
       #### arrows ####
       print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
       abline(v=thisAreaFeature,
-             lwd=3, col='darkgreen')
+             lwd=3, col='darkgreen', xpd=NA)
       arrows(x0 = feature, y0 = 0,
              x1 = feature, y1= par('usr')[4]*1.2, xpd=NA,
              col='darkgreen', lwd=3)
