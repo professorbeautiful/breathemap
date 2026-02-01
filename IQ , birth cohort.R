@@ -153,8 +153,8 @@ cohort.births = births.for.twt
 plot(twt$`Population in 2019`, cohort.births)
 
 save(cohort.births, file = 'cohort.births.Rd')
-cohort.iq.lost = twt$`PM2.5 average` * twt$births.for.twt * 0.27  ## sum
-cohort.earnings.lost = twt$`PM2.5 average` * twt$births.for.twt * mean(10.6,13.1)
+cohort.iq.lost = twt$`PM2.5 average` * births.for.twt * 0.27  ## sum
+cohort.earnings.lost = twt$`PM2.5 average` * births.for.twt * mean(10.6,13.1)
 save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
 save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
 #### check hard links  OK,
