@@ -134,7 +134,7 @@ fluidPage(
                                              style=leftSideButtonStyle)
                        )
                      ) #fluidRow
-              ), #  final rhs
+              ), #  left half
               column(5,
                      div(style=paste(breatheLabelColoring, ';text-align:center'),
                          strong("Harm that excess PM2.5 did in this tract or community...")),
@@ -147,7 +147,7 @@ fluidPage(
                      fluidRow(
                        column(12,
                               popify(placement = 'left',
-                                plotOutput(outputId="featurePlot",
+                                  el=plotOutput(outputId="featurePlot",
                                              height=300),
                                 title="Information about this figure",
                                 content=div(
@@ -173,15 +173,9 @@ fluidPage(
                           actionButton(style=rightSideButtonStyle,
                                        'IdShowCohort', label='# in the 2019 birth cohort')
                      )
-              ))
-            # ,
-            #     fluidRow(
-            #       #dataTableOutput("tabledemog"),
-            #       dataTableOutput("tableest"), br(),
-            #       textOutput("hotext"), br(),
-            #       p("**Performance IQ is a measure of intelligence related to problem solving skills."))
-  )
-
+              )  # end of right side
+            )  # end of the entire page, in one Fluidrow
+    )  # end of mainPanel
 })
 
 
