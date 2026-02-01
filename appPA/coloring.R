@@ -1,8 +1,8 @@
 breatheGreen.previous = '#7E0023';   # dark red!
 breatheGreen = '#62A50B';
 mypickwas = '#75C443'
-referenceColor = breatheGreen;
-referenceColorStyle = paste0('color:', referenceColor)
+referenceColor = breatheGreen.previous;
+referenceColorStyle = paste0('color:', referenceColor, ';')
 breatheLabelColoring = paste0('background-color:', breatheGreen, '; color:white')
 leftSideButtonStyle = breatheLabelColoring
 rightSideButtonStyle = paste(breatheLabelColoring,
