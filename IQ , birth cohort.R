@@ -5,7 +5,7 @@
 #'
 #'
 
-install.packages("googlesheets4")
+# install.packages("googlesheets4")
 library("googlesheets4")
 
 # reading the sheet data
@@ -43,8 +43,9 @@ head(ellaBirths.SW)
 
 which(ellaBirths.SW$tract=='')  #none!
 
-#### this is for the small table ####
-library('xlsx')  #This package depends on Java and the rJava package
+#### this is for the small table ####  FAILS TO LOAD.
+#library('xlsx')  #This package depends on Java and the rJava package
+
 ellaIQ = readxl::read_excel(path = 'IQ Loss in the 2019 Pittsburgh MSA Birth Cohort.xlsx', sheet=1, skip =2, col_names = T)
 
 countyBirthComparison = cbind(table(ellaBirths.SW$County), ellaIQ$`Live Births`[1:8])
@@ -137,37 +138,49 @@ plot(twt.df$Population.in.2019, twt.df$Births.in.2019, col=twt.df$county.tracts)
 
 ###   We will use
 
-births.for.twt = ellaBirths.SW.counts$ellaCounts.Freq[
-  match(twt$tracts, ### note tracts is PLURAL
-        ellaBirths.SW.counts$tract)]
-tracts.for.twt = ellaBirths.SW.counts$tract[
-  match(twt$tracts, ### note tracts is PLURAL
-        ellaBirths.SW.counts$tract)]
-sum(tracts.for.twt==twt$tracts, na.rm=T)  ## 723.  So 16 no match?
+cohort = data.frame(tract=twt$tracts, cpop=twt$`Population in 2019`)
+cohort$births = ellaBirths.SW.counts$ellaCounts.Freq[
+  match(twt$tracts, ellaBirths.SW.counts$tract)
+]
+cohort$births[is.na(cohort$births)] = 0
+cor(cohort$cpop, cohort$births)  #### ok.
+
+table(cohort$tract==twt$tracts, exclude=NULL)  ## 739
 setcompare(ellaBirths.SW.counts$tract, twt$tracts)
 ## ella has 120 extra tracts.  twt has 16 extra.
-sum(is.na(births.for.twt))  #16
-births.for.twt[is.na(births.for.twt)] = 0
+setcompare(cohort$tract, twt$tracts)  ### identical
 
-cohort.births = births.for.twt
-plot(twt$`Population in 2019`, cohort.births)
-
-save(cohort.births, file = 'cohort.births.Rd')
+plot(twt$`Population in 2019`, births.for.twt)
+cor(twt$`Population in 2019`, births.for.twt)  ## 0.76, excellent!
+# So  twt$`PM2.5 average`    should be in the right order too.
 cohort.iq.lost = twt$`PM2.5 average` * births.for.twt * 0.27  ## sum
 cohort.earnings.lost = twt$`PM2.5 average` * births.for.twt * mean(10.6,13.1)
-save(cohort.iq.lost, file = 'cohort.iq.lost.Rd')
-save(cohort.earnings.lost, file = 'cohort.earnings.lost.Rd')
+cohort$cohort.iq.lost = cohort.iq.lost
+cohort$cohort.earnings.lost = cohort.earnings.lost
+cohort.births.plus = cohort
+cor(cohort.births.plus$births,
+    cohort.births.plus$cpop)   ###OK.
+save(cohort.births.plus, file = 'cohort.births.plus.Rd')
+
+
 #### check hard links  OK,
 #  We are done!
+
+# checkIt = read.csv('Air-Pollution-PA (8).csv')
+# plot(checkIt$Population.in.2019, checkIt$Births.in.2019)
+# ### still wrong order.
+# plot(cohort.births, checkIt$Births.in.2019)
+# table(cohort.births  == checkIt$Births.in.2019)
+
 
 ##############################
 
 
 #######  new census file for 8 counties?
 
-births.by.county = sapply(split(cohort.births, twt$county.tracts), sum)
-names(births.by.county) = countymap$county[ match(names(births.by.county), countymap$COUNTYFP)]
-as.data.frame(births.by.county)
+# births.by.county = sapply(split(cohort.births, twt$county.tracts), sum)
+# names(births.by.county) = countymap$county[ match(names(births.by.county), countymap$COUNTYFP)]
+# as.data.frame(births.by.county)
 # tabulated from cohort.by.tract$births[match(twt$tracts, cohort.by.tract$tract)]
 # See also 2019-counties-tracts - Pennsylvania_Birth_2019.csv.csv,
 # Allegheny               12718
@@ -188,7 +201,6 @@ as.data.frame(births.by.county)
 # Washington	1339
 # Westmoreland	645
 # Pittsburgh MSA	24604
-read.table(file=pipe('pbpaste'), header = F)
 
 #'A 0.27-point loss in full-scale IQ (FSIQ) per 1 µg/m³ increase in PM₂.₅ (Alter et al.)
 #'The monetary valuation of an IQ point, estimated at USD 10,600–13,100 per point in the United States (Grosse et al.).
@@ -211,9 +223,9 @@ read.table(file=pipe('pbpaste'), header = F)
 
 ################################################
 ### for old time's sake... last 6 digits are not unique.
-counties = substr(twt$tracts, 3, 5)
-table(counties)
-table(table(substr(twt$tracts, 6, 100)))  ## remember the 7?
+# counties = substr(twt$tracts, 3, 5)
+# table(counties)
+# table(table(substr(twt$tracts, 6, 100)))  ## remember the 7?
 
 
 
