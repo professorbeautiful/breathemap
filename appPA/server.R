@@ -842,7 +842,10 @@ function(input, output, session) {
     print(paste('featurePlot: referenceDistribution:'))
     print('before:')
     print(summary(referenceDistribution))
-    if(!is.na(rV$removeOutliersQuantile) ) {
+    print(length(referenceDistribution))
+    if(is.na(rV$removeOutliersQuantile) ) {
+      outliers = numeric(0)
+    } else {
       outlierRows = theOutlierRows(referenceDistribution,
                              rV$removeOutliersQuantile)
       if(verbose>1)
@@ -873,16 +876,20 @@ function(input, output, session) {
     }
     if(verbose>0)print('after:')
     if(verbose>0)print(summary(referenceDistribution))
+    print(length(referenceDistribution))
+
 
     xlab = decorateFeatureName()
 
 
     if(rV$do.hist) {
-    #### histogram ####
-      histReturn = hist(referenceDistribution,
+    #### histogram ####H
+      histReturn = hist(referenceDistribution, plot=F)
+      plot(histReturn, ylim=c(0, max(histReturn$counts)),
                         xlab=xlab, ylab = 'number of census tracts',
                         main = '',
                         cex.lab=1.5)
+      print(histReturn)
       highestPlotValue = max(histReturn$counts)
     }
     else {
