@@ -282,7 +282,7 @@ function(input, output, session) {
       which(sapply(  townsForAllTracts, function(t) identical(town, t)))
     if(verbose>0)
       print(paste( 'showAllTractsWithOnly: # tracts = ', length(rownumbersForTown),
-                 '   town=', rV$selectedTown))
+                   '   town=', rV$selectedTown))
 
     if(showingPittsburgh())   {
       rownumbersForTown = as.vector(which(sapply(twt$twt, isPittsburgh)) )
@@ -466,8 +466,8 @@ function(input, output, session) {
              )),
       br(),
       fluidRow( style=referenceColorStyle,  class='reference',  column(3, strong( "Current reference:")),
-                 column(9, textOutput(outputId = 'IdReferenceCommunity')
-                 ))
+                column(9, textOutput(outputId = 'IdReferenceCommunity')
+                ))
     )
   })
 
@@ -524,8 +524,8 @@ function(input, output, session) {
   # total.communities()
 
   thisAreaFeatureList = function(var = rV$featureToPlot,
-                                    applyTo= rV$TARGETrownumbers,
-                                    verbose=T) {
+                                 applyTo= rV$TARGETrownumbers,
+                                 verbose=T) {
     featureName = toDots(rV$featureToPlot)
     data = data.frame(twt)[[featureName]] [applyTo]
     if(makeItARate()){
@@ -544,8 +544,8 @@ function(input, output, session) {
     return(data)
   }
   thisAreaFeatureSummary = function(var = rV$featureToPlot,
-                                 applyTo= rV$TARGETrownumbers,
-                                 verbose=T) {
+                                    applyTo= rV$TARGETrownumbers,
+                                    verbose=T) {
     #### Combines the numbers from thisAreaFeatureList into a single number.
     data = thisAreaFeatureList(var, applyTo, verbose)
     if(var %in% "PM2.5 average")
@@ -629,7 +629,7 @@ function(input, output, session) {
     observerName = paste('featureActionButtonObserver_', thisId)
     if(verbose>2)
       print(paste('makeFeatureActionButtonObserver: \nthisId=', thisId,
-                '\nobserverName=', observerName))
+                  '\nobserverName=', observerName))
     assign(observerName,  inherits=TRUE,
            observeEvent(input[[ thisId ]],
                         {
@@ -652,11 +652,11 @@ function(input, output, session) {
     size='sm'  # no effect.
     #    feat = gsub('Childbirth', '', feat)
     if(feat %in% c("Ischemic Heart Disease Deaths",
-                    "Myocardial Infarctions"))
+                   "Myocardial Infarctions"))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:8px')
     else if(feat %in% c("All-cause deaths",
-                   "Lung Cancer Deaths"))
+                        "Lung Cancer Deaths"))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:10px')
     else ButtonStyle = rightSideButtonStyle
@@ -792,9 +792,11 @@ function(input, output, session) {
 
   rV$removeOutliersQuantile = 0.999
 
+  rV$disableOutliersIsBirth = FALSE
+
   observeEvent(input$IdQuantile,handlerExpr = {
-               rV$removeOutliersQuantile = eval(input$IdQuantile) }
-               )
+    rV$removeOutliersQuantile = eval(input$IdQuantile) }
+  )
 
   observeEvent(input$keys, {
     ### great!  you can type in NA also.  Instant response.
@@ -802,8 +804,8 @@ function(input, output, session) {
               showModal(modalDialog(
                 numericInput(inputId = 'IdQuantile',
                              label='outlier quantile (e.g. NA, 0.99, 0.999...',
-                value = rV$removeOutliersQuantile
-              ))),
+                             value = rV$removeOutliersQuantile
+                ))),
             'H' = eval({rV$do.hist = !rV$do.hist})
     )
   })
@@ -828,7 +830,7 @@ function(input, output, session) {
   rV$do.hist = TRUE
 
   total.communities = reactive((input$IdTotalOrRate == '...total')
-           & (input$Id_ToggleTownTract == 'communities'))
+                               & (input$Id_ToggleTownTract == 'communities'))
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
@@ -845,38 +847,43 @@ function(input, output, session) {
     #as.numeric(twt[[(rV$featureToPlot)]])
     print(paste('featurePlot: referenceDistribution:'))
     print('before:')
+
     print(summary(referenceDistribution))
     print(length(referenceDistribution))
-    if(is.na(rV$removeOutliersQuantile) ) {
+    if(is.na(rV$removeOutliersQuantile) | rV$disableOutliersIsBirth) {
       outliers = numeric(0)
     } else {
       outlierRows = theOutlierRows(referenceDistribution,
-                             rV$removeOutliersQuantile)
-      if(verbose>1)
+                                   rV$removeOutliersQuantile)
+      if(verbose>0)
         print(paste('initial outlier rows ', paste(collapse=',', outlierRows)))
       outliers = referenceDistribution[outlierRows]
-      if(verbose>1)
+      if(verbose>0)
         print(paste('initial outliers ',
-                  paste(collapse=',',
-                        signif(digits=3, outliers))) )
-      rowsToDrop = which(outliers <= max(thisAreaFeature, na.rm=T) )
-        # These outliers are smaller than thisAreaFeature !
-        ### thisAreaFeature should appear on the plot, so drop smaller ones.
-      if(verbose>1)
-        print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
-                  'Removing these outliers if any',
-                  outliers[rowsToDrop]))
-
-      if(length(rowsToDrop) > 0) {
-        outliers = outliers[-rowsToDrop]   ## take out the ones too small.
-      }
+                    paste(collapse=',',
+                          signif(digits=3, outliers))) )
+      #   rowsToDrop = which(outliers <= max(thisAreaFeature, na.rm=T) )
+      #     # These outliers are smaller than thisAreaFeature !
+      #     ### thisAreaFeature should appear on the plot, so drop smaller ones.
+      #   if(verbose>0)
+      #     print(paste('rowsToDrop ', paste(collapse=', ', rowsToDrop),
+      #               'Removing these outliers if any',
+      #               outliers[rowsToDrop]))
+      # print((rowsToDrop))
+      # print(length(rowsToDrop))
+      # print(length(rowsToDrop) > 0)
+      #
+      #   if(length(rowsToDrop) >0 ) {
+      #     print("SHOULD NOT BE HERE")
+      #     outliers = outliers[-rowsToDrop]   ## take out the ones too small.
+      #   }
       # print(paste('intersection:',
       #             paste(collapse=',',
       #                   intersect(referenceDistribution, outliers))))
       referenceDistribution = setdiff(referenceDistribution, outliers)
       if(verbose>1)
         print(paste('final outliers ', paste(collapse=', ',
-                                           signif(digits=3,outliers))))
+                                             signif(digits=3,outliers))))
     }
     if(verbose>0)print('after:')
     if(verbose>0)print(summary(referenceDistribution))
@@ -884,21 +891,27 @@ function(input, output, session) {
 
 
     xlab = decorateFeatureName()
-
-
+    histFix = (xlab == "Births in 2019" & isTRUE(rV$disableOutliersIsBirth))
     if(rV$do.hist) {
-    #### histogram ####H
+      #### histogram ####H
+      if(histFix)  #### reset referenceDistribution ####
+      referenceDistribution = initialreferenceDistribution
       histReturn = hist(referenceDistribution, plot=F)
+      save('referenceDistribution', file='referenceDistribution.saved.Rd')
+      dump('referenceDistribution', file='referenceDistribution.dumped.Rd')
+      save('histReturn', file='histReturn.saved.Rd')
+      dump('histReturn', file='histReturn.dumped.Rd')
+      print(paste('max(histReturn$counts)', max(histReturn$counts)))
       plot(histReturn, ylim=c(0, max(histReturn$counts)),
-                        xlab=xlab, ylab = 'number of census tracts',
-                        main = '',
-                        cex.lab=1.5)
+           xlab=xlab, ylab = 'number of census tracts',
+           main = '',
+           cex.lab=1.5)
       print(histReturn)
       highestPlotValue = max(histReturn$counts)
     }
     else {
       densityReturn = density(referenceDistribution
-                   )
+      )
       plot(densityReturn, main='', axes=F,
            xlab=xlab, ylab='', xlim=c(0,max(densityReturn$x)))
       axis(1, labels=T)
@@ -939,14 +952,16 @@ function(input, output, session) {
         biggestOutliers = c(biggestOutliers, '...')
 
       outlierLabel = paste0('#outliers\n  = ', length(outliers), '  ➡\n',
-                           paste(biggestOutliers, collapse='\n'
-                             ))
+                            paste(biggestOutliers, collapse='\n'
+                            ))
       print(paste(outlierLabel))
-      text.default(x = max(referenceDistribution), y = highestPlotValue,
-                   xpd=NA, adj=c(0,0.5),
-                   labels = outlierLabel)
+      if(! histFix)
+        text.default(x = max(referenceDistribution), y = highestPlotValue,
+                     xpd=NA, adj=c(0,0.5),
+                     labels = outlierLabel)
 
     }
+
   })
 
   ### popovers--  popify or tipify work, but these don't.
