@@ -879,8 +879,8 @@ function(input, output, session) {
     for(feature in thisAreaFeature) {
       #### arrows ####
       print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
-      abline(v=thisAreaFeature,
-             lwd=3, col='darkgreen', xpd=NA)
+      # abline(v=thisAreaFeature,
+      #        lwd=3, col='darkgreen')
       arrows(x0 = feature, y0 = 0,
              x1 = feature, y1= par('usr')[4]*1.2, xpd=NA,
              col='darkgreen', lwd=3)
