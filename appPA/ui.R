@@ -5,7 +5,7 @@ source('coloring.R')
 
 fluidPage(
   useKeys(),
-  keysInput("keys", c("O")),
+  keysInput("keys", c("O", "H")),
   {
     mainPanel(width = 12,
             # tags$head(

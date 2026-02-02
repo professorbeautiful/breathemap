@@ -799,7 +799,8 @@ function(input, output, session) {
                 numericInput(inputId = 'IdQuantile',
                              label='outlier quantile (e.g. NA, 0.99, 0.999...',
                 value = rV$removeOutliersQuantile
-              )))
+              ))),
+            'H' = eval({rV$do.hist = !rV$do.hist})
     )
   })
 
@@ -820,6 +821,7 @@ function(input, output, session) {
       print(paste(intro, paste(collapse=ppcollapse, ...)))
   }
 
+  rV$do.hist = TRUE
 
   total.communities = reactive((input$IdTotalOrRate == '...total')
            & (input$Id_ToggleTownTract == 'communities'))
@@ -874,11 +876,23 @@ function(input, output, session) {
 
     xlab = decorateFeatureName()
 
+
+    if(rV$do.hist) {
     #### histogram ####
-    histReturn = hist(referenceDistribution,
-         xlab=xlab, ylab = 'number of census tracts',
-         main = '',
-         cex.lab=1.5)
+      histReturn = hist(referenceDistribution,
+                        xlab=xlab, ylab = 'number of census tracts',
+                        main = '',
+                        cex.lab=1.5)
+      highestPlotValue = max(histReturn$counts)
+    }
+    else {
+      densityReturn = density(referenceDistribution
+                   )
+      plot(densityReturn, main='', axes=F,
+           xlab=xlab, ylab='', xlim=c(0,max(densityReturn$x)))
+      axis(1, labels=T)
+      highestPlotValue = max(densityReturn$y)
+    }
     for(feature in thisAreaFeature) {
       #### arrows ####
       print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
@@ -917,8 +931,7 @@ function(input, output, session) {
                            paste(biggestOutliers, collapse='\n'
                              ))
       print(paste(outlierLabel))
-      #print(histReturn)
-      text.default(x = max(referenceDistribution), y = max(histReturn$counts),
+      text.default(x = max(referenceDistribution), y = highestPlotValue,
                    xpd=NA, adj=c(0,0.5),
                    labels = outlierLabel)
 
