@@ -73,7 +73,7 @@ setcompare(ellaBirths.SW$tract, census.allegheny$tract)
 # 351 tracts overlap
 # both x_not_y y_not_x
 # 351     492      43
-table(ellaBirths.SW$tract)
+ellaCountTable = table(ellaBirths.SW$tract)
 ellaBirths.SW.counts = data.frame(ellaCounts = table(ellaBirths.SW$tract),
                                   tract = names(table(ellaBirths.SW$tract)))
 head(ellaBirths.SW.counts)
@@ -165,7 +165,7 @@ cor(cohort.births.plus$births,
     cohort.births.plus$cpop)   ###OK.
 save(cohort.births.plus, file = 'cohort.births.plus.Rd')
 
-
+hist(cohort.births.plus$births, breaks=seq(0,200, by=20))
 #### check hard links  OK,
 #  We are done!
 

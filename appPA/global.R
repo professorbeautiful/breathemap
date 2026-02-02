@@ -64,22 +64,30 @@ patowndata3$`Population in 2019` =
 print(paste('is.numeric(patowndata3$`Population in 2019` )',
       is.numeric(patowndata3$`Population in 2019` )))
 PAtowndata = patowndata3    ### as of Jan 25.
+
 PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Lepeule Estimate') ])  ### Krewski is out.
 
-
+#### cohort.births.plus ####
 load('cohort.births.plus.Rd')
 print(head(cohort.births.plus))
 #### merging in cohort.births.plus ####
+PAtowndata$tract = as.numeric(PAtowndata$tract)
 PAtowndata = merge(PAtowndata, cohort.births.plus)
-PAtowndata$`Births in 2019` = cohort.births.plus$births
-PAtowndata$`IQ points lost` = cohort.births.plus$cohort.iq.lost
-PAtowndata$`Lifetime earnings lost` = cohort.births.plus$cohort.earnings.lost
+print('merge is finished')
+PAtowndata$`Births in 2019` = PAtowndata$births
+  print(paste('identical(PAtowndata$`Births in 2019` ,  PAtowndata$births)
+  ?',   identical(PAtowndata$`Births in 2019` ,  PAtowndata$births)
+  ))
+PAtowndata$`IQ points lost` = PAtowndata$cohort.iq.lost
+PAtowndata$`Lifetime earnings lost` = PAtowndata$cohort.earnings.lost
 #  15 zeros, not 16?
+head(PAtowndata)
 
 
 PAtown = st_transform(PAtown, "WGS84")
+PAtown$tract = as.numeric(PAtown$GEOID)
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
 ### removes the error msg,
 # Warning: sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
