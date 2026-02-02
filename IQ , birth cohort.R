@@ -139,22 +139,25 @@ plot(twt.df$Population.in.2019, twt.df$Births.in.2019, col=twt.df$county.tracts)
 ###   We will use
 
 cohort = data.frame(tract=twt$tracts, cpop=twt$`Population in 2019`)
+####  this allows cohort to have tracts with no counts.
 cohort$births = ellaBirths.SW.counts$ellaCounts.Freq[
   match(twt$tracts, ellaBirths.SW.counts$tract)
 ]
+head(cohort)
 cohort$births[is.na(cohort$births)] = 0
 cor(cohort$cpop, cohort$births)  #### ok.
 
 table(cohort$tract==twt$tracts, exclude=NULL)  ## 739
-setcompare(ellaBirths.SW.counts$tract, twt$tracts)
-## ella has 120 extra tracts.  twt has 16 extra.
+setcompare(cohort$tract, twt$tracts)
+## ella has 120 extra tracts.  twt had 16 extra.  Now set to births=zero.
 setcompare(cohort$tract, twt$tracts)  ### identical
 
-plot(twt$`Population in 2019`, births.for.twt)
-cor(twt$`Population in 2019`, births.for.twt)  ## 0.76, excellent!
+plot(cohort$cpop, cohort$births)
+cor(cohort$cpop, cohort$births)  ## 0.76, excellent!
+cor(cohort$cpop, twt$`Population in 2019`)  ## 1, perfect
 # So  twt$`PM2.5 average`    should be in the right order too.
-cohort.iq.lost = twt$`PM2.5 average` * births.for.twt * 0.27  ## sum
-cohort.earnings.lost = twt$`PM2.5 average` * births.for.twt * mean(10.6,13.1)
+cohort.iq.lost = twt$`PM2.5 average` * cohort$births * 0.27  ## sum
+cohort.earnings.lost = twt$`PM2.5 average` * cohort$births * mean(10.6,13.1)
 cohort$cohort.iq.lost = cohort.iq.lost
 cohort$cohort.earnings.lost = cohort.earnings.lost
 cohort.births.plus = cohort
