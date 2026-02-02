@@ -68,12 +68,16 @@ PAtowndata$`All-cause deaths` = rowMeans(PAtowndata[c(
   'All Cause Deaths, Laden Estimate',
   'All Cause Deaths, Lepeule Estimate') ])  ### Krewski is out.
 
-load('cohort.births.Rd')
-load('cohort.iq.lost.Rd')
-load('cohort.earnings.lost.Rd')
-PAtowndata$`Births in 2019` = cohort.births
-PAtowndata$`IQ points lost` = cohort.iq.lost
-PAtowndata$`Lifetime earnings lost` = cohort.earnings.lost
+
+load('cohort.births.plus.Rd')
+print(head(cohort.births.plus))
+#### merging in cohort.births.plus ####
+PAtowndata = merge(PAtowndata, cohort.births.plus)
+PAtowndata$`Births in 2019` = cohort.births.plus$births
+PAtowndata$`IQ points lost` = cohort.births.plus$cohort.iq.lost
+PAtowndata$`Lifetime earnings lost` = cohort.births.plus$cohort.earnings.lost
+#  15 zeros, not 16?
+
 
 PAtown = st_transform(PAtown, "WGS84")
 #st_crs(PAtown) <- "WGS84"   ### no effect on the app apparently.
