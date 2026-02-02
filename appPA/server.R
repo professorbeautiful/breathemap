@@ -792,7 +792,7 @@ function(input, output, session) {
 
   rV$removeOutliersQuantile = 0.999
 
-  rV$disableOutliersIsBirth = FALSE
+  rV$disableOutliersIsBirth = TRUE
 
   observeEvent(input$IdQuantile,handlerExpr = {
     rV$removeOutliersQuantile = eval(input$IdQuantile) }
@@ -806,7 +806,8 @@ function(input, output, session) {
                              label='outlier quantile (e.g. NA, 0.99, 0.999...',
                              value = rV$removeOutliersQuantile
                 ))),
-            'H' = eval({rV$do.hist = !rV$do.hist})
+            'H' = eval({rV$do.hist = !rV$do.hist}),
+            'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
     )
   })
 
@@ -834,6 +835,8 @@ function(input, output, session) {
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
+    xlab = decorateFeatureName()
+    histFix = (xlab == "Births in 2019" & isTRUE(rV$disableOutliersIsBirth))
 
     if( total.communities()) {
       thisAreaFeature = thisAreaFeatureList()
@@ -850,7 +853,7 @@ function(input, output, session) {
 
     print(summary(referenceDistribution))
     print(length(referenceDistribution))
-    if(is.na(rV$removeOutliersQuantile) | rV$disableOutliersIsBirth) {
+    if(is.na(rV$removeOutliersQuantile) | histFix) {
       outliers = numeric(0)
     } else {
       outlierRows = theOutlierRows(referenceDistribution,
@@ -890,8 +893,7 @@ function(input, output, session) {
     print(length(referenceDistribution))
 
 
-    xlab = decorateFeatureName()
-    histFix = (xlab == "Births in 2019" & isTRUE(rV$disableOutliersIsBirth))
+    print(paste('histFix', histFix))
     if(rV$do.hist) {
       #### histogram ####H
       if(histFix)  #### reset referenceDistribution ####
