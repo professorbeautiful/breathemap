@@ -651,10 +651,14 @@ function(input, output, session) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
     size='sm'  # no effect.
     #    feat = gsub('Childbirth', '', feat)
-    if(feat %in% c("All-cause deaths", "Ischemic Heart Disease Deaths",
-                   "Lung Cancer Deaths", "Myocardial Infarctions"))
+    if(feat %in% c("Ischemic Heart Disease Deaths",
+                    "Myocardial Infarctions"))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:8px')
+    else if(feat %in% c("All-cause deaths",
+                   "Lung Cancer Deaths"))
+      ButtonStyle =
+      paste(rightSideButtonStyle, '; font-size:10px')
     else ButtonStyle = rightSideButtonStyle
     feat = gsub('[dD]eaths', '', feat)
     actionButton(style=ButtonStyle,
