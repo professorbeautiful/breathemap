@@ -627,18 +627,21 @@ function(input, output, session) {
   makeFeatureActionButtonObserver = function(feat) {
     thisId = paste0('idFeature', gsub(' ', '_', feat))
     observerName = paste('featureActionButtonObserver_', thisId)
-    print(paste('makeFeatureActionButtonObserver: \nthisId=', thisId,
+    if(verbose>2)
+      print(paste('makeFeatureActionButtonObserver: \nthisId=', thisId,
                 '\nobserverName=', observerName))
     assign(observerName,  inherits=TRUE,
            observeEvent(input[[ thisId ]],
                         {
-                          print(paste('updating rV$featureToPlot: '))
+                          if(verbose>2)
+                            print(paste('updating rV$featureToPlot: '))
                           rV$featureToPlot = feat
                           shinyjs::addCssClass(thisId, class='buttonPressed')
                         }
            )
     )
-    print(paste('find observerName:', find(observerName)))
+    if(verbose>2)
+      print(paste('find observerName:', find(observerName)))
   }
 
   sapply(featureList, makeFeatureActionButtonObserver)
