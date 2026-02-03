@@ -15,7 +15,10 @@ library(keys)
 #   setwd('appPA')
 source('moveColumns.R')
 source('cq.R')
-
+indentMe = function(...)
+  fluidRow(column(12, offset=1,
+                  ...)
+  )
 
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')

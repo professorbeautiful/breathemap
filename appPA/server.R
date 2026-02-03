@@ -36,22 +36,10 @@ function(input, output, session) {
 
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
-
+  source('acknowledgements.R')
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,
-      div(HTML(paste(
-        'Professor Philip Landrigan, Boston College',
-        '<br>Paul Fireman of Fireman Creative',
-        '<br>Matt Mehalik of The Breathe Project',
-        '<br>Page design&implementation: Luke Bryan, Boston College and Roger Day, U. Pittsburgh',
-        '<br> Volodymyr Agafonkin, creator of the "<a href=https://leafletjs.com/>leaflet</a>" Javascript package.',
-        '<br>Creators of the "<a href=	https://github.com/rstudio/leaflet>leaflet</a>" R package.',
-        '<br>Creators of the "<a href=	https://www.rdocumentation.org/packages/tigris>tigris</a>" R package.',
-        '<br>Supplemental census tract information:',
-        '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=',
-        '"https://pitt.libguides.com/pghcensus/pghcensustracts">U. Pitt Pittsburgh Census Information</a> (Christopher Lemery)'
-
-      )))
+      acknowledgements
     ))
   })
   observeEvent(input$IdMapAdvice, {
