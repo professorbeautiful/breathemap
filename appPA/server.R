@@ -792,7 +792,7 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  rV$removeOutliersQuantile = NA  # 0.999
+  rV$removeOutliersQuantile =  0.999
 
   observeEvent(input$IdQuantile,handlerExpr = {
     rV$removeOutliersQuantile = eval(input$IdQuantile) }
@@ -807,46 +807,50 @@ function(input, output, session) {
                              label='outlier quantile (e.g. blank (NA), 0.99, 0.999...',
                              value = rV$removeOutliersQuantile
                 ),
-                uiOutput('theOutlierRowsOutput')
+                tableOutput('theOutlierRowsOutput')
                 )),
             'H' = eval({rV$do.hist = !rV$do.hist})
             # NOT NEEDED    'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
     )
   })
-  output$theOutlierRowsOutput = renderUI({
-    HTML(paste(collapse='<br>',
-               paste(theOutlierValues(thisAreaFeatureDistribution() ),
-                     theOutlierTracts(thisAreaFeatureDistribution() ) )
-               )
-    )
+  output$theOutlierRowsOutput = renderTable({
+    theOutlierInfo()[order(decreasing = TRUE, theOutlierInfo()$outlierValues), ]
 
   })
-  theOutlierValues = function(x, quantile =  rV$removeOutliersQuantile) {
+  theOutlierValues = function(x=thisAreaFeatureDistribution(), quantile =  rV$removeOutliersQuantile) {
     theValues = sort(decreasing = TRUE,
                      x[ theOutlierRows(x, quantile)]
     )
     signif(digits=3, theValues)
 
   }
-  theOutlierTracts = function(x, quantile =  rV$removeOutliersQuantile) {
-    theTracts = twt$twt[
-      sort(decreasing = TRUE,
-           x[ theOutlierRows(x, quantile)]
-      )
-    ]
-    theTracts
-
+  theOutlierTracts = function(x=thisAreaFeatureDistribution(), quantile =  rV$removeOutliersQuantile) {
+    theOutlierInfo$tracts
   }
-  theOutlierRows = function(x, quantile =  rV$removeOutliersQuantile) {
+
+  theOutlierRows = function(x=thisAreaFeatureDistribution(),
+                            quantile =  rV$removeOutliersQuantile) {
     if(is.na(rV$removeOutliersQuantile))
       return(numeric(0))
     print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
                 rV$removeOutliersQuantile))
     outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
-    print(paste('outlierRows: ', paste(collapse = ',', outlierRows)))
-    print(paste('outlierValues: ', paste(collapse = ',',
-                                         signif(digits=3, x[outlierRows]))))
+    print(data.frame(outlierRows = outlierRows,
+                     outlierValues=x[outlierRows],
+                     tracts = twt$twt[outlierRows]))   #### OK
     return(outlierRows)
+  }
+
+  theOutlierInfo = function(x=thisAreaFeatureDistribution(),
+                            quantile =  rV$removeOutliersQuantile) {
+    if(is.na(rV$removeOutliersQuantile))
+      return(numeric(0))
+    print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
+                rV$removeOutliersQuantile))
+    outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
+    return(data.frame(outlierRows = outlierRows,
+                     outlierValues=x[outlierRows],
+                     tracts = twt$twt[outlierRows]))   #### OK
   }
 
   printpaste = function(intro, ..., ppverbose=1, ppcollapse=', ') {
@@ -931,12 +935,17 @@ function(input, output, session) {
       dump('referenceDistribution', file='referenceDistribution.dumped.Rd')
       save('histReturn', file='histReturn.saved.Rd')
       dump('histReturn', file='histReturn.dumped.Rd')
-      print(paste('max(histReturn$counts)', max(histReturn$counts)))
-      plot(histReturn, ylim=c(0, max(histReturn$counts)),
+      if(verbose>2)
+        print(histReturn)
+      if(verbose>2)
+        print(paste('max(histReturn$counts)', max(histReturn$counts)))
+      plot(histReturn, ylim=c(0, max(histReturn$counts)*1.05),
+           xlim=c(0, max(referenceDistribution*1.05)),
            xlab=xlab, ylab = 'number of census tracts',
            main = '',
            cex.lab=1.5)
-      print(histReturn)
+      if(verbose>2)
+        print(histReturn)
       highestPlotValue = max(histReturn$counts)
     }
     else {
