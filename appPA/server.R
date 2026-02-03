@@ -94,7 +94,7 @@ function(input, output, session) {
 
   areaSelectorObserver = observeEvent(input$areaSelectorId, {
     if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
-      updateSelectInput(inputId='areaSelectorId', selected = 1)     #### default before area is selected ####
+      updateSelectInput(inputId='areaSelectorId', selected = 'Clairton 42003492700')      #### default before area is selected ####
     #if(input$areaSelectorId != rV$savedTract)
     rV$savedTract = input$areaSelectorId
     if(verbose>2)
@@ -185,8 +185,7 @@ function(input, output, session) {
     click = input$map_shape_click
     ### TODO  Seems ok but keep an eye on this.
     if(is.null(click))
-      #updateSelectInput(session, "areaSelectorId", selected = PAtown[['areaField']] [1])
-      updateSelectInput(session, "areaSelectorId", selected = twt[['areaField']] [1])
+      updateSelectInput(session, "areaSelectorId", selected = 'Clairton 42003492700')
 
     rV$click = input$map_shape_click
     updateSelectInput(session, "areaSelectorId", selected = click$id)

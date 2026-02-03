@@ -81,7 +81,8 @@ fluidPage(
                                          el =
                                            selectInput("areaSelectorId", 'Communities and Census Tracts',
                                                        twt$areaField,
-                                                       selected = twt$areaField[1])))),
+                                                       selected =
+                                                         'Clairton 42003492700')))),
                        column(3,
 
                               div(style=breatheLabelColoring,
