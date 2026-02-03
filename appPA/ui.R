@@ -149,9 +149,12 @@ fluidPage(
                      uiOutput('UITotalOrRates'),
                      uiOutput('histTitle'),
                      fluidRow(
-                       column(12, id='IdfeaturePlotforpopover',
+                       column(12,
+                              div(  ### this div does not help! but popover works now.
+                                id='IdfeaturePlotforpopover',
                                   plotOutput(outputId="featurePlot",
                                              height=300)
+                              )
 
                        )
                      ),
