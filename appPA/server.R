@@ -798,17 +798,29 @@ function(input, output, session) {
     rV$removeOutliersQuantile = eval(input$IdQuantile) }
   )
 
+  outlierModal = reactive(
+    {
+      showModal(modalDialog(
+        title="outlier quantile",
+        numericInput(inputId = 'IdQuantile',
+                     label='outlier quantile (e.g. blank (NA), 0.99, 0.999...',
+                     value = rV$removeOutliersQuantile
+        ),
+        tableOutput('theOutlierRowsOutput')
+      ))
+    })
+
   observeEvent(input$keys, {
     ### great!  you can type in NA also.  Instant response.
-    switch (input$keys, 'O' =
-              showModal(modalDialog(
-                title="outlier quantile",
-                numericInput(inputId = 'IdQuantile',
-                             label='outlier quantile (e.g. blank (NA), 0.99, 0.999...',
-                             value = rV$removeOutliersQuantile
-                ),
-                tableOutput('theOutlierRowsOutput')
-                )),
+    switch (input$keys,
+            'O' = {
+              rV$removeOutliersQuantile = NA
+              outlierModal()
+            },
+            '9' = {
+              rV$removeOutliersQuantile = 0.999
+              outlierModal()
+            },
             'H' = eval({rV$do.hist = !rV$do.hist})
             # NOT NEEDED    'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
     )

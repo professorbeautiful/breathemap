@@ -49,25 +49,31 @@ addPopover(session = session,
                "across the communities currently selected."
 
              ),
-             h6("Special KEYS:"),
+             h6("Outlier handling:"),
              indentMe(
-               "Type capital ", strong('H'), " to toggle between ",
-               br(), "histogram and density plot.",
-               br(),
-               "Type capital ", strong('O'), " for a popover to adjust the outlier quantile:",
-               br(),
                indentMe(
                  "Outliers not on the graph ",
                  br(),
                  "are listed on the right side of the graph,",
                  br(),
-                 " and in this  ", strong('O'), " quantile popover",
+                 " and in a quantile popover",
                  br(),
                  "To remove outlier handling, ",
                  br(),
                  "click in 'outlier quantile' box and delete."
+             ),
+             h6("Special KEYS for the outlier handling:"),
+             indentMe(
+               "Type  ", strong('9'), " for a popover to open the outlier quantile dialog",
+               br(),  ' while setting the outlier quantile to 0.999. ',
+               br(),
+               "Type capital ", strong('O'), " for a popover to open the outlier quantile dialog",
+               br(),  ' while setting the outlier quantile (no  outlier handling). ',
+               br()
 
-               )
+               ),
+             "Type capital ", strong('H'), " to toggle between ",
+             "histogram and density plot.",
              ),
              HTML(paste(rep('-', 50)) )
            ), trigger='hover'
