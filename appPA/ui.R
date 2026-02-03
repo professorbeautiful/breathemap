@@ -149,20 +149,10 @@ fluidPage(
                      uiOutput('UITotalOrRates'),
                      uiOutput('histTitle'),
                      fluidRow(
-                       column(12,
-                              popify(placement = 'left',
-                                  el=plotOutput(outputId="featurePlot",
-                                             height=300),
-                                title="Information about this figure",
-                                content=div(
-                                  "Histogram of values",
-                                  "If these toggles are chosen: 'communities','...rate per 1000', ",
-                                  "each tract in the community cluster is shown.",
-                                  "Type capital O for a popup to adjust the outlier quantile."
-                                )
-                              )
-                              # p("*All estimates are based on number of cases per 1,000 population annually"),
-                              # p("**Performance IQ is a measure of intelligence related to problem solving skills."),
+                       column(12, id='IdfeaturePlotforpopover',
+                                  plotOutput(outputId="featurePlot",
+                                             height=300)
+
                        )
                      ),
                      fluidRow(column(offset=1, 11, uiOutput('IdUiForReferenceCommunity'))),

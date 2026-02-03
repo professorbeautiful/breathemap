@@ -1,5 +1,7 @@
 function(input, output, session) {
   source('coloring.R')
+  source('popovers.R', local = T)
+
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
