@@ -104,17 +104,17 @@ fluidPage(
                                          content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 
                                          checkboxInput('IdNbhds',
-                                                       'City of Pittsburgh Neighborhoods'
+                                                       'Individual Pittsburgh neighborhoods?'
                                                        #'See each Pgh nbhd?'
                                                        ,value = TRUE)
                                   ),
                                   popify(title='Selecting one community in a tract:',
                                          content=
                                            div(style='font-size:6px !important; container:body !important',
-                                               HTML('With "Community shares?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community shares?" = NO<br>   ____ show ONLY tracts where this is the only community.'
+                                               HTML('With "Community can overlap?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community can overlap?" = NO<br>   ____ show ONLY tracts where this is the only community.'
                                                )),
                                          checkboxInput("Id_townSharesCheckbox",
-                                                       'Community Overlaps'
+                                                       'Community can overlap?'
                                                        #"Community shares?"
                                                        ,value = TRUE)
                                   )
