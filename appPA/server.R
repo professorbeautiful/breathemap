@@ -802,20 +802,46 @@ function(input, output, session) {
     ### great!  you can type in NA also.  Instant response.
     switch (input$keys, 'O' =
               showModal(modalDialog(
+                title="outlier quantile",
                 numericInput(inputId = 'IdQuantile',
-                             label='outlier quantile (e.g. NA, 0.99, 0.999...',
+                             label='outlier quantile (e.g. blank (NA), 0.99, 0.999...',
                              value = rV$removeOutliersQuantile
-                ))),
+                ),
+                uiOutput('theOutlierRowsOutput')
+                )),
             'H' = eval({rV$do.hist = !rV$do.hist})
             # NOT NEEDED    'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
     )
   })
+  output$theOutlierRowsOutput = renderUI({
+    HTML(paste(collapse='<br>',
+               paste(theOutlierValues(thisAreaFeatureDistribution() ),
+                     theOutlierTracts(thisAreaFeatureDistribution() ) )
+               )
+    )
 
+  })
+  theOutlierValues = function(x, quantile =  rV$removeOutliersQuantile) {
+    theValues = sort(decreasing = TRUE,
+                     x[ theOutlierRows(x, quantile)]
+    )
+    signif(digits=3, theValues)
+
+  }
+  theOutlierTracts = function(x, quantile =  rV$removeOutliersQuantile) {
+    theTracts = twt$twt[
+      sort(decreasing = TRUE,
+           x[ theOutlierRows(x, quantile)]
+      )
+    ]
+    theTracts
+
+  }
   theOutlierRows = function(x, quantile =  rV$removeOutliersQuantile) {
+    if(is.na(rV$removeOutliersQuantile))
+      return(numeric(0))
     print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
                 rV$removeOutliersQuantile))
-    if(is.na(rV$removeOutliersQuantile))
-      stop('rV$removeOutliersQuantile should not be NA')
     outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
     print(paste('outlierRows: ', paste(collapse = ',', outlierRows)))
     print(paste('outlierValues: ', paste(collapse = ',',
