@@ -853,7 +853,7 @@ function(input, output, session) {
 
     print(summary(referenceDistribution))
     print(length(referenceDistribution))
-    if(is.na(rV$removeOutliersQuantile) | histFix) {
+    if(is.na(rV$removeOutliersQuantile) ) {  # skip histfix not needed?
       outliers = numeric(0)
     } else {
       outlierRows = theOutlierRows(referenceDistribution,
@@ -883,7 +883,8 @@ function(input, output, session) {
       # print(paste('intersection:',
       #             paste(collapse=',',
       #                   intersect(referenceDistribution, outliers))))
-      referenceDistribution = setdiff(referenceDistribution, outliers)
+      referenceDistribution = #setdiff(referenceDistribution, outliers) WIEIRD!
+        referenceDistribution [ - match( outliers, referenceDistribution )]
       if(verbose>1)
         print(paste('final outliers ', paste(collapse=', ',
                                              signif(digits=3,outliers))))
@@ -893,11 +894,11 @@ function(input, output, session) {
     print(length(referenceDistribution))
 
 
-    print(paste('histFix', histFix))
+    # print(paste('histFix', histFix))
     if(rV$do.hist) {
       #### histogram ####H
-      if(histFix)  #### reset referenceDistribution ####
-      referenceDistribution = initialreferenceDistribution
+      # if(histFix)  #### reset referenceDistribution ####
+      # referenceDistribution = initialreferenceDistribution
       histReturn = hist(referenceDistribution, plot=F)
       save('referenceDistribution', file='referenceDistribution.saved.Rd')
       dump('referenceDistribution', file='referenceDistribution.dumped.Rd')
@@ -957,7 +958,7 @@ function(input, output, session) {
                             paste(biggestOutliers, collapse='\n'
                             ))
       print(paste(outlierLabel))
-      if(! histFix)
+      #if(! histFix)
         text.default(x = max(referenceDistribution), y = highestPlotValue,
                      xpd=NA, adj=c(0,0.5),
                      labels = outlierLabel)
