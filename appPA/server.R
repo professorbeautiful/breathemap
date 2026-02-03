@@ -792,9 +792,7 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  rV$removeOutliersQuantile = 0.999
-
-  rV$disableOutliersIsBirth = TRUE
+  rV$removeOutliersQuantile = NA  # 0.999
 
   observeEvent(input$IdQuantile,handlerExpr = {
     rV$removeOutliersQuantile = eval(input$IdQuantile) }
@@ -808,8 +806,8 @@ function(input, output, session) {
                              label='outlier quantile (e.g. NA, 0.99, 0.999...',
                              value = rV$removeOutliersQuantile
                 ))),
-            'H' = eval({rV$do.hist = !rV$do.hist}),
-            'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
+            'H' = eval({rV$do.hist = !rV$do.hist})
+            # NOT NEEDED    'B' = eval({rV$disableOutliersIsBirth = !rV$disableOutliersIsBirth})
     )
   })
 
