@@ -885,8 +885,9 @@ function(input, output, session) {
       # print(paste('intersection:',
       #             paste(collapse=',',
       #                   intersect(referenceDistribution, outliers))))
-      referenceDistribution = #setdiff(referenceDistribution, outliers) WIEIRD!
+      referenceDistribution = #setdiff(referenceDistribution, outliers) #WRONG
         referenceDistribution [ - match( outliers, referenceDistribution )]
+      #  equivalently, referenceDistribution %except% outliers
       if(verbose>1)
         print(paste('final outliers ', paste(collapse=', ',
                                              signif(digits=3,outliers))))
