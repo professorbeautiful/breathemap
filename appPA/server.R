@@ -945,7 +945,7 @@ function(input, output, session) {
       #### histogram ####H
       # if(histFix)  #### reset referenceDistribution ####
       # referenceDistribution = initialreferenceDistribution
-      histReturn = hist(referenceDistribution, plot=F)
+      histReturn = hist(referenceDistribution[!is.na(referenceDistribution)], plot=F)
       save('referenceDistribution', file='referenceDistribution.saved.Rd')
       dump('referenceDistribution', file='referenceDistribution.dumped.Rd')
       save('histReturn', file='histReturn.saved.Rd')
@@ -954,8 +954,8 @@ function(input, output, session) {
         print(histReturn)
       if(verbose>2)
         print(paste('max(histReturn$counts)', max(histReturn$counts)))
-      plot(histReturn, ylim=c(0, max(histReturn$counts)*1.05),
-           xlim=c(0, max(referenceDistribution*1.05)),
+      plot(histReturn, #ylim=c(0, max(histReturn$counts, na.rm=T)*1.05),
+           #xlim=c(0, max(referenceDistribution*1.05, na.rm=T)),
            xlab=xlab, ylab = 'number of census tracts',
            main = '',
            cex.lab=1.5)
@@ -964,7 +964,7 @@ function(input, output, session) {
       highestPlotValue = max(histReturn$counts)
     }
     else {
-      densityReturn = density(referenceDistribution
+      densityReturn = density(referenceDistribution[!is.na(referenceDistribution)]
       )
       plot(densityReturn, main='', axes=F,
            xlab=xlab, ylab='', xlim=c(0,max(densityReturn$x)))
