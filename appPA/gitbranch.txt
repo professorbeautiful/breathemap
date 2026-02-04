@@ -1,9 +1,27 @@
-Sat Jan 31 14:59:31 2026 
- * out          ba62534 color the reference tract name. 
- Fri Jan 30 12:20:45 2026 
-Sat Jan 31 14:59:31 2026 
- * out          ba62534 color the reference tract name. 
-  * 1-29plus     2e2be3c fixed name for 'All-cause deaths' 
-Sat Jan 31 14:59:31 2026 
- * out          ba62534 color the reference tract name. 
-  * 1-29         3da0555 Fixed the "red doesn't stay fixed" problem.
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+ Sat Jan 31 14:59:31 2026 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+  * out          ba62534 color the reference tract name. 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+  Fri Jan 30 12:20:45 2026 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+ Sat Jan 31 14:59:31 2026 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+  * out          ba62534 color the reference tract name. 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+   * 1-29plus     2e2be3c fixed name for 'All-cause deaths' 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+ Sat Jan 31 14:59:31 2026 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+  * out          ba62534 color the reference tract name. 
+Wed Feb  4 11:23:04 2026 
+ * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
+   * 1-29         3da0555 Fixed the "red doesn't stay fixed" problem.

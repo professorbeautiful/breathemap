@@ -821,7 +821,7 @@ function(input, output, session) {
 
   toDots = function(s) gsub('[ -]', '.', s)
 
-  rV$removeOutliersQuantile =  0.999
+  rV$removeOutliersQuantile =  NA
 
   observeEvent(input$IdQuantile,handlerExpr = {
     rV$removeOutliersQuantile = eval(input$IdQuantile) }
