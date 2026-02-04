@@ -73,24 +73,26 @@ function(input, output, session) {
   #### townsForAllTracts ####
   townsForAllTracts = lapply(twt$twt, getTownsForThisTract)
 
-
-  clickATract = function(tractNumber) {
-    if(is.character(tractNumber))
-      tractNumber = match(tractNumber, twt$twt)
-    if(verbose>1)
-      print(paste('clickATract: ', tractNumber))
-    leafletProxy("map", session) %>%
-      clearGroup("selectedTractGroup") %>%
-      addPolygons(data=twt[tractNumber,], weight = 1,  #  twt has the geom data
-                  color="Red", fillColor="darkgreen",
-                  label= ~twt,
-                  #layerId = ~twt,
-                  fillOpacity = 1, group="selectedTractGroup")
-    updateSelectInput(session, "areaSelectorId",
-                      selected = twt[['areaField']] [tractNumber])
-    if(verbose>1)
-      print(paste('clickATract: areaSelectorId: ', input$areaSelectorId))
-  }
+  #
+  # clickATract = function(tractNumber) {   #NEVER CALLED!!!
+  #   if(verbose>0)
+  #     print(paste('clickATract: ', tractNumber))
+  #   if(is.character(tractNumber))
+  #     tractNumber = match(tractNumber, twt$twt)
+  #   if(verbose>0)
+  #     print(paste('clickATract: ', tractNumber))
+  #   leafletProxy("map", session) %>%
+  #     clearGroup("selectedTractGroup") %>%
+  #     addPolygons(data=twt[tractNumber,], weight = 1,  #  twt has the geom data
+  #                 color="Red", fillColor="darkgreen",
+  #                 label= ~twt,
+  #                 #layerId = ~twt,
+  #                 fillOpacity = 1, group="selectedTractGroup")
+  #   updateSelectInput(session, "areaSelectorId",
+  #                     selected = twt[['areaField']] [tractNumber])
+  #   if(verbose>0)
+  #     print(paste('clickATract: areaSelectorId: ', input$areaSelectorId))
+  # }
 
   areaSelectorObserver = observeEvent(input$areaSelectorId, {
     if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
