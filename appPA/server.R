@@ -881,7 +881,6 @@ function(input, output, session) {
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
     xlab = decorateFeatureName()
-    histFix = (xlab == "Births in 2019" & isTRUE(rV$disableOutliersIsBirth))
 
     if( total.communities()) {
       thisAreaFeature = thisAreaFeatureList()
@@ -940,11 +939,8 @@ function(input, output, session) {
     print(length(referenceDistribution))
 
 
-    # print(paste('histFix', histFix))
     if(rV$do.hist) {
       #### histogram ####H
-      # if(histFix)  #### reset referenceDistribution ####
-      # referenceDistribution = initialreferenceDistribution
       histReturn = hist(referenceDistribution[!is.na(referenceDistribution)], plot=F)
       save('referenceDistribution', file='referenceDistribution.saved.Rd')
       dump('referenceDistribution', file='referenceDistribution.dumped.Rd')
@@ -1009,10 +1005,9 @@ function(input, output, session) {
                             paste(biggestOutliers, collapse='\n'
                             ))
       print(paste(outlierLabel))
-      #if(! histFix)
-        text.default(x = max(referenceDistribution), y = highestPlotValue,
-                     xpd=NA, adj=c(0,0.5),
-                     labels = outlierLabel)
+      text.default(x = max(referenceDistribution), y = highestPlotValue,
+                   xpd=NA, adj=c(0,0.5),
+                   labels = outlierLabel)
 
     }
 
