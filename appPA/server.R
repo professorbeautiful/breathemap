@@ -917,12 +917,12 @@ function(input, output, session) {
   output$featurePlot <- renderPlot({
     xlab = decorateFeatureName()
 
-    if( isTRUE(total.communities())) {
-      thisAreaFeature = thisAreaFeatureList()
-    }  #### display all individual towns in this area
-
-    else   #### for rates or tracts, just the one.
-      thisAreaFeature = thisAreaFeatureSummary()
+    # if( isTRUE(total.communities())) {
+       thisAreaFeature = thisAreaFeatureList()
+    # }  #### display all individual towns in this area
+    #
+    # else   #### for rates or tracts, just the one.
+    #  thisAreaFeature = thisAreaFeatureSummary()
 
     referenceDistribution = thisAreaFeatureDistribution()
     initialreferenceDistribution = referenceDistribution
@@ -1003,18 +1003,31 @@ function(input, output, session) {
       axis(1, labels=T)
       highestPlotValue = max(densityReturn$y)
     }
-    for(feature in thisAreaFeature) {
-      #### arrows ####
+    if(length(thisAreaFeature) > 1 ) {
+      for(feature in thisAreaFeature) {
+      #### multiple arrows ####
       print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
       # abline(v=thisAreaFeature,
       #        lwd=3, col='darkgreen')
       arrows(x0 = feature, y0 = 0,
-             x1 = feature, y1= par('usr')[4]*1.2, xpd=NA,
-             col='darkgreen', lwd=3)
-      text(x = feature, y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+             x1 = feature, y1= 0.5 * par('usr')[4]*1.2, xpd=NA,
+             col='darkgreen', lwd=3, lty=3)
+      text(x = feature, y= 0.5 * par('usr')[4]*(1.2 + 0.06), xpd=NA,
            label = signif(digits=3, feature),
            col='darkgreen', cex=1.5)
+      }
     }
+    #### one arrow ####
+    print(paste('arrows: ', paste(thisAreaFeatureSummary(), collapse=',')))
+    # abline(v=thisAreaFeature,
+    #        lwd=3, col='darkgreen')
+    arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
+           x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
+           col='darkgreen', lwd=3)
+    text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+         label = signif(digits=3, thisAreaFeatureSummary()),
+         col='darkgreen', cex=1.5)
+
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
@@ -1044,8 +1057,8 @@ function(input, output, session) {
       text.default(x = max(referenceDistribution), y = highestPlotValue,
                    xpd=NA, adj=c(0,0.5),
                    labels = outlierLabel)
-
     }
+
 
   })
 
