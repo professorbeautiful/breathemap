@@ -31,7 +31,9 @@ function(input, output, session) {
   zoomLevel = 10
   verbose = 1
   rV = reactiveValues(featureToPlot='IQ points lost',
-                      selectedTown = NULL, savedTract = 1, savedclick = NULL, showingModal = FALSE)
+                      selectedTown = NULL,
+                      savedTract = 'Clairton 42003492700',
+                      savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
 
   print(paste('======== BEGIN server: #unspecified=',
@@ -95,8 +97,15 @@ function(input, output, session) {
   # }
 
   areaSelectorObserver = observeEvent(input$areaSelectorId, {
-    if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId))
-      updateSelectInput(inputId='areaSelectorId', selected = 'Clairton 42003492700')      #### default before area is selected ####
+    print(paste('0 areaSelectorObserver: rV$savedTract' , rV$savedTract,
+                'input$areaSelectorId' , input$areaSelectorId))
+    if (input$areaSelectorId %in% c(" ","") | is.na(input$areaSelectorId)) {
+      rV$savedTract = 'Clairton 42003492700'
+      updateSelectInput(inputId='areaSelectorId',
+                        selected = 'Clairton 42003492700')      #### default before area is selected ####
+      printpaste('1 Clairton areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId)
+    }
+    print(paste('1  areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId))
     #if(input$areaSelectorId != rV$savedTract)
     rV$savedTract = input$areaSelectorId
     if(verbose>0) {
@@ -220,7 +229,7 @@ function(input, output, session) {
       print(paste('input$Id_ToggleTownTract:  switched from twt to towns '))
       rV$selectedTown = NULL
       if(is.null(rV$savedTract))
-        rV$savedTract = 1
+        rV$savedTract = 'Clairton 42003492700'
       theseTowns = getTownsForThisTract(rV$savedTract)
       getATownFromThisTract(theseTowns)
     }
