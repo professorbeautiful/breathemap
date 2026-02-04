@@ -296,8 +296,8 @@ function(input, output, session) {
       rownumbers = which(twt$twt %in% rownumbers)  ### notice the order!!
     locateMe = getLonLat(rV$savedTract)
 
-    if(verbose > 1)
-      print(paste('tractIsChanged: ',
+    if(verbose > 0)
+      print(paste('showTheseTracts: ',
                   'input$areaSelectorId', input$areaSelectorId,
                   'rV$savedTract', rV$savedTract,
                   '   datarow', locateMe$datarow,
