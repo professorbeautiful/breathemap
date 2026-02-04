@@ -102,14 +102,15 @@ function(input, output, session) {
     if(verbose>0) {
       print(paste('2 areaSelectorObserver: ',
                   'input$areaSelectorId', input$areaSelectorId))
-    tractIsChanged()
+    }
+    tractIsChanged('areaSelectorObserver')
   })
   savedTractObserver = observeEvent(rV$savedTract, {
     if(verbose> 0 )
       printpaste('savedTractObserver:  rV$savedTract: ', rV$savedTract)
     if(input$areaSelectorId != rV$savedTract)
       updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
-    tractIsChanged()
+    tractIsChanged('savedTractObserver')
   })
 
   isTowns = function() { input$Id_ToggleTownTract == 'towns'}
@@ -159,7 +160,8 @@ function(input, output, session) {
     returnVal = (list(lon=lon, lat=lat, zoom=zoom, datarow=datarow))
     return(returnVal)
   }
-  tractIsChanged = function(){
+  tractIsChanged = function(whoCalled='unknown'){
+    printpaste('tractIsChanged: whoCalled', whoCalled)
     locateMe = getLonLat(rV$savedTract)
 
     if(verbose > 0) print(paste('tractIsChanged: ',
