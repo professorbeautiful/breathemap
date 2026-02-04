@@ -869,7 +869,7 @@ function(input, output, session) {
   }
 
   printpaste = function(intro, ..., ppverbose=1, ppcollapse=', ') {
-    if(verbose>ppverbose)
+    #if(verbose>ppverbose)
       print(paste(intro, paste(collapse=ppcollapse, ...)))
   }
 
