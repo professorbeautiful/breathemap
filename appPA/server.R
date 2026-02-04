@@ -750,10 +750,24 @@ function(input, output, session) {
     if(f %in% infoList) return(f)
     if(verbose > 1)
       print(paste('input$IdTotalOrRate', length(input$IdTotalOrRate)))
-    if(is.na(input$IdTotalOrRate) | length(input$IdTotalOrRate) == 0)
-      updateRadioButtons(session, 'IdTotalOrRate',
-                         selected = '...total')
-    if(input$IdTotalOrRate == '...total')
+    needIdTotalOrRate <<- NULL
+    try(silent = TRUE, {
+      needIdTotalOrRate <<- is.null(input$IdTotalOrRate) |
+        is.na(input$IdTotalOrRate) |
+        length(input$IdTotalOrRate) == 0
+      if(length(needIdTotalOrRate) == 0 )
+        needIdTotalOrRate <<- TRUE
+      if(isTRUE(needIdTotalOrRate) ) {
+        updateRadioButtons(session, 'IdTotalOrRate',
+                           selected = '...total')
+        if(verbose>0)
+          printpaste('needIdTotalOrRate is TRUE, setting IdTotalOrRate',
+                     input$IdTotalOrRate, '- done' )
+      }
+    })
+    if(isTRUE(needIdTotalOrRate) )
+      paste(f, '(estimated total)')
+    else  if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
       paste(f, '(rate per 1000)')
