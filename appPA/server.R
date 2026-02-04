@@ -502,9 +502,11 @@ function(input, output, session) {
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
 
   makeItARate = function(){
-    (rV$featureToPlot %in% featureList) &
+    isTRUE(
+      (rV$featureToPlot %in% featureList) &
       (input$IdTotalOrRate == '...rate per 1000') &
       (rV$featureToPlot != "PM2.5 average")
+    )
   }
 
   popIsZero = function()
@@ -537,6 +539,11 @@ function(input, output, session) {
 
       data = ( 1000 * (data) / (pops) )
       data = data[ - popIsZero()]
+      if(length(which (is.nan(data))) > 0)
+         data = data[ - which (is.nan(data))]
+      if(length(data) == 0)
+        printpaste('no data in thisAreaFeatureList')
+
     }
     if(verbose> 2){
       print(paste('thisAreaFeatureList:  ', input$IdTotalOrRate,
@@ -554,17 +561,19 @@ function(input, output, session) {
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
       return(feat.sum(rows = applyTo))   # people;  babies; but not PM2.5
-    if(input$IdTotalOrRate == '...total'){
+    if(isTRUE(input$IdTotalOrRate == '...total') ) {
       return(feat.sum(rows = applyTo))  # uses safe.sum
     } else if(makeItARate()){
       if(verbose>1)
         print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       pops = data.frame(twt)[[toDots("Population in 2019")]][applyTo]
       pops =  pops [- popIsZero()]
+      if( length( pops [- which(is.nan(data))] ) > 0)
+        pops =  pops [- which(is.nan(data))]
       # data are already rates per 1000,
       #  and pops is already cleaned in thisAreaFeatureList, so...
       #  return( safe.sum(data * pops) / safe.sum(pops) )
-      return( sum(data * pops) / sum(pops) )
+      return( safe.sum(data * pops) / safe.sum(pops) )
     }
     else stop('ERROR in thisAreaFeatureSummary')
   }
@@ -713,12 +722,18 @@ function(input, output, session) {
 
   output$histTitle = renderUI( {  #### histTitle ####
     # thisFeature = (twt[[rV$featureToPlot]])
+    thisAreaFeatureSummaryString =   signif(digits=3,
+                                            thisAreaFeatureSummary() )
+    printpaste('output$histTitle: thisAreaFeatureSummaryString ', thisAreaFeatureSummaryString)
+    if(is.nan(thisAreaFeatureSummaryString) | is.na(thisAreaFeatureSummaryString)  |
+       length(thisAreaFeatureSummaryString) == 0)
+      thisAreaFeatureSummaryString = "data not available"
     div(
       span(strong("Selected feature: "),  #### selected feature ####
            span(
              style='color:green', decorateFeatureName(), ' = ',
-             signif(digits=3,
-                    thisAreaFeatureSummary() ) )
+             thisAreaFeatureSummaryString
+           )
            #### TODO: which features do we sum, which do we mean?
            ### population is char for some reason.
       ),
