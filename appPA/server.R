@@ -63,7 +63,7 @@ function(input, output, session) {
   twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
     gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
           twt$twtSaved )
-  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt)
+  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt, selected = 'Clairton 42003492700')
 
 
   #### getTownsForThisTract ####
