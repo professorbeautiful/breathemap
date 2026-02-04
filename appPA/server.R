@@ -99,12 +99,14 @@ function(input, output, session) {
       updateSelectInput(inputId='areaSelectorId', selected = 'Clairton 42003492700')      #### default before area is selected ####
     #if(input$areaSelectorId != rV$savedTract)
     rV$savedTract = input$areaSelectorId
-    if(verbose>2)
-      print(paste('areaSelectorObserver: ',
+    if(verbose>0) {
+      print(paste('2 areaSelectorObserver: ',
                   'input$areaSelectorId', input$areaSelectorId))
     tractIsChanged()
   })
   savedTractObserver = observeEvent(rV$savedTract, {
+    if(verbose> 0 )
+      printpaste('savedTractObserver:  rV$savedTract: ', rV$savedTract)
     if(input$areaSelectorId != rV$savedTract)
       updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
     tractIsChanged()
@@ -160,7 +162,7 @@ function(input, output, session) {
   tractIsChanged = function(){
     locateMe = getLonLat(rV$savedTract)
 
-    if(verbose > 1) print(paste('tractIsChanged: ',
+    if(verbose > 0) print(paste('tractIsChanged: ',
                                 'input$areaSelectorId', input$areaSelectorId,
                                 'rV$savedTract', rV$savedTract,
                                 '   datarow', locateMe$datarow,
@@ -303,7 +305,7 @@ function(input, output, session) {
                   '   datarow', locateMe$datarow,
                   locateMe$lon, locateMe$lat, locateMe$zoom))
 
-    if(verbose > 1)
+    if(verbose > 0)
       print(paste('showTheseTracts:  rownumbers = ', paste(collapse='+', rownumbers),
                   'dim rV$TARGETdatarows',
                   paste(collapse=',', dim(rV$TARGETdatarows ))))
@@ -847,10 +849,12 @@ function(input, output, session) {
                             quantile =  rV$removeOutliersQuantile) {
     if(is.na(rV$removeOutliersQuantile))
       return(numeric(0))
-    print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
+    if(verbose > 2)
+      print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
                 rV$removeOutliersQuantile))
     outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
-    print(data.frame(outlierRows = outlierRows,
+    if(verbose > 2)
+      print(data.frame(outlierRows = outlierRows,
                      outlierValues=x[outlierRows],
                      tracts = twt$twt[outlierRows]))   #### OK
     return(outlierRows)
@@ -860,7 +864,8 @@ function(input, output, session) {
                             quantile =  rV$removeOutliersQuantile) {
     if(is.na(rV$removeOutliersQuantile))
       return(numeric(0))
-    print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
+    if(verbose > 2)
+      print(paste('call to theOutlierRows: rV$removeOutliersQuantile=',
                 rV$removeOutliersQuantile))
     outlierRows = which(pnorm((x - mean(x, na.rm=T)) /sd(x, na.rm=T) ) > quantile)
     return(data.frame(outlierRows = outlierRows,
@@ -892,12 +897,12 @@ function(input, output, session) {
     referenceDistribution = thisAreaFeatureDistribution()
     initialreferenceDistribution = referenceDistribution
     #as.numeric(twt[[(rV$featureToPlot)]])
-    print(paste('featurePlot: referenceDistribution:'))
-    print('before:')
+    if(verbose>2)print(paste('featurePlot: referenceDistribution:'))
+    if(verbose>2)print('before:')
 
-    print(summary(referenceDistribution))
-    print(length(referenceDistribution))
-    if(is.na(rV$removeOutliersQuantile) ) {  # skip histfix not needed?
+    if(verbose>2)print(summary(referenceDistribution))
+    if(verbose>2)print(length(referenceDistribution))
+    if(is.na(rV$removeOutliersQuantile) ) {
       outliers = numeric(0)
     } else {
       outlierRows = theOutlierRows(referenceDistribution,
@@ -934,9 +939,10 @@ function(input, output, session) {
         print(paste('final outliers ', paste(collapse=', ',
                                              signif(digits=3,outliers))))
     }
-    if(verbose>0)print('after:')
-    if(verbose>0)print(summary(referenceDistribution))
-    print(length(referenceDistribution))
+    if(verbose>2) print('after:')
+    if(verbose>2) print(summary(referenceDistribution))
+    if(verbose>2) print(length(referenceDistribution))
+
 
 
     if(rV$do.hist) {
@@ -983,8 +989,8 @@ function(input, output, session) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
                 rvIdMakeReferenceCommunity$referenceCommunity)
-      print(paste('REFERENCE:  datarows', rV$REFERENCEdatarows,
-                  'Community', rvIdMakeReferenceCommunity$referenceCommunity))
+      print(paste('REFERENCE Community:  datarows', rV$REFERENCEdatarows,
+                  '', rvIdMakeReferenceCommunity$referenceCommunity))
       refValue = thisAreaFeatureSummary(applyTo = rV$REFERENCEdatarows)
       print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
