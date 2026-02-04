@@ -94,9 +94,9 @@ fluidPage(
                                                             ' <hr>See "Community shares" checkbox for details'
                                          ) ),
                                          radioButtons("Id_ToggleTownTract", "Areas shown:",
-                                                      choiceNames=c('communities', 'tracts'),
-                                                      choiceValues=c('towns', 'twt'),
-                                                      selected='twt')
+                                                      choiceNames=c('tracts', 'communities'),
+                                                      choiceValues=c('twt', 'towns'),
+                                                      selected='twt') # not 2 or tracts
                                   )
                               )),
                        column(4,
