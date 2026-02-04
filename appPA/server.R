@@ -525,8 +525,6 @@ function(input, output, session) {
     return(distribution)
   }
 
-  # total.communities()
-
   thisAreaFeatureList = function(var = rV$featureToPlot,
                                  applyTo= rV$TARGETrownumbers,
                                  verbose=T) {
@@ -736,7 +734,7 @@ function(input, output, session) {
 
 
   output$proportion_smaller <- renderUI({
-    if(  total.communities()  & length(thisAreaFeatureList() > 1) )
+    if(  isTRUE(total.communities())  & length(thisAreaFeatureList() > 1) )
       return('proportion_smaller would not make sense ')
     #### proportion_smaller would not make sense
     howManyLess = try({
@@ -891,14 +889,20 @@ function(input, output, session) {
 
   rV$do.hist = TRUE
 
-  total.communities = reactive((input$IdTotalOrRate == '...total')
-                               & (input$Id_ToggleTownTract == 'communities'))
+  total.communities = reactive({
+    if(verbose>0)
+      printpaste('total.communities', 'input$IdTotalOrRate', input$IdTotalOrRate,
+               'input$Id_ToggleTownTract', input$Id_ToggleTownTract
+               )
+    (input$IdTotalOrRate == '...total') &
+                                (input$Id_ToggleTownTract == 'communities')
+  })
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
     xlab = decorateFeatureName()
 
-    if( total.communities()) {
+    if( isTRUE(total.communities())) {
       thisAreaFeature = thisAreaFeatureList()
     }  #### display all individual towns in this area
 
