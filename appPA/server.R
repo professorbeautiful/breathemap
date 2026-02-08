@@ -424,7 +424,7 @@ function(input, output, session) {
                   layerId = ~twt, ## initially.
                   highlight = highlightOptions(
                     fillColor = '#224488',
-                    color = "blue",
+                    #color = "blue",
                     weight = 2,
                     fillOpacity = 0.1,
                     bringToFront = T))
