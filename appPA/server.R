@@ -665,20 +665,13 @@ function(input, output, session) {
     if(feat %in% c("Ischemic Heart Disease Deaths",
                    "Myocardial Infarctions"))
       ButtonStyle =
-      paste(rightSideButtonStyle, '; font-size:10px')
+      paste(rightSideButtonStyle, '; font-size:8px')
     else if(feat %in% c("All-cause deaths",
                         "Lung Cancer Deaths"))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:10px')
-    else if(feat %in% c("Lifetime earnings lost",
-                        "IQ points lost"))
-      ButtonStyle =
-      paste(rightSideButtonStyle, '; font-size:10px')
     else ButtonStyle = rightSideButtonStyle
-
-    ####  Remove the word 'deaths' from labels
     feat = gsub('[dD]eaths', '', feat)
-    feat = gsub('Myocardial Infarctions', 'Myocard Infarcts', feat)
     actionButton(style=ButtonStyle,
                  inputId = inputId,
                  label=feat)
@@ -691,12 +684,13 @@ function(input, output, session) {
     })
     buttonsFixed =
       div(
-        div(style='text-align: center; margin:auto; ',
-            "Deaths:", buttons[3:5],HTML(" &nbsp;Disease:"), buttons[6]),
+        div(style='text-align: center; margin:auto',
+            "Birth cohort", buttons[1:2]),
         div(style='text-align: center; margin:auto',
             "Perinatal:" , buttons[7:9]),
-        div(style='text-align: center; margin:auto',
-            "Birth cohort:", buttons[2:1])  # reverse order on the bottom
+        div(style='text-align: center; margin:auto; ',
+            "Death, disease:", buttons[3:6])
+
       )
 
     # style=' border-radius: 0px; margin:0px;
