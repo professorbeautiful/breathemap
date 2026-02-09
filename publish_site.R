@@ -5,12 +5,16 @@
 
 
 #  git push --set-upstream origin BreatheMap
+#### gitbranch.txt  Nice idea, needs work.
 
 gitbranch.txt = readLines('appPA/gitbranch.txt')
 
-gitbranch.txt =  print(paste( date(), '\n',
-                              grep(v=T, '^\\*', system("git branch -v",  intern = T) ),
-                              '\n', gitbranch.txt))
+gitbranch.latest =  system(" git branch -v|grep '^*'",  intern = T)
+
+gitbranch.txt = paste(gitbranch.latest,
+                             collapse='\n', gitbranch.txt)
+cat(gitbranch.txt)
+
 
 write(file = 'appPA/gitbranch.txt',
       gitbranch.txt )
