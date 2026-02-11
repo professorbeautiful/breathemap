@@ -6,7 +6,10 @@ indentMe = function(...)
 acknowledgements = div(
   # a(href='', "Published article"),
   # br(),
-  strong('Annals of Global Health', br(),
+  strong(
+    #Journal Articles: Include author(s), title, journal name, year, volume, issue, page range, and DOI. Should DOI be the URL?
+
+    'Annals of Global Health', br(),
          'Particulate Air Pollution, Disease and Death
          in the Cities and Towns of Southwestern Pennsylvania
          ',
@@ -21,9 +24,12 @@ acknowledgements = div(
          1.	Global Observatory on Planetary Health, Schiller Institute for Integrated Science and Society, Boston College, Chestnut Hill, MA 02467, USA
          <br>&nbsp;&nbsp;&nbsp;&nbsp;
           2.	Centre Scientifique de Monaco, Monaco, MC'))
-           )
+           ),
+      a(href='https://annalsofglobalhealth.org/articles/10.5334/aogh.5145',
+        "Year: 2026, Volume: 92 Issue: 1, Page/Article: 10, DOI: 10.5334/aogh.5145")
   )
   ,
+  br(),br(),
   HTML(paste(
     '
 The Breathe Project wishes to thank the people who made this mapping site possible:<br>
@@ -34,7 +40,7 @@ Ella Whitman, Luke Bryan, Sancia Sehdev, and Philip Landrigan of Global Observat
 Site Design:
 Paul Fireman of Fireman Creative
     <br>Original page design&implementation: Luke Bryan, Boston College,
-    <br>Western PA map page customization and expansion:  Roger Day,
+    <br>Western PA map page customization and expansion: Roger Day,
     <br> Volodymyr Agafonkin, creator of the "<a href=https://leafletjs.com/>leaflet</a>" Javascript package,
     <br>Creators of the "<a href=	https://github.com/rstudio/leaflet>leaflet</a>" R package,
     <br>Creators of the "<a href=	https://www.rdocumentation.org/packages/tigris>tigris</a>" R package,
