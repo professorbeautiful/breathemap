@@ -561,9 +561,10 @@ function(input, output, session) {
       return(feat.pop.weightedAverage(applyTo))
     else if(var %in% infoList)
       return(feat.sum(rows = applyTo))   # people;  babies; but not PM2.5
+    #"Population in 2019" "PM2.5 average"      "Births in 2019"
     if(isTRUE(input$IdTotalOrRate == '...total') ) {
       return(feat.sum(rows = applyTo))  # uses safe.sum
-    } else if(makeItARate()){
+    } else if(isTRUE(makeItARate() ) ){
       if(verbose>1)
         print(paste('feat.countsPer1000:', str(feat.countsPer1000())) )
       pops = data.frame(twt)[[toDots("Population in 2019")]][applyTo]
@@ -575,7 +576,9 @@ function(input, output, session) {
       #  return( safe.sum(data * pops) / safe.sum(pops) )
       return( safe.sum(data * pops) / safe.sum(pops) )
     }
-    else stop('ERROR in thisAreaFeatureSummary')
+    else printpaste('warning: in thisAreaFeatureSummary: ', var,
+                    '\nOnly happens on startup. Ignore')
+
   }
 
 
@@ -720,8 +723,14 @@ function(input, output, session) {
     )
   })
 
+  rV$firstTime = TRUE
+
   output$histTitle = renderUI( {  #### histTitle ####
     # thisFeature = (twt[[rV$featureToPlot]])
+    if(isTRUE(rV$firstTime)) {
+      print('rV$firstTime')
+      opt.save= options(warn=-1)
+    }
     thisAreaFeatureSummaryString =   signif(digits=3,
                                             thisAreaFeatureSummary() )
     printpaste('output$histTitle: thisAreaFeatureSummaryString ', thisAreaFeatureSummaryString)
@@ -744,6 +753,10 @@ function(input, output, session) {
       # br(),
       uiOutput('proportion_smaller')
     )
+    if(isTRUE(rV$firstTime))  {
+      rV$firstTime =  FALSE
+      options(opt.save)
+    }
   })
 
 
@@ -1021,12 +1034,17 @@ function(input, output, session) {
     print(paste('arrows: ', paste(thisAreaFeatureSummary(), collapse=',')))
     # abline(v=thisAreaFeature,
     #        lwd=3, col='darkgreen')
-    arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
-           x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
-           col='darkgreen', lwd=3)
-    text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
-         label = signif(digits=3, thisAreaFeatureSummary()),
-         col='darkgreen', cex=1.5)
+    opt.save = options(warn = -1)
+    try(silent = TRUE, {
+
+      arrows(x0 = thisAreaFeatureSummary(), y0 = 0,
+             x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
+             col='darkgreen', lwd=3)
+      text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
+           label = signif(digits=3, thisAreaFeatureSummary()),
+           col='darkgreen', cex=1.5)
+
+    })
 
     if(! is.null(rvIdMakeReferenceCommunity$referenceCommunity)) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
@@ -1059,7 +1077,7 @@ function(input, output, session) {
                    labels = outlierLabel)
     }
 
-
+    options(opt.save)
   })
 
   ### popovers--  popify or tipify work, but these don't.
