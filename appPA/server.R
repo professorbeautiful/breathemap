@@ -2,6 +2,7 @@ function(input, output, session) {
   source('coloring.R')
   source('popovers.R', local = T)
 
+
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
@@ -731,8 +732,15 @@ function(input, output, session) {
       print('rV$firstTime')
       opt.save= options(warn=-1)
     }
-    thisAreaFeatureSummaryString =   signif(digits=3,
-                                            thisAreaFeatureSummary() )
+    thisAreaFeatureSummaryString =  try(silent = TRUE,
+        {
+       signif(digits=3,
+                                              thisAreaFeatureSummary() )
+    })
+    if(class(thisAreaFeatureSummaryString) ==  'try-error') {
+      printpaste(thisAreaFeatureSummaryString)
+      thisAreaFeatureSummaryString = ''
+    }
     printpaste('output$histTitle: thisAreaFeatureSummaryString ', thisAreaFeatureSummaryString)
     if(is.nan(thisAreaFeatureSummaryString) | is.na(thisAreaFeatureSummaryString)  |
        length(thisAreaFeatureSummaryString) == 0)
