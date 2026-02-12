@@ -25,7 +25,8 @@ acknowledgements = div(
          <br>&nbsp;&nbsp;&nbsp;&nbsp;
           2.	Centre Scientifique de Monaco, Monaco, MC'))
            ),
-      a(href='https://annalsofglobalhealth.org/articles/10.5334/aogh.5145',
+      a(target='_blank',
+        href='https://annalsofglobalhealth.org/articles/10.5334/aogh.5145',
         "Year: 2026, Volume: 92 Issue: 1, Page/Article: 10, DOI: 10.5334/aogh.5145")
   )
   ,
