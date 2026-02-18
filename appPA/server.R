@@ -1026,16 +1026,19 @@ function(input, output, session) {
     }
     if(length(thisAreaFeature) > 1 ) {
       for(feature in thisAreaFeature) {
-      #### multiple arrows ####
-      print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
-      # abline(v=thisAreaFeature,
-      #        lwd=3, col='darkgreen')
-      arrows(x0 = feature, y0 = 0,
-             x1 = feature, y1= 0.5 * par('usr')[4]*1.2, xpd=NA,
-             col='darkgreen', lwd=3, lty=3)
-      text(x = feature, y= 0.5 * par('usr')[4]*(1.2 + 0.06), xpd=NA,
-           label = signif(digits=3, feature),
-           col='darkgreen', cex=1.5)
+        #### multiple arrows ####
+        print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
+        # abline(v=thisAreaFeature,
+        #        lwd=3, col='darkgreen')
+        arrowHeight =  0.5 * par('usr')[4]*1.2
+        arrows(x0 = feature, y0 = 0,
+               x1 = feature, y1= arrowHeight, xpd=NA,
+               col='darkgreen', lwd=3, lty=1,
+               length=0)
+        points(x=feature, y= arrowHeight)
+        # text(x = feature, y= 0.5 * par('usr')[4]*(1.2 + 0.06), xpd=NA,
+        #      label = signif(digits=3, feature),
+        #      col='darkgreen', cex=1.5)   ### too busy- overlapping.
       }
     }
     #### one arrow ####
