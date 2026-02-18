@@ -1,8 +1,24 @@
 Deployed: 
- * BreatheMap   49c5c9b Set initial toggle to "towns". Deployed to BreatheMap, 2026-02-18 
+ * BreatheMap   8d606ea [ahead 2] slight improvement in publish_site.R , which works on source'ing! 
 =-=-=-=-=-
 Recent:
- commit 49c5c9b61b2c34cbb935d8711f2b27e433f12f49
+ commit 8d606ea8b56b1c16d7aaeceb26d11fef8fa2b0e1
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 16:51:11 2026 -0500
+
+    slight improvement in publish_site.R , which works on source'ing!
+
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+commit e64064505232469a2623c5001c75dc32b8efe075
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 16:50:19 2026 -0500
+
+    More FAQ tweaks.
+
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+commit 49c5c9b61b2c34cbb935d8711f2b27e433f12f49
 Author: Roger Day <notsofeo@gmail.com>
 Date:   Wed Feb 18 16:37:29 2026 -0500
 
@@ -26,19 +42,3 @@ Date:   Wed Feb 18 15:25:12 2026 -0500
     Adding an FAQ.
 
  4 files changed, 73 insertions(+), 5 deletions(-)
-
-commit 36ce3981ada587c299de3ba7d00e69f5f8ece480
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 13:58:26 2026 -0500
-
-    Slight correction of reference:   tract, not community
-
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-commit a05b789472f6bb457a6db89bee409074b738ff55
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 13:55:16 2026 -0500
-
-    Better "arrows" for multiple tracts.
-
- 1 file changed, 13 insertions(+), 10 deletions(-)
