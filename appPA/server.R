@@ -466,12 +466,15 @@ function(input, output, session) {
                           label =
                             span(span(style=referenceColorStyle, "Set"),
                                  span(style='color:darkgreen',"currently selected"),
-                                 span(style=referenceColorStyle, "as reference community? (Red lozenge)"
+                                 span(style=referenceColorStyle, "as reference tract? (Red lozenge)"
                                  ))
              )),
       br(),
-      fluidRow( style=referenceColorStyle,  class='reference',  column(3, strong( "Current reference:")),
-                column(9, textOutput(outputId = 'IdReferenceCommunity')
+      fluidRow( style=referenceColorStyle,  class='reference',
+                column(5, offset=1, strong( "Current reference tract:")))
+      ,
+      fluidRow( style=referenceColorStyle,  class='reference',
+                column(9, offset=1, textOutput(outputId = 'IdReferenceCommunity')
                 ))
     )
   })
