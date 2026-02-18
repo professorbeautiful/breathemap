@@ -1,7 +1,10 @@
 
+# source'ing this file works.
+
 ### you may need shinyDebuggingPanel installed fresh
 #  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
-# Not a package!  devtools::install_github('professorbeautiful/BreatheMap')
+# Note: this app is a package!  devtools::install_github('professorbeautiful/BreatheMap')
+
 
 
 #  git push --set-upstream origin BreatheMap
@@ -31,6 +34,9 @@ write(file = 'appPA/gitbranch.txt',
 appName = 'BreatheMap'
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 logLevel = c("normal", "quiet", "verbose") [3]
+
+### 2026-02-18  I removed appPAtest from
+# '/Users/rogerday/Library/Mobile Documents/com~apple~CloudDocs/Fireman backup/appPA/rsconnect/shinyapps.io/trials/BreatheMap.dcf'
 
 # launch.browser.bad = getOption("rsconnect.launch.browser",
 #                            is_interactive())
