@@ -1,8 +1,17 @@
 Deployed: 
- * BreatheMap   c5a2610 [ahead 5] Edits to the FAQ 
+ * BreatheMap   49c5c9b Set initial toggle to "towns". Deployed to BreatheMap, 2026-02-18 
 =-=-=-=-=-
 Recent:
- commit c5a26102382261de21298ee894ff49896c0293a9
+ commit 49c5c9b61b2c34cbb935d8711f2b27e433f12f49
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 16:37:29 2026 -0500
+
+    Set initial toggle to "towns".
+    Deployed to BreatheMap, 2026-02-18
+
+ 2 files changed, 44 insertions(+), 12 deletions(-)
+
+commit c5a26102382261de21298ee894ff49896c0293a9
 Author: Roger Day <notsofeo@gmail.com>
 Date:   Wed Feb 18 15:37:30 2026 -0500
 
@@ -33,11 +42,3 @@ Date:   Wed Feb 18 13:55:16 2026 -0500
     Better "arrows" for multiple tracts.
 
  1 file changed, 13 insertions(+), 10 deletions(-)
-
-commit a4c9df3fa30b68d92ee7c7196e665eeaf7f6aed0
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 13:44:22 2026 -0500
-
-    modifications of the acknowledgments section.
-
- 1 file changed, 4 insertions(+), 4 deletions(-)
