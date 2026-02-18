@@ -472,7 +472,7 @@ function(input, output, session) {
                           label =
                             span(span(style=referenceColorStyle, "Set"),
                                  span(style='color:darkgreen',"currently selected"),
-                                 span(style=referenceColorStyle, "as reference tract? (Red lozenge)"
+                                 span(style=referenceColorStyle, "as reference tract? (Red diamond)"
                                  ))
              )),
       br(),
