@@ -42,11 +42,11 @@ Site Design:
 Paul Fireman of Fireman Creative
     <br>Original page design&implementation: Luke Bryan, Boston College,
     <br>Western PA map page customization and expansion: Roger Day,
-    <br> Volodymyr Agafonkin, creator of the "<a href=https://leafletjs.com/>leaflet</a>" Javascript package,
-    <br>Creators of the "<a href=	https://github.com/rstudio/leaflet>leaflet</a>" R package,
-    <br>Creators of the "<a href=	https://www.rdocumentation.org/packages/tigris>tigris</a>" R package,
+    <br> Volodymyr Agafonkin, creator of the "<a target=_blank href=https://leafletjs.com/>leaflet</a>" Javascript package,
+    <br>Creators of the R packages "<a target=_blank href=	https://github.com/rstudio/leaflet>leaflet</a>" and
+        "<a target=_blank href=	https://www.rdocumentation.org/packages/tigris>tigris</a>",
     <br>Supplemental census tract information:,
-    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=,
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target=_blank href=
     "https://pitt.libguides.com/pghcensus/pghcensustracts">U. Pitt Pittsburgh Census Information</a> (Christopher Lemery)
     '
 
