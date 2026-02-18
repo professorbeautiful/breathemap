@@ -39,6 +39,12 @@ function(input, output, session) {
 
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
+  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
+  observeEvent(input$IdFAQ, {
+    showModal(modalDialog(#footer = NULL,
+      faq
+    ))
+  })
   source('acknowledgements.R')
   observeEvent(input$IdAck, {
     showModal(modalDialog(#footer = NULL,

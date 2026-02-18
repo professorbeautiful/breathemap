@@ -7,12 +7,14 @@
 #  git push --set-upstream origin BreatheMap
 #### gitbranch.txt  Nice idea, needs work.
 
-gitbranch.txt = readLines('appPA/gitbranch.txt')
+# gitbranch.txt = readLines('appPA/gitbranch.txt')
 
 gitbranch.latest =  system(" git branch -v|grep '^*'",  intern = T)
+gitbranch.recentlog = system(" git log @{5}..HEAD --shortstat ",  intern = T)
+gitbranch.txt = paste("Deployed: \n",
+  gitbranch.latest, '\n=-=-=-=-=-\nRecent:\n',
+                      paste(collapse='\n', gitbranch.recentlog) )
 
-gitbranch.txt = paste(gitbranch.latest,
-                             collapse='\n', gitbranch.txt)
 cat(gitbranch.txt)
 
 

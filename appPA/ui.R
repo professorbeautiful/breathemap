@@ -124,12 +124,17 @@ fluidPage(
                      leafletOutput("map", height = 450),
                      br(),
                      fluidRow(
-                       column(width=4,
+                       column(width=3,
+                              #div(
+                              actionButton('IdFAQ', label='FAQ',
+                                           style=leftSideButtonStyle)
+                       ),
+                       column(width=3,
                               #div(
                               actionButton('IdAck', label='Acknowledgments',
                                            style=leftSideButtonStyle)
                        ),
-                       column(width=4,
+                       column(width=3,
                               actionButton(inputId='IdMapAdvice',
                                            style=leftSideButtonStyle,
                                            label = 'Navigating the map')
