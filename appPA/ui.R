@@ -96,7 +96,7 @@ fluidPage(
                                          radioButtons("Id_ToggleTownTract", "Areas shown:",
                                                       choiceNames=c('tracts', 'communities'),
                                                       choiceValues=c('twt', 'towns'),
-                                                      selected='twt') # not 2 or tracts
+                                                      selected='towns') # not 2 or tracts
                                   )
                               )),
                        column(4,

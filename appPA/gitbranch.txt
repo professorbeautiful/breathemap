@@ -1,11 +1,43 @@
-Wed Feb  4 11:23:04 2026 
- * BreatheMap   6283fa0 eliminated NaN (with failsafe string) 
- Sat Jan 31 14:59:31 2026 
-  * out          ba62534 color the reference tract name. 
-  Fri Jan 30 12:20:45 2026 
- Sat Jan 31 14:59:31 2026 
-  * out          ba62534 color the reference tract name. 
-   * 1-29plus     2e2be3c fixed name for 'All-cause deaths' 
- Sat Jan 31 14:59:31 2026 
-  * out          ba62534 color the reference tract name. 
-   * 1-29         3da0555 Fixed the "red doesn't stay fixed" problem.
+Deployed: 
+ * BreatheMap   c5a2610 [ahead 5] Edits to the FAQ 
+=-=-=-=-=-
+Recent:
+ commit c5a26102382261de21298ee894ff49896c0293a9
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 15:37:30 2026 -0500
+
+    Edits to the FAQ
+
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+commit 8542841beea685b10d4daaffd81afaf58a7d92b5
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 15:25:12 2026 -0500
+
+    Adding an FAQ.
+
+ 4 files changed, 73 insertions(+), 5 deletions(-)
+
+commit 36ce3981ada587c299de3ba7d00e69f5f8ece480
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 13:58:26 2026 -0500
+
+    Slight correction of reference:   tract, not community
+
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+commit a05b789472f6bb457a6db89bee409074b738ff55
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 13:55:16 2026 -0500
+
+    Better "arrows" for multiple tracts.
+
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+commit a4c9df3fa30b68d92ee7c7196e665eeaf7f6aed0
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Feb 18 13:44:22 2026 -0500
+
+    modifications of the acknowledgments section.
+
+ 1 file changed, 4 insertions(+), 4 deletions(-)
