@@ -675,16 +675,22 @@ function(input, output, session) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
     size='sm'  # no effect.
     #    feat = gsub('Childbirth', '', feat)
-    if(feat %in% c("Ischemic Heart Disease Deaths",
-                   "Myocardial Infarctions"))
+    if(feat %in% c("Ischemic Heart Disease Deaths"
+                   ))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:8px')
     else if(feat %in% c("All-cause deaths",
-                        "Lung Cancer Deaths"))
+                        "Lung Cancer"))
       ButtonStyle =
       paste(rightSideButtonStyle, '; font-size:10px')
     else ButtonStyle = rightSideButtonStyle
+    if(feat == 'All-cause deaths')
+       feat='Total Deaths'
+    ##   if(feat == 'Ischemic Heart Disease')  #stet, per Philip.
     feat = gsub('[dD]eaths', '', feat)
+    if(feat == "Myocardial Infarctions")
+        feat = "Heart Attack"
+
     actionButton(style=ButtonStyle,
                  inputId = inputId,
                  label=feat)
@@ -702,7 +708,8 @@ function(input, output, session) {
         div(style='text-align: center; margin:auto',
             "Perinatal:" , buttons[7:9]),
         div(style='text-align: center; margin:auto; ',
-            "Death, disease:", buttons[3:6])
+            "Death:", buttons[3:5],
+            HTML("&nbsp;&nbsp;&nbsp;Disease:"), buttons[6])
 
       )
 
