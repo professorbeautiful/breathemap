@@ -885,8 +885,12 @@ function(input, output, session) {
     )
   })
   output$theOutlierRowsOutput = renderTable({
-    theOutlierInfo()[order(decreasing = TRUE, theOutlierInfo()$outlierValues), ]
-
+    result = try(silent = TRUE,
+        {theOutlierInfo()[order(decreasing = TRUE, theOutlierInfo()$outlierValues), ]}
+    )
+    if(class(result) ==  'try-error')
+      result = NULL
+    return(result)
   })
   theOutlierValues = function(x=thisAreaFeatureDistribution(), quantile =  rV$removeOutliersQuantile) {
     theValues = sort(decreasing = TRUE,
@@ -1092,7 +1096,7 @@ function(input, output, session) {
                             paste(biggestOutliers, collapse='\n'
                             ))
       print(paste(outlierLabel))
-      text.default(x = max(referenceDistribution), y = highestPlotValue,
+      text.default(x = max(referenceDistribution), y = highestPlotValue * 0.8,
                    xpd=NA, adj=c(0,0.5),
                    labels = outlierLabel)
     }
