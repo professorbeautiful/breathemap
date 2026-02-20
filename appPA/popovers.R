@@ -7,7 +7,7 @@ indentMe = function(...)
   )
 addPopover(session = session,
            placement = 'left',
-           id='featurePlot',
+           id='IdfeaturePlotforpopover',
            title = 'About this graph:',
            content=div( style= 'width: 120% !important;',
              "NOTE: ",

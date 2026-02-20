@@ -157,9 +157,11 @@ fluidPage(
                      fluidRow(
                        column(12,
                               div(  ### this div does not help! but popover works now.
-                                id='IdfeaturePlotforpopover',
-                                  plotOutput(outputId="featurePlot",
-                                             height=300)
+                                actionButton(style=rightSideButtonStyle,
+                                             inputId = 'IdfeaturePlotforpopover',
+                                             label="Hover here  for information about this graph"),
+                                plotOutput(outputId="featurePlot",
+                                           height=300)
                               )
 
                        )
