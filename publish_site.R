@@ -2,7 +2,7 @@
 # source'ing this file works.
 
 ### you may need shinyDebuggingPanel installed fresh
-#  devtools::install_github('professorbeautiful/shinyDebuggingPanel')
+devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 # Note: this app is a package!  devtools::install_github('professorbeautiful/BreatheMap')
 
 
