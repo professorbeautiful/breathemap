@@ -1,19 +1,19 @@
-## requires  patown1 (PAtown;  has the geometry),
-#                   patowndata2 (PAtowndata; has the data to display)
+## requires  patown1 now patown2 (PAtown;  has the geometry),
+#                   patowndata2 now patowndata3 (PAtowndata; has the data to display)
 
 
-PAtown = patown1    #  badly named.  Luke tract geometry.
-PAtowndata = patowndata2  #  badly named.  Luke tract data fields.
+PAtown = patown2    #  badly named. See below.  Luke tract geometry.
+PAtowndata = patowndata3  #  badly named.  Luke tract data fields.
 # There's nothing "town" about them. But we will keep these names to avoid more confusion.
 save(PAtown, file='appPA/PAtown.Rd')
 save(PAtowndata, file='appPA/PAtowndata.Rd')
 
-luke.pa.geom.pop = patown1   ### a better name
+luke.pa.geom.pop = patown2   ### a better name
 luke.pa.geom.pop$tracts = luke.pa.geom.pop$GEOID   ### rename
 
 #### replace missing geometry with luke.pa.geom.pop (from PAtown originally)
 
-setcompare(luke.pa.geom.pop$tracts, patowndata2$GEOID)   # identical.
+setcompare(luke.pa.geom.pop$tracts, patowndata3$GEOID)   # identical.
 # setcompare(luke.pa.geom.pop$tracts, tt1.sw.l$tracts)
 # # both x_not_y y_not_x
 # #  739       0      69
