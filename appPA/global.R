@@ -11,6 +11,8 @@ library(shinyBS)
 library(shinyjs)
 library(shinyWidgets)
 library(keys)
+library(markdown)
+library(rmarkdown)
 
 shinyjs::useShinyjs()
 
