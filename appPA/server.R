@@ -1111,12 +1111,7 @@ function(input, output, session) {
     options(opt.save)
   })
 
-  ### popovers--  popify or tipify work, but these don't.
-  # addPopover(session, id='IdNbhds',title = 'Pittsburgh Neighborhood toggle',
-  #            content = '...in progress.', placement='top', trigger='hover')
-  # addPopover(session, id='areaSelectorId',title = 'census tracts',
-  #            content = 'with town names when available', placement='top', trigger='hover')
-  #source('popovers.R')
+
 }
 
 
