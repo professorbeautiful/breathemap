@@ -8,11 +8,24 @@ library(tigris)
 library(sf)
 library(dplyr)
 library(shinyBS)
+library(shinyjs)
 library(shinyWidgets)
 library(keys)
 
+shinyjs::useShinyjs()
+
 appName = gsub('deploying','',
-               grep('deploying', dir() , v=T))
+               grep('deploying', dir() , v=T) )
+if(length(appName) > 1)
+  appName = 'BreatheMap-test'
+
+hideIfDesired <<- function(style,
+                           hideMe = appName=='BreatheMap-test')
+  paste(style,
+        ifelse(hideMe,
+               "; visibility: hidden",
+               ''))
+
 
 # if(basename(getwd()) != 'appPA')
 #   setwd('appPA')

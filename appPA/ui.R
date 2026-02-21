@@ -84,8 +84,8 @@ fluidPage(
                                                        selected =
                                                          'Clairton 42003492700')))),
                        column(3,
-
-                              div(style=breatheLabelColoring,
+                              div(id='div_Id_ToggleTownTract', #class='hideMe',
+                                  style=hideIfDesired(breatheLabelColoring),
                                   popify(title='Areas shown:',
                                          content=HTML(paste('"tracts":  <br>_____Show one tract.<hr>',
                                                             '"communities":',
@@ -100,7 +100,7 @@ fluidPage(
                                   )
                               )),
                        column(4,
-                              div(style=breatheLabelColoring,
+                              div(style=hideIfDesired(breatheLabelColoring),
                                   popify(title='Pittsburgh Neighborhood toggle',
                                          content='When "community" is selected, <br>should Pittsburgh be seen <br>as one "community", <br>or each neighborhood as an individual "community"?',
 

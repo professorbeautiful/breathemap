@@ -2,6 +2,12 @@ function(input, output, session) {
   source('coloring.R')
   source('popovers.R', local = T)
 
+  hideIfDesired <<- function(style,
+                             hideMe = appName=='BreatheMap-test')
+    paste(style,
+          ifelse(hideMe,
+                 "; visibility: hidden",
+                 ''))
 
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
@@ -30,7 +36,7 @@ function(input, output, session) {
 
 
   zoomLevel = 10
-  verbose = 1
+  verbose = 0
   rV = reactiveValues(featureToPlot='IQ points lost',
                       selectedTown = NULL,
                       savedTract = 'Clairton 42003492700',
@@ -703,7 +709,7 @@ function(input, output, session) {
     })
     buttonsFixed =
       div(
-        div(style='text-align: center; margin:auto',
+        div(style=hideIfDesired('text-align: center; margin:auto'),
             "Birth cohort", buttons[1:2]),
         div(style='text-align: center; margin:auto',
             "Perinatal:" , buttons[7:9]),
@@ -939,7 +945,7 @@ function(input, output, session) {
   }
 
   printpaste = function(intro, ..., ppverbose=1, ppcollapse=', ') {
-    #if(verbose>ppverbose)
+    if(verbose>ppverbose)
       print(paste(intro, paste(collapse=ppcollapse, ...)))
   }
 
@@ -1111,7 +1117,23 @@ function(input, output, session) {
     options(opt.save)
   })
 
+#  showModal(modalDialog(title=paste('in ', appName)))
+  if(length(appName) > 1)
+    appName = 'BreatheMap-test'
 
+  print(paste('appName is ', appName))
+  rV$appName = appName
+
+  observeEvent(rV$appName, {
+    if(appName=='BreatheMap-test') {
+      printpaste("appName=='BreatheMap-test'")
+      shinyjs::hideElement('Id_ToggleTownTract', asis = TRUE)
+      shinyjs::hideElement('div_Id_ToggleTownTract', asis = TRUE)
+      shinyjs::runjs("$('#Id_ToggleTownTract').hide();")
+      shinyjs::runjs("$('#hideMe').hide();")
+      #shinyjs::toggle(id = 'div_Id_ToggleTownTract', condition = appName=='BreatheMap-test')
+    }
+  })
 }
 
 
