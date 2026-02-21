@@ -70,7 +70,7 @@ Moving to a different tract or community, for example to South Fayette Township,
 &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
 
 <hr>
-<div style=`r hideIfDesired('')`>
+<div style=`r hideIfDesired()`>
 •	<strong> Birth cohort</strong>
 <br>
 Some outcome estimates apply specifically to the birth cohort of 2019:
