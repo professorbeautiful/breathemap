@@ -1,6 +1,13 @@
 
 # source'ing this file works.
 
+appName = 'BreatheMap'
+appName = 'BreatheMap-noIQ'
+appName = 'BreatheMap-test'
+
+appTitle = 'BreatheMap for southwestern Pennsylvania'
+
+
 ### you may need shinyDebuggingPanel installed fresh
 devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 # Note: this app is a package!  devtools::install_github('professorbeautiful/BreatheMap')
@@ -27,14 +34,7 @@ write(file = 'appPA/gitbranch.txt',
 
 ### Read by server. We can use shinyDebuggingPanel to view it.
 
-# appName = 'appPA_deployApp'
-# appTitle = 'appPA_deployApp'
-# appName = 'appPA'
-# appTitle = 'appPA'
-appName = 'BreatheMap'
-appName = 'BreatheMap-noIQ'
-appName = 'BreatheMap-test'
-appTitle = 'BreatheMap for southwestern Pennsylvania'
+
 logLevel = c("normal", "quiet", "verbose") [3]
 
 ## Use file.exists(grep('deployBreatheMap-noIQ', dir() , v=T)
