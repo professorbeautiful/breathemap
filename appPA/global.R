@@ -19,8 +19,11 @@ appName = gsub('deploying','',
 if(length(appName) > 1)
   appName = 'BreatheMap-test'
 
+### use this to mask elements.
 hideIfDesired <<- function(style,
-                           hideMe = appName=='BreatheMap-test')
+                           hideMe =
+                             appName %in% c('BreatheMap-test',
+                                            'BreatheMap-noIQ'))
   paste(style,
         ifelse(hideMe,
                "; visibility: hidden",
