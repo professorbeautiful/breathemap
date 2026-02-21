@@ -5,10 +5,14 @@ appName = 'BreatheMap'  # https://www.shinyapps.io/admin/#/application/16404137/
 appName = 'BreatheMap-test'  # 16730739
 appName = 'BreatheMap-noIQ'  #16630494
 
-appNumbers = c('BreatheMap-noIQ'='16630494', 'BreatheMap' ='16404137', 'BreatheMap-test' = '16730739')
-showAppLog = function(app='BreatheMap')
+appNumbers = c('BreatheMap-noIQ'='16630494',
+               'BreatheMap' ='16404137',
+               'BreatheMap-test' = '16730739')
+showAppLog = function(app='BreatheMap') {
   browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
                    appNumbers[app], '/logs'))
+}
+
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 
 #  review appFileManifestKept.R   to assure all needed files are there.
