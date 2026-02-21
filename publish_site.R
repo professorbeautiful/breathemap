@@ -1,12 +1,17 @@
 
 # source'ing this file works.
 
-appName = 'BreatheMap'
-appName = 'BreatheMap-noIQ'
-appName = 'BreatheMap-test'
+appName = 'BreatheMap'  # https://www.shinyapps.io/admin/#/application/16404137/logs
+appName = 'BreatheMap-test'  # 16730739
+appName = 'BreatheMap-noIQ'  #16630494
 
+appNumbers = c('BreatheMap-noIQ'='16630494', 'BreatheMap' ='16404137', 'BreatheMap-test' = '16730739')
+showAppLog = function(app='BreatheMap')
+  browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
+                   appNumbers[app], '/logs'))
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 
+#  review appFileManifestKept.R   to assure all needed files are there.
 
 ### you may need shinyDebuggingPanel installed fresh
 devtools::install_github('professorbeautiful/shinyDebuggingPanel')

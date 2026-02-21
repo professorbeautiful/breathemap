@@ -2,12 +2,12 @@ function(input, output, session) {
   source('coloring.R')
   source('popovers.R', local = T)
 
-  hideIfDesired <<- function(style,
-                             hideMe = appName=='BreatheMap-test')
-    paste(style,
-          ifelse(hideMe,
-                 "; visibility: hidden",
-                 ''))
+  # hideIfDesired <<- function(style,
+  #                            hideMe = appName=='BreatheMap-test')
+  #   paste(style,
+  #         ifelse(hideMe,
+  #                "; visibility: hidden",
+  #                ''))
 
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
@@ -455,7 +455,7 @@ function(input, output, session) {
 
   output$UITotalOrRates = renderUI( {
     fluidRow(
-      column(5, strong( "As total or as rate?")),
+      column(3, strong( "As total or as rate?")),
       column(7,
              radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
@@ -710,7 +710,7 @@ function(input, output, session) {
     })
     buttonsFixed =
       div(
-        div(style=hideIfDesired('text-align: center; margin:auto'),
+        div(style=hideIfDesired('text-align: center; margin:auto;'),
             "Birth cohort", buttons[1:2]),
         div(style='text-align: center; margin:auto',
             "Perinatal:" , buttons[7:9]),
