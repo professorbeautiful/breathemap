@@ -1,0 +1,79 @@
+•	<strong>The fully-featured map</strong> is <a target=_blank
+href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
+<br>
+•	<strong>Areas Shown: </strong>The areas shown in the map on the left are census tracts
+<br>for the Pittsburgh  Metropolitan Statistical Area (8 counties, 739 tracts).
+<br> The numbers presented on the histogram to the right
+<br> are estimates obtained from models based on the year 2016,
+<br>the most recent year for which this fine-grained data was available.
+<hr>
+•	<strong>Health Harms </strong> The health harms reported in this study are attributable to PM 2.5 exposure.
+<br>
+Much of this harm occurs even when PM 2.5 exposure levels are below the current federal standard of 9.0 µg/m³.
+<br>
+This indicates that the federal standard needs to be reduced to protect the health of vulnerable populations,
+<br>
+especially those near steel mills and coke ovens like Clairton and Braddock.
+<hr>
+•	<strong> Arrows and Reference Tracts</strong>
+<br>The solid GREEN arrow (on the histogram) is the value for the selected tract or community.
+<br> When the <strong> "communities" toggle</strong>  is selected,
+<br> the arrow is placed at the sum/average of the tracts contributing to the community.
+<br>
+When more than one tract, the shorter lines are at the individual census tracts .
+<br>
+At the bottom, a user-selected <strong> reference census tract </strong> is shown.
+<br>
+Its data appears on the histogram as a red diamond shape.
+<hr>
+
+•	<strong> Example:</strong>
+<br>
+The current default is a tract (42003492700) of Clairton,
+<br>
+one of three that are within the community of Clairton.
+<br>
+On the right, click on an indicator of harm, such as Total Deaths.
+<br>
+The estimate for that tract's total estimated deaths in 2016 equals roughly 3.
+<br>
+Now select the "communities" toggle, top left.
+<br>
+Then the second and third Clairton tracts are added to the region, as seen on the map.
+<br>
+The estimate for Clairton’s total deaths in 2016 equals 13 people.
+<br> the sum of three census tracks.
+<br> (These counts are estimates, not records-based counts;
+<br>therefore they are not round numbers.)
+<hr>
+Moving to a different tract or community, for example to South Fayette Township,
+<br> the histogram remains the same, and the red diamond stays put on the axis,
+<br> Selecting, say, PM2.5 (below graph), and South Fayette Township,
+<br> we compare the average 7.92 against Clairton's 10.6 value.
+<br> The three tracts are almost identical,
+<br> while the three Clairton tracts are somewhat different.
+<hr>
+•	<strong> Totals versus rates</strong> .
+<br>
+Totals give a sense of actual people harmed (and sum over tracts when appropriate).
+<br>
+Rates allow for comparisons among different regions.
+<br>So Totals and Rates (rescaled to 1000) are each useful in different ways.
+<br>Hover over the histogram's information button to see an explanation of
+"...total" versus "...rescaled to 1000 people".
+<br>
+<br>
+<strong>NOTE</strong> that the three quantities are not affected by this toggle.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;•	<strong>PM2.5 </strong>always shows the <strong>average</strong> over tracts.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
+
+<hr>
+•	<strong> Birth cohort</strong>
+<br>
+Some outcome estimates apply specifically to the birth cohort of 2019:
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;•	Lifetime earnings lost

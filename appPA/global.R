@@ -34,6 +34,8 @@ hideIfDesired <<- function(style,
 #   setwd('appPA')
 source('moveColumns.R')
 source('cq.R')
+source('inclRmd.R')
+
 indentMe = function(...)
   fluidRow(column(12, offset=1,
                   ...)

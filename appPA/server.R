@@ -45,7 +45,8 @@ function(input, output, session) {
 
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
-  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
+#  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
+  faq = inclRmd('FAQ.Rmd')   ### the link will not work from the Rhtml file. This does.
   observeEvent(input$IdFAQ, {
     showModal(modalDialog(#footer = NULL,
       faq
