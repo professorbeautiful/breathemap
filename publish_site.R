@@ -13,12 +13,6 @@ devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 # Note: this app is a package!  devtools::install_github('professorbeautiful/BreatheMap')
 
 
-
-#  git push --set-upstream origin BreatheMap
-#### gitbranch.txt  Nice idea, needs work.
-
-# gitbranch.txt = readLines('appPA/gitbranch.txt')
-
 gitbranch.latest =  system(" git branch -v|grep '^*'",  intern = T)
 gitbranch.recentlog = system(" git log @{5}..HEAD --shortstat ",  intern = T)
 gitbranch.txt = paste("Deployed: \n",
