@@ -11,6 +11,9 @@ library(shinyBS)
 library(shinyWidgets)
 library(keys)
 
+appName = gsub('deploying','',
+               grep('deploying', dir() , v=T))
+
 # if(basename(getwd()) != 'appPA')
 #   setwd('appPA')
 source('moveColumns.R')
