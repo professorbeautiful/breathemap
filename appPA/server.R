@@ -1054,7 +1054,8 @@ function(input, output, session) {
     if(length(thisAreaFeature) > 1 ) {
       for(feature in thisAreaFeature) {
         #### multiple arrows ####
-        print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
+        if(verbose>2)
+          print(paste('arrows: ', paste(thisAreaFeature, collapse=',')))
         # abline(v=thisAreaFeature,
         #        lwd=3, col='darkgreen')
         arrowHeight =  0.5 * par('usr')[4]*1.2
@@ -1093,7 +1094,8 @@ function(input, output, session) {
       refValue = thisAreaFeatureSummary(applyTo = rV$REFERENCEdatarows)
       print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
-      points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
+      if(!is.null(refValue))
+        points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
     }
 
     if(length(outliers) > 0 ) {  #### prepare table of outliers ####
