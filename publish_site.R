@@ -32,8 +32,16 @@ write(file = 'appPA/gitbranch.txt',
 # appName = 'appPA'
 # appTitle = 'appPA'
 appName = 'BreatheMap'
+appName = 'BreatheMap-noIQ'
+appName = 'BreatheMap-test'
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 logLevel = c("normal", "quiet", "verbose") [3]
+
+## Use file.exists(grep('deployBreatheMap-noIQ', dir() , v=T)
+#  etc to detect the version in ui and server.
+##
+appFiles = c(appFileManifestKept,
+             paste0('deploying', appName))
 
 ### 2026-02-18  I removed appPAtest from
 # '/Users/rogerday/Library/Mobile Documents/com~apple~CloudDocs/Fireman backup/appPA/rsconnect/shinyapps.io/trials/BreatheMap.dcf'
@@ -45,7 +53,7 @@ logLevel = c("normal", "quiet", "verbose") [3]
 
 rsconnect::deployApp(
   appDir = ifelse(basename(getwd()) == 'appPA', '.', 'appPA'),
-  appFiles = NULL,
+  appFiles = appFiles,
   appFileManifest = NULL,
   appPrimaryDoc = NULL,
   appName = appName,
