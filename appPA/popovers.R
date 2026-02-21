@@ -16,7 +16,7 @@ addPopover(session = session,
              br(),
              br(),
              indentMe(
-             "The toggle '...total'/'...rate per 1000'  ",
+             "The toggle '...total'/'...rescaled to 1000 people'  ",
              br(),
              "is in effect for the nine ", strong("'harm'"),
              "features at the top.",
@@ -38,13 +38,13 @@ addPopover(session = session,
                br(),
                "across the communities currently selected."
              ),
-             h5("If '...rate per 1000' is selected:"),
+             h5("If '......rescaled to 1000 people' is selected:"),
              indentMe(
                "Yearly estimates are rescaled to per 1000 people.",
                br(),
                "If 'communities/tracts' is set to 'communities',",
                br(),
-               "this is the rate combined ",
+               "the rescaling is done combining  ",
                br(),
                "across the communities currently selected."
 

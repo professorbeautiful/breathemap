@@ -452,7 +452,7 @@ function(input, output, session) {
       column(7,
              radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
-                          choices=c('...total', '...rate per 1000'),
+                          choices=c('...total', '...rescaled to 1000 people'),
                           selected='...total',
                           inline=TRUE)
       )
@@ -514,7 +514,7 @@ function(input, output, session) {
   makeItARate = function(){
     isTRUE(
       (rV$featureToPlot %in% featureList) &
-      (input$IdTotalOrRate == '...rate per 1000') &
+      (input$IdTotalOrRate == '...rescaled to 1000 people') &
       (rV$featureToPlot != "PM2.5 average")
     )
   }
@@ -833,7 +833,7 @@ function(input, output, session) {
     else  if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
-      paste(f, '(rate per 1000)')
+      paste(f, '(rescaled to 1000 people)')
   }
   #
   # observeEvent(input$idFeature, {
