@@ -22,13 +22,13 @@ if(length(appName) > 1)
   appName = 'BreatheMap-test'
 
 ### use this to mask elements.
-hideIfDesired <<- function(style,
+hideIfDesired <<- function(style = ';',
                            hideMe =
                              appName %in% c('BreatheMap-test',
                                             'BreatheMap-noIQ'))
   paste(style,
         ifelse(hideMe,
-               "; visibility: hidden",
+               "; visibility: hidden;",
                ''))
 
 
