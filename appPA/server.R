@@ -710,13 +710,14 @@ function(input, output, session) {
     })
     buttonsFixed =
       div(
-        div(style=hideIfDesired('text-align: center; margin:auto;'),
-            "Birth cohort", buttons[1:2]),
         div(style='text-align: center; margin:auto',
             "Perinatal:" , buttons[7:9]),
         div(style='text-align: center; margin:auto; ',
             "Death:", buttons[3:5],
-            HTML("&nbsp;&nbsp;&nbsp;Disease:"), buttons[6])
+            HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disease:"), buttons[6]),
+        div(style='text-align: center; margin:auto;',
+            "Birth cohort",
+            style=hideIfDesired(buttons[1]), buttons[2])
 
       )
 
