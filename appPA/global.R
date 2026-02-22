@@ -182,7 +182,7 @@ twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
 fixOneTract = function(tract, value, newvalue){
   print(paste('Calling fixOneTract', tract, value, newvalue))
   if(is.numeric(tract)) tract = as.character(tract)
-  rowToChange = which(twtCopy$tracts==tract) #35
+  rowToChange = which(twt$tracts==tract) #35
   print(paste('Calling fixOneTract', tract, value, newvalue, rowToChange))
   # if( ! identical(length(rowToChange), 1) )
   #   stop(paste('error fixOneTract', length(rowToChange), rowToChange))
