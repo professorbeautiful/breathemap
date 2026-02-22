@@ -177,6 +177,30 @@ twt$twtSaved = twt$twt
 #### move '___' to the end, ####
 which___ = (grep('___', twt$areaField))   ### 1 to 15
 twt = twt[ c(setdiff(1:nrow(twt), which___),  which___), ]
+
+
+fixOneTract = function(tract, value, newvalue){
+  print(paste('Calling fixOneTract', tract, value, newvalue))
+  if(is.numeric(tract)) tract = as.character(tract)
+  rowToChange = which(twtCopy$tracts==tract) #35
+  print(paste('Calling fixOneTract', tract, value, newvalue, rowToChange))
+  # if( ! identical(length(rowToChange), 1) )
+  #   stop(paste('error fixOneTract', length(rowToChange), rowToChange))
+  columnsToChange = names(grep(value, twt[rowToChange, ], v=T) )
+  print(columnsToChange)
+  for(v in columnsToChange) {
+    fixedFeature =  gsub(value, newvalue,
+                          data.frame(twt[rowToChange,v] ) ) [1]
+
+    print(paste(names(fixedFeature), fixedFeature, length(fixedFeature)))
+    twt[rowToChange,v] = fixedFeature
+
+  }
+  print(paste('Exiting fixOneTract', twt[rowToChange, columnsToChange]))
+  twt <<- twt
+}
+fixOneTract(42003562900, 'Pittsburgh', 'Hazelwood')
+
 twt.df = data.frame(twt)   ### remove the sf class.
 twt.df <<- data.frame(twt)
 twt.df <<- twt.df[ which(names(twt.df) != 'geometry')]
