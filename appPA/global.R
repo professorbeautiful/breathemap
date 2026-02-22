@@ -19,7 +19,8 @@ shinyjs::useShinyjs()
 appName = gsub('deploying','',
                grep('deploying', dir() , v=T) )
 if(length(appName) > 1)
-  appName = 'BreatheMap-test'
+  appName = 'BreatheMap-noIQ'
+print(paste('appName: ', appName))
 
 ### use this to mask elements.
 hideIfDesired <<- function(style = ';',
