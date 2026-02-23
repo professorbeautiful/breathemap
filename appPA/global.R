@@ -17,12 +17,15 @@ library(rmarkdown)
 shinyjs::useShinyjs()
 
 verbose = 0
+defaultAppName = 'BreatheMap-test'  #### used only when run locally.
+if( ! (basename(getwd()) == 'appPA') )
+  setwd('appPA')
 if(exists('appName'))
   rm(appName) ### running from RStudio; removing previous run.
 appName = gsub('deploying','',
                grep('deploying', dir() , v=T) )
 if(length(appName) > 1)  ### running from RStudio, not a deployed one.
-  appName = 'BreatheMap-test'
+  appName = defaultAppName
 print(paste('appName: ', appName))
 
 ### use this to mask elements.
