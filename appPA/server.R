@@ -36,7 +36,7 @@ function(input, output, session) {
 
 
   zoomLevel = 10
-  verbose = 0
+
   rV = reactiveValues(featureToPlot='IQ points lost',
                       selectedTown = NULL,
                       savedTract = 'Clairton 42003492700',
@@ -117,9 +117,11 @@ function(input, output, session) {
       rV$savedTract = 'Clairton 42003492700'
       updateSelectInput(inputId='areaSelectorId',
                         selected = 'Clairton 42003492700')      #### default before area is selected ####
-      printpaste('1 Clairton areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId)
+      if(verbose > 2)
+        printpaste('1 Clairton areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId)
     }
-    print(paste('1  areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId))
+    if(verbose > 2)
+      print(paste('1  areaSelectorObserver, input$areaSelectorId' ,input$areaSelectorId))
     #if(input$areaSelectorId != rV$savedTract)
     rV$savedTract = input$areaSelectorId
     if(verbose>0) {
@@ -373,7 +375,8 @@ function(input, output, session) {
   ####   getATownFromThisTract  observeEvent  townsForThisTract -> rV$selectedTown ####
   getATownFromThisTract = function(townsForThisTract)  {
     if(! is.null(rV$selectedTown)) {
-      print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
+      if(verbose > 2)
+        print(paste('getATownFromThisTract: rV$selectedTown should be NULL. ',
                   rV$selectedTown, '  tract:', rV$selectedTract))
       #print(sys.calls())  ### Error
       return(rV$selectedTown)
@@ -383,9 +386,8 @@ function(input, output, session) {
     ### for now, pick the first town.  Later, pop up to pick a town.
     if(length(townsForThisTract) == 1 ){
       rV$selectedTown = townsForThisTract[1]
-
-
-      print(paste('selectedTown (1): ', rV$selectedTown))
+      if(verbose > 2)
+        print(paste('selectedTown (1): ', rV$selectedTown))
     }
     else {
       townsString = paste(collapse="+", townsForThisTract)
@@ -682,10 +684,10 @@ function(input, output, session) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
     size='sm'  # no effect.
     #    feat = gsub('Childbirth', '', feat)
-    if(feat %in% c("Ischemic Heart Disease Deaths"
+    if(feat %in% c("Ischemic Heart Disease Deaths", "Lung Cancer"
                    ))
       ButtonStyle =
-      paste(rightSideButtonStyle, '; font-size:8px')
+      paste(rightSideButtonStyle, '; font-size:10px')
     else if(feat %in% c("All-cause deaths",
                         "Lung Cancer"))
       ButtonStyle =
@@ -753,7 +755,8 @@ function(input, output, session) {
   output$histTitle = renderUI( {  #### histTitle ####
     # thisFeature = (twt[[rV$featureToPlot]])
     if(isTRUE(rV$firstTime)) {
-      print('rV$firstTime')
+      if(verbose > 2)
+        print('rV$firstTime')
       opt.save= options(warn=-1)
     }
     thisAreaFeatureSummaryString =  try(silent = TRUE,
@@ -1071,7 +1074,8 @@ function(input, output, session) {
       }
     }
     #### one arrow ####
-    print(paste('arrows: ', paste(thisAreaFeatureSummary(), collapse=',')))
+    if(verbose > 2)
+      print(paste('arrows: ', paste(thisAreaFeatureSummary(), collapse=',')))
     # abline(v=thisAreaFeature,
     #        lwd=3, col='darkgreen')
     opt.save = options(warn = -1)
@@ -1090,10 +1094,12 @@ function(input, output, session) {
       rV$REFERENCEdatarows =   ### now just the ref tract.
         which(twt$twt ==
                 rvIdMakeReferenceCommunity$referenceCommunity)
-      print(paste('REFERENCE Community:  datarows', rV$REFERENCEdatarows,
+      if(verbose > 2)
+        print(paste('REFERENCE Community:  datarows', rV$REFERENCEdatarows,
                   '', rvIdMakeReferenceCommunity$referenceCommunity))
       refValue = thisAreaFeatureSummary(applyTo = rV$REFERENCEdatarows)
-      print(paste(' so red shd stay at ', refValue))
+      if(verbose > 2)
+        print(paste(' so red shd stay at ', refValue))
       ### thisAreaFeatureSummary accommodates makeItARate()
       if(!is.null(refValue))
         points( refValue, 0, cex=2, col=referenceColor, pch='⬧', xpd=NA)
@@ -1123,12 +1129,13 @@ function(input, output, session) {
 
 #  showModal(modalDialog(title=paste('in ', appName)))
   if(length(appName) > 1)
-    appName = 'BreatheMap-test'
+    appName = 'BreatheMap'
 
-  print(paste('appName is ', appName))
+  print(paste('(server) appName is ', appName))
   rV$appName = appName
 
   observeEvent(rV$appName, {
+    ### this doesn't work. Instead I used hideIfDesired().
     if(appName=='BreatheMap-test') {
       printpaste("appName=='BreatheMap-test'")
       shinyjs::hideElement('Id_ToggleTownTract', asis = TRUE)

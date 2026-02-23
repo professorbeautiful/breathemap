@@ -16,6 +16,7 @@ library(rmarkdown)
 
 shinyjs::useShinyjs()
 
+verbose = 0
 appName = gsub('deploying','',
                grep('deploying', dir() , v=T) )
 if(length(appName) > 1)
