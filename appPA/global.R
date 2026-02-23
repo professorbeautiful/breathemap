@@ -18,8 +18,8 @@ shinyjs::useShinyjs()
 
 verbose = 0
 defaultAppName = 'BreatheMap-test'  #### used only when run locally.
-if( ! (basename(getwd()) == 'appPA') )
-  setwd('appPA')
+# if( ! (basename(getwd()) == 'appPA') )
+#      setwd('appPA')  ### NOT NEEDED IF FILES ARE LINKED IN THE 2 FOLDERS.
 if(exists('appName'))
   rm(appName) ### running from RStudio; removing previous run.
 appName = gsub('deploying','',
