@@ -457,7 +457,7 @@ function(input, output, session) {
 
   output$UITotalOrRates = renderUI( {
     fluidRow(
-      column(3, strong( "As total or as rate?")),
+      column(4, strong( "As total or as rate?")),
       column(7,
              radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
