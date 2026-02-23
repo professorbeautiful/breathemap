@@ -719,7 +719,8 @@ function(input, output, session) {
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disease:"), buttons[6]),
         div(style='text-align: center; margin:auto;',
             "Birth cohort",
-            span(style=hideIfDesired(), buttons[1]), buttons[2])
+            buttons[2],
+            span(style=hideIfDesired(), buttons[1]))
 
       )
 
