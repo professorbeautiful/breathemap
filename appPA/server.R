@@ -712,7 +712,7 @@ function(input, output, session) {
     })
     styleHarmRow = 'text-indent: 20px;margin:auto'
     styleHarmSectionLabel = function(word)
-      span(style='color:darkgreen; font-style: italic;', word)
+      span(style='color:green; font-style: italic;', word)
     buttonsFixed =
       div(
         div(style=styleHarmRow,
