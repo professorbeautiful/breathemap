@@ -2,9 +2,9 @@
 # rearrange these appName lines:
 # the last one is deployed when source'ing this file
 
-appName = 'BreatheMap-noIQ'  #16630494
-appName = 'BreatheMap'  #16404137
 appName = 'BreatheMap-test'  # 16730739
+appName = 'BreatheMap'  #16404137
+appName = 'BreatheMap-noIQ'  #16630494
 
 
 appNumbers = c('BreatheMap-noIQ'='16630494',
