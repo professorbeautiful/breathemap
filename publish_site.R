@@ -1,9 +1,11 @@
 
-# source'ing this file works.
+# rearrange these appName lines:
+# the last one is deployed when source'ing this file
 
-appName = 'BreatheMap-test'  # 16730739
 appName = 'BreatheMap-noIQ'  #16630494
 appName = 'BreatheMap'  #16404137
+appName = 'BreatheMap-test'  # 16730739
+
 
 appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap' ='16404137',
@@ -49,8 +51,12 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ## Use file.exists(grep('deployBreatheMap-noIQ', dir() , v=T)
 #  etc to detect the version in ui and server.
 ##
+source('appFileManifestKept.R')
 appFiles = c(appFileManifestKept,
              paste0('deploying', appName))
+##  Adding the correct 'deploying' file
+#  to the manifest will signal the app code, in hideIfDesired().
+
 
 ### 2026-02-18  I removed appPAtest from
 # '/Users/rogerday/Library/Mobile Documents/com~apple~CloudDocs/Fireman backup/appPA/rsconnect/shinyapps.io/trials/BreatheMap.dcf'
