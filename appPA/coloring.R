@@ -8,4 +8,4 @@ leftSideButtonStyle = breatheLabelColoring
 rightSideButtonStyle = paste(breatheLabelColoring,
                              '; border-radius: 15px;
                              height: 50% !important;
-                             padding:4px; font-size:100%; font-weight:bold')
+                             padding:4px; font-size:10px; font-weight:bold')
