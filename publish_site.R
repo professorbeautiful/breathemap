@@ -1,9 +1,9 @@
 
 # source'ing this file works.
 
-appName = 'BreatheMap'  # https://www.shinyapps.io/admin/#/application/16404137/logs
 appName = 'BreatheMap-test'  # 16730739
 appName = 'BreatheMap-noIQ'  #16630494
+appName = 'BreatheMap'  #16404137
 
 appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap' ='16404137',
@@ -12,6 +12,12 @@ showAppLog = function(app='BreatheMap') {
   browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
                    appNumbers[app], '/logs'))
 }
+runSelectedApp = function(app='BreatheMap') {
+  browseURL(paste0('https://trials.shinyapps.io/',
+                   app))
+}
+
+
 
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 
