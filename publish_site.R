@@ -51,7 +51,7 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ## Use file.exists(grep('deployBreatheMap-noIQ', dir() , v=T)
 #  etc to detect the version in ui and server.
 ##
-source('appFileManifestKept.R')
+source('appPA/appFileManifestKept.R')
 appFiles = c(appFileManifestKept,
              paste0('deploying', appName))
 ##  Adding the correct 'deploying' file
