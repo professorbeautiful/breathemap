@@ -710,15 +710,19 @@ function(input, output, session) {
     buttons = lapply(featureList, function(feat) {
       makeFeatureActionButton(feat)
     })
+    styleHarmRow = 'text-indent: 20px;margin:auto'
+    styleHarmSectionLabel = function(word)
+      span(style='color:darkgreen; font-style: italic;', word)
     buttonsFixed =
       div(
-        div(style='text-align: center; margin:auto',
-            "Perinatal:" , buttons[7:9]),
-        div(style='text-align: center; margin:auto; ',
-            "Death:", buttons[3:5],
-            HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disease:"), buttons[6]),
-        div(style='text-align: center; margin:auto;',
-            "Birth cohort",
+        div(style=styleHarmRow,
+            styleHarmSectionLabel("Perinatal:") , buttons[7:9]),
+        div(style=styleHarmRow,
+            styleHarmSectionLabel("Death:"), buttons[3:5],
+            HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
+            styleHarmSectionLabel("Disease:"), buttons[6]),
+        div(style=styleHarmRow,
+            styleHarmSectionLabel("Birth cohort"),
             buttons[2],
             span(style=hideIfDesired(), buttons[1]))
 
