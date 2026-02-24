@@ -37,7 +37,7 @@ function(input, output, session) {
 
   zoomLevel = 10
 
-  rV = reactiveValues(featureToPlot='IQ points lost',
+  rV = reactiveValues(featureToPlot='Low Birth Weight Babies',
                       selectedTown = NULL,
                       savedTract = 'Clairton 42003492700',
                       savedclick = NULL, showingModal = FALSE)
