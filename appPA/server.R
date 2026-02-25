@@ -37,7 +37,7 @@ function(input, output, session) {
 
   zoomLevel = 10
 
-  rV = reactiveValues(featureToPlot='Low Birth Weight Babies',
+  rV = reactiveValues(featureToPlot='All-cause deaths',
                       selectedTown = NULL,
                       savedTract = 'Clairton 42003492700',
                       savedclick = NULL, showingModal = FALSE)
@@ -716,11 +716,11 @@ function(input, output, session) {
     buttonsFixed =
       div(
         div(style=styleHarmRow,
-            styleHarmSectionLabel("Perinatal:") , buttons[7:9]),
-        div(style=styleHarmRow,
             styleHarmSectionLabel("Death:"), buttons[3:5],
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
             styleHarmSectionLabel("Disease:"), buttons[6]),
+        div(style=styleHarmRow,
+            styleHarmSectionLabel("Perinatal:") , buttons[7:9]),
         div(style=styleHarmRow,
             styleHarmSectionLabel("Birth cohort"),
             buttons[2],
