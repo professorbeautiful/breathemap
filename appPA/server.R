@@ -1144,11 +1144,11 @@ function(input, output, session) {
   })
 
 #  showModal(modalDialog(title=paste('in ', appName)))
-  if(length(appName) > 1)
-    appName = 'BreatheMap'
-
-  print(paste('(server) appName is ', appName))
-  rV$appName = appName
+  # if(length(appName) > 1)
+  #   appName = 'BreatheMap'
+  #
+  # print(paste('(server) appName is ', appName))
+  # rV$appName = appName
 
   observeEvent(rV$appName, {
     ### this doesn't work. Instead I used hideIfDesired().
