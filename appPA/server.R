@@ -92,7 +92,11 @@ function(input, output, session) {
                  icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
                  inputId = 'Id_LifetimeHarm_Information',
                  label='')
-
+  observeEvent(input$Id_LifetimeHarm_Information, {
+    showModal(modalDialog(#footer = NULL,
+      content_LifetimeHarm_Information
+    ))
+  })
 
   observeEvent(input$Id_TotalOrRates_Information, {
     showModal(modalDialog(#footer = NULL,
