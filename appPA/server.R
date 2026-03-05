@@ -94,7 +94,8 @@ function(input, output, session) {
                  label='')
   observeEvent(input$Id_LifetimeHarm_Information, {
     showModal(modalDialog(#footer = NULL,
-      content_LifetimeHarm_Information
+      #content_TotalOrRates_Information  ## see if the content is the problem.
+      content_LifetimeHarm_Information  ### yes!
     ))
   })
 
@@ -738,8 +739,6 @@ function(input, output, session) {
 
   sapply(featureList, makeFeatureActionButtonObserver)
 
-  ### make IQ popup html
-  knitr::knit2html(input = 'IQ-faq.Rmd', output = 'IQ-faq.html')
 
   IQbutton = renderUI({  #### too much cruft-- not using
     #if(appName == 'BreatheMap-test-with-IQ-no-popify')
@@ -785,7 +784,8 @@ function(input, output, session) {
     buttons <<- lapply(featureList, function(feat) {
       makeFeatureActionButton(feat)
     })
-    styleHarmRow = 'text-indent: 20px;margin:auto'
+    #styleHarmRow = 'text-indent: 20px;margin:auto'
+    styleHarmRow = ''  ### not the problem
     styleHarmSectionLabel = function(word)
       span(style='color:green; font-style: italic;', word)
     buttonsFixed =

@@ -8,6 +8,21 @@ indentMe = function(...)
 
 content_IQdiscussion = readLines('IQ-faq.html')
 
+
+### make IQ popup html
+### To change text, edit the file IQ-faq.Rmd
+knitr::knit2html(input = 'IQ-faq.Rmd', output = 'IQ-faq.html')
+content_IQdiscussion = readLines('IQ-faq.html')
+#### clunky but necessary to avoid the artifacts!
+#### Before this cleanup,
+### without HTML() no diag line problem, but not HTML.
+### with HTML() looks good but diag line problem
+
+content_IQdiscussion = content_IQdiscussion[
+  (grep('<body>', content_IQdiscussion) + 1)
+  : (grep('</body>', content_IQdiscussion) - 1)
+]
+
 content_LifetimeHarm_Information = div(
   HTML(paste(collapse=' ',
              paste('<br><h4>
@@ -17,9 +32,10 @@ that is, the babies born during the year 2019.
     &nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
   </h4><hr><br>
     '),
-                   paste(collapse=' ',content_IQdiscussion)
+                   paste(collapse=' ',content_IQdiscussion)   ### It's this.
              )
-  ))
+  )
+)
 
 
 #  this did not work well!!
