@@ -78,4 +78,8 @@ Some outcome estimates apply specifically to the birth cohort of 2019:
 &nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;•	Lifetime earnings lost
-</div>
+</div>  
+
+<br>
+•	<strong> Map version: </strong> `r appName`
+
