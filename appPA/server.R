@@ -682,6 +682,19 @@ function(input, output, session) {
   ### make IQ popup html
   knitr::knit2html(input = 'IQ-faq.Rmd', output = 'IQ-faq.html')
 
+  IQbutton = renderUI({
+    if(appName == 'BreatheMap-test-with-IQ-no-popify')
+      return(buttons[[1]])
+    return(popify(el = buttons[[1]],
+                  title="",
+                  content = HTML(paste(
+                    readLines('IQ-faq.html'),
+                    collapse=' '
+                  ))
+    )
+    )
+  })
+
   #### makeFeatureActionButton ####
   makeFeatureActionButton = function(feat) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
@@ -710,7 +723,7 @@ function(input, output, session) {
 
   #### uiFeatureList button panel ####
   output$uiFeatureList = renderUI({
-    buttons = lapply(featureList, function(feat) {
+    buttons <<- lapply(featureList, function(feat) {
       makeFeatureActionButton(feat)
     })
     styleHarmRow = 'text-indent: 20px;margin:auto'
@@ -728,14 +741,7 @@ function(input, output, session) {
             styleHarmSectionLabel("Birth cohort"),
             buttons[2],
             span(style=hideIfDesired(),
-                 buttons[[1]]
-                 # popify(el = buttons[[1]],
-                 #        title="",
-                 #        content = HTML(paste(
-                 #          readLines('IQ-faq.html'),
-                 #          collapse=' '
-                 #        ))
-                 # )
+                 IQbutton
             )
         )
       )
