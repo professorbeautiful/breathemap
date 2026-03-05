@@ -738,7 +738,7 @@ function(input, output, session) {
         div(style=styleHarmRow,
             styleHarmSectionLabel("Birth outcomes:") , buttons[7:9]),
         div(style=styleHarmRow,
-            styleHarmSectionLabel("Birth cohort"),
+            styleHarmSectionLabel("Lifetime harm to  newborns"),
             buttons[2],
             span(style=hideIfDesired(),
                  IQbutton
