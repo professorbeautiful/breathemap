@@ -795,7 +795,7 @@ function(input, output, session) {
             Death_Information_button,
             styleHarmSectionLabel("Death:"), buttons[3:5],
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
-            styleHarmSectionLabel("Disease:"), buttons[6]),
+#            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
         ),
         div(style=styleHarmRow,
             Birth_outcomes_Information_button,
