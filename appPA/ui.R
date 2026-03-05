@@ -159,7 +159,7 @@ fluidPage(
                               div(  ### this div does not help! but popover works now.
                                 actionButton(style=informationButtonStyle,
                                              icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
-                                             inputId = 'IdfeaturePlotforpopover',
+                                             inputId = 'IdfeaturePlotInformation',
                                              label=paste(
                                                          "about this graph" )),
                                 plotOutput(outputId="featurePlot",

@@ -58,6 +58,60 @@ function(input, output, session) {
       acknowledgements
     ))
   })
+
+
+
+  content_Death_Information = 'TODO'
+  Death_Information_button =
+    actionButton(style=informationButtonStyle,
+                 icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                 inputId = 'Id_Death_Information',
+                 label='')
+  observeEvent(input$Id_Death_Information, {
+    showModal(modalDialog(#footer = NULL,
+      content_Death_Information
+    ))
+  })
+
+  LifetimeHarm_Information_button =
+    actionButton(style=informationButtonStyle,
+                 icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                 inputId = 'Id_LifetimeHarm_Information',
+                 label='')
+
+
+  content_Birth_outcomes_Information = 'TODO'
+  Birth_outcomes_Information_button =
+    actionButton(style=informationButtonStyle,
+                 icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                 inputId = 'Id_Birth_outcomes_Information',
+                 label='')
+  observeEvent(input$Id_Birth_outcomes_Information, {
+    showModal(modalDialog(#footer = NULL,
+      content_Birth_outcomes_Information
+    ))
+  })
+
+  LifetimeHarm_Information_button =
+    actionButton(style=informationButtonStyle,
+                 icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                 inputId = 'Id_LifetimeHarm_Information',
+                 label='')
+
+
+  observeEvent(input$Id_TotalOrRates_Information, {
+    showModal(modalDialog(#footer = NULL,
+      content_TotalOrRates_Information
+    ))
+  })
+
+  observeEvent(input$IdfeaturePlotInformation, {
+    showModal(modalDialog(#footer = NULL,
+      content_FeaturePlot_Information
+    ))
+  })
+
+
   observeEvent(input$IdMapAdvice, {
     showModal(modalDialog(#footer = NULL,
       div(HTML(paste(
@@ -460,7 +514,7 @@ function(input, output, session) {
       column(1,
              actionButton(style=informationButtonStyle,
                                icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
-                               inputId = 'Id_TotalOrRates_popover',
+                               inputId = 'Id_TotalOrRates_Information',
                                label='')
       ) ,
       column(4, strong( "As total or as rate?")),
@@ -738,12 +792,16 @@ function(input, output, session) {
     buttonsFixed =
       div(
         div(style=styleHarmRow,
+            Death_Information_button,
             styleHarmSectionLabel("Death:"), buttons[3:5],
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
             styleHarmSectionLabel("Disease:"), buttons[6]),
+        ),
         div(style=styleHarmRow,
+            Birth_outcomes_Information_button,
             styleHarmSectionLabel("Birth outcomes:") , buttons[7:9]),
         div(style=styleHarmRow,
+            LifetimeHarm_Information_button,
             styleHarmSectionLabel("Lifetime harm to  newborns"),
             buttons[2],
             span(style=hideIfDesired(),
