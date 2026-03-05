@@ -56,7 +56,10 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ##
 source('appPA/appFileManifestKept.R')
 appFiles = c(appFileManifestKept,
+             'IQ-faq.Rmd')
+appFiles = c(appFileManifestKept,
              paste0('deploying', appName))
+
 ##  Adding the correct 'deploying' file
 #  to the manifest will signal the app code, in hideIfDesired().
 
