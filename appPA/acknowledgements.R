@@ -50,6 +50,7 @@ Paul Fireman of Fireman Creative
     "https://pitt.libguides.com/pghcensus/pghcensustracts">U. Pitt Pittsburgh Census Information</a> (Christopher Lemery)
     '
 
-  ))
+  )),
+  div('appName:', appName)
 )
 

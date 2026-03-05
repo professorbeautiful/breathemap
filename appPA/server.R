@@ -728,13 +728,14 @@ function(input, output, session) {
             styleHarmSectionLabel("Birth cohort"),
             buttons[2],
             span(style=hideIfDesired(),
-                 popify(el = buttons[[1]],
-                        title="",
-                        content = HTML(paste(
-                          readLines('IQ-faq.html'),
-                          collapse=' '
-                        ))
-                 )
+                 buttons[[1]]
+                 # popify(el = buttons[[1]],
+                 #        title="",
+                 #        content = HTML(paste(
+                 #          readLines('IQ-faq.html'),
+                 #          collapse=' '
+                 #        ))
+                 # )
             )
         )
       )
