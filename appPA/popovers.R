@@ -6,7 +6,6 @@ indentMe = function(...)
                   ...)
   )
 
-content_IQdiscussion = readLines('IQ-faq.html')
 
 
 ### make IQ popup html
