@@ -73,11 +73,6 @@ function(input, output, session) {
     ))
   })
 
-  LifetimeHarm_Information_button =
-    actionButton(style=informationButtonStyle,
-                 icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
-                 inputId = 'Id_LifetimeHarm_Information',
-                 label='')
 
 
   content_Birth_outcomes_Information = 'TODO'

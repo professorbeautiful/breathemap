@@ -6,14 +6,29 @@ indentMe = function(...)
                   ...)
   )
 
-content_LifetimeHarm_Information = div('content_LifetimeHarm_Information')
+content_IQdiscussion = readLines('IQ-faq.html')
 
-addPopover(session = session, trigger = 'focus',  #### not used.
-           placement = 'bottom',
-           id="IQ points lost" ,
-           title = 'Using IQ to measure harm',
-           content=div('TODO')
-)
+content_LifetimeHarm_Information = div(
+  HTML(paste(collapse=' ',
+             paste('<br><h4>
+    These "Lifetime harms"  are  outcome estimates specifically for the birth cohort of 2019:
+that is, the babies born during the year 2019.
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
+  </h4><hr><br>
+    '),
+                   paste(collapse=' ',content_IQdiscussion)
+             )
+  ))
+
+
+#  this did not work well!!
+# addPopover(session = session, trigger = 'focus',  #### not used.
+#            placement = 'bottom',
+#            id="IQ points lost" ,
+#            title = 'Using IQ to measure harm',
+#            content=div('TODO')
+# )
 
 content_FeaturePlot_Information =
   div( style= 'width: 120% !important;',
@@ -84,9 +99,10 @@ content_FeaturePlot_Information =
      ),
      HTML(paste(rep('-', 50)) )
 )
-content_TotalOrRates_Information = '
 
-  •	<strong> Totals versus rates</strong> .
+content_TotalOrRates_Information = HTML(paste(collapse=' ',
+
+  '•	<strong> Totals versus rates</strong> .
 <br>
   Totals give a sense of actual people harmed (and sum over tracts when appropriate).
 <br>
@@ -103,6 +119,7 @@ content_TotalOrRates_Information = '
              &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
 
            <hr>'
+))
 # addPopover(session = session, trigger = 'click',
 #            placement = 'left',
 #            id='Id_TotalOrRates_popover',
