@@ -720,7 +720,7 @@ function(input, output, session) {
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
             styleHarmSectionLabel("Disease:"), buttons[6]),
         div(style=styleHarmRow,
-            styleHarmSectionLabel("Perinatal:") , buttons[7:9]),
+            styleHarmSectionLabel("Birth outcomes:") , buttons[7:9]),
         div(style=styleHarmRow,
             styleHarmSectionLabel("Birth cohort"),
             buttons[2],
