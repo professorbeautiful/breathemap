@@ -680,7 +680,7 @@ function(input, output, session) {
   sapply(featureList, makeFeatureActionButtonObserver)
 
   ### make IQ popup html
-  knitr::knit2html(input = 'IQ FAQs1.rm', output = 'IQ FAQs1.html')
+  knitr::knit2html(input = 'IQ-faq.Rmd', output = 'IQ-faq.html')
 
   #### makeFeatureActionButton ####
   makeFeatureActionButton = function(feat) {
@@ -731,7 +731,7 @@ function(input, output, session) {
                  popify(el = buttons[[1]],
                         title="",
                         content = HTML(paste(
-                          readLines('IQ FAQs1.html'),
+                          readLines('IQ-faq.html'),
                           collapse=' '
                         ))
                  )
