@@ -17,7 +17,10 @@ library(rmarkdown)
 shinyjs::useShinyjs()
 
 verbose = 0
-defaultAppName = 'BreatheMap-test-with-IQ'  #### used only when run locally.
+
+defaultAppName =   #### used only when run locally.
+  'BreatheMap-test-with-IQ-no-popify'
+
 # if( ! (basename(getwd()) == 'appPA') )
 #      setwd('appPA')  ### NOT NEEDED IF FILES ARE LINKED IN THE 2 FOLDERS.
 if(exists('appName'))
