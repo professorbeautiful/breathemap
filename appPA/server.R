@@ -679,6 +679,9 @@ function(input, output, session) {
 
   sapply(featureList, makeFeatureActionButtonObserver)
 
+  ### make IQ popup html
+  knitr::knit2html(input = 'IQ FAQs1.rm', output = 'IQ FAQs1.html')
+
   #### makeFeatureActionButton ####
   makeFeatureActionButton = function(feat) {
     inputId = paste0('idFeature', gsub(' ', '_', feat))
@@ -724,8 +727,16 @@ function(input, output, session) {
         div(style=styleHarmRow,
             styleHarmSectionLabel("Birth cohort"),
             buttons[2],
-            span(style=hideIfDesired(), buttons[1]))
-
+            span(style=hideIfDesired(),
+                 popify(el = buttons[[1]],
+                        title="",
+                        content = HTML(paste(
+                          readLines('IQ FAQs1.html'),
+                          collapse=' '
+                        ))
+                 )
+            )
+        )
       )
 
     # style=' border-radius: 0px; margin:0px;
