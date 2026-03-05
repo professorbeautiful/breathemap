@@ -5,6 +5,36 @@ indentMe = function(...)
   fluidRow(column(12, offset=1,
                   ...)
   )
+addPopover(session = session, trigger = 'focus',
+           placement = 'bottom',
+           id="IQ points lost" ,
+           title = 'Using IQ to measure harm',
+           content=div('TODO')
+)
+addPopover(session = session, trigger = 'click',
+           placement = 'left',
+           id='Id_TotalOrRates_popover',
+           title = 'About Totals and Rates:',
+           content='
+
+  •	<strong> Totals versus rates</strong> .
+<br>
+  Totals give a sense of actual people harmed (and sum over tracts when appropriate).
+<br>
+  Rates allow for comparisons among different regions.
+<br>So Totals and Rates (rescaled to 1000) are each useful in different ways.
+<br>Hover over the histogram\'s information button to see an explanation of
+           "...total" versus "...rescaled to 1000 people".
+           <br>
+             <br>
+             <strong>NOTE</strong> that the three quantities are not affected by this toggle.
+           <br>
+             &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>PM2.5 </strong>always shows the <strong>average</strong> over tracts.
+           <br>
+             &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
+
+           <hr>'
+)
 addPopover(session = session,
            placement = 'left',
            id='IdfeaturePlotforpopover',

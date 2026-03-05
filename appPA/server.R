@@ -457,6 +457,12 @@ function(input, output, session) {
 
   output$UITotalOrRates = renderUI( {
     fluidRow(
+      column(1,
+             actionButton(style=informationButtonStyle,
+                               icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                               inputId = 'Id_TotalOrRates_popover',
+                               label='')
+      ) ,
       column(4, strong( "As total or as rate?")),
       column(7,
              radioButtons(inputId='IdTotalOrRate',
@@ -682,8 +688,8 @@ function(input, output, session) {
   ### make IQ popup html
   knitr::knit2html(input = 'IQ-faq.Rmd', output = 'IQ-faq.html')
 
-  IQbutton = renderUI({
-    if(appName == 'BreatheMap-test-with-IQ-no-popify')
+  IQbutton = renderUI({  #### too much cruft-- not using
+    #if(appName == 'BreatheMap-test-with-IQ-no-popify')
       return(buttons[[1]])
     return(popify(el = buttons[[1]],
                   title="",
@@ -741,7 +747,7 @@ function(input, output, session) {
             styleHarmSectionLabel("Lifetime harm to  newborns"),
             buttons[2],
             span(style=hideIfDesired(),
-                 IQbutton
+                 buttons[[1]]
             )
         )
       )

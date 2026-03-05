@@ -9,3 +9,6 @@ rightSideButtonStyle = paste(breatheLabelColoring,
                              '; border-radius: 15px;
                              height: 50% !important;
                              padding:4px; font-size:10px; font-weight:bold')
+informationButtonStyle = paste("color:green; background-color:white;",
+                               '; padding:0px !important; border:white !important; border-radius: 0px !important;
+                               font-weight:bold !important')
