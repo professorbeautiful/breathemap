@@ -5,13 +5,13 @@
 appName = 'BreatheMap-noIQ'  #16630494
 appName = 'BreatheMap'  #16404137
 appName = 'BreatheMap-test'  # 16730739
-appName = 'BreatheMap-test-with-IQ'  # 16730739
+appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
 
 
 #For showAppLog only
 appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap' ='16404137',
-               'BreatheMap-test-with-IQ' ='',
+               'BreatheMap-test-with-IQ-no-popify' ='16827732',
                'BreatheMap-test' = '16730739')
 showAppLog = function(app='BreatheMap') {
   browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
