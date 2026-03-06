@@ -56,8 +56,8 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ##
 source('appPA/appFileManifestKept.R')
 appFiles = c(appFileManifestKept,
-             'IQ-faq.Rmd')
-appFiles = c(appFileManifestKept,
+             'www/IQ-faq.Rmd',
+             'www/article-results-on-IQ.html',
              paste0('deploying', appName))
 
 ##  Adding the correct 'deploying' file
