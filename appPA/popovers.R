@@ -10,8 +10,8 @@ indentMe = function(...)
 
 ### make IQ popup html
 ### To change text, edit the file IQ-faq.Rmd
-knitr::knit2html(input = 'IQ-faq.Rmd', output = 'www/IQ-faq.html')
-content_IQdiscussion = readLines('IQ-faq.html')
+#knitr::knit2html(input = 'IQ-faq.Rmd', output = 'www/IQ-faq.html')
+content_IQdiscussion = readLines('www/IQ-faq.html')
 #### clunky but necessary to avoid the artifacts!
 #### Before this cleanup,
 ### without HTML() no diag line problem, but not HTML.
