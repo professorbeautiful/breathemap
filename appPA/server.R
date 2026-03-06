@@ -200,7 +200,7 @@ function(input, output, session) {
     if(verbose> 0 )
       printpaste('savedTractObserver:  rV$savedTract: ', rV$savedTract)
     if(input$areaSelectorId != rV$savedTract)
-      updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
+      updateSelectInput(session, inputId = 'areaSelectorId', selected = rV$savedTract)
     tractIsChanged('savedTractObserver')
   })
 
