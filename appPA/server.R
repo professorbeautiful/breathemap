@@ -533,7 +533,7 @@ function(input, output, session) {
       column(7,
              radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
-                          choices=c('...total', '...rescaled to 1000 people'),
+                          choices=c('...total', '...adjusted for population'),
                           selected='...total',
                           inline=TRUE)
       )
