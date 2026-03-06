@@ -1064,7 +1064,7 @@ function(input, output, session) {
                'input$Id_ToggleTownTract', input$Id_ToggleTownTract
                )
     (input$IdTotalOrRate == '...total') &
-                                (input$Id_ToggleTownTract == 'communities')
+                                (input$Id_ToggleTownTract == 'towns')
   })
 
   #### featurePlot histogram arrow ####
