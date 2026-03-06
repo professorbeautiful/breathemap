@@ -57,6 +57,20 @@ if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
 library(shinyDebuggingPanel)
 
+print(paste('interactive()', interactive()))
+if(exists('ourModalDialog')) rm(ourModalDialog)
+ourModalDialog = function(...) {
+  modalDialog(footer=NULL,
+              fluidRow(
+                column(style='color:blue' , offset=11, 12,
+                       style='text-align:left; color:blue',
+                        span(#em("To close this popup:"),
+                       modalButton('X'))
+                )),
+              hr(),
+      div(...)
+  )
+}
 
 #### infoList, for the bottom 3 buttons, handled differently in plot ####
 infoList = c(

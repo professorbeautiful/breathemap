@@ -48,13 +48,13 @@ function(input, output, session) {
 #  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
   faq = inclRmd('FAQ.Rmd')   ### the link will not work from the Rhtml file. This does.
   observeEvent(input$IdFAQ, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       faq
     ))
   })
   source('acknowledgements.R')
   observeEvent(input$IdAck, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       acknowledgements
     ))
   })
@@ -74,7 +74,7 @@ function(input, output, session) {
                  inputId = 'Id_Death_Information',
                  label='')
   observeEvent(input$Id_Death_Information, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       content_Death_Information
     ))
   })
@@ -94,7 +94,7 @@ function(input, output, session) {
                  inputId = 'Id_Birth_outcomes_Information',
                  label='')
   observeEvent(input$Id_Birth_outcomes_Information, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       content_Birth_outcomes_Information
     ))
   })
@@ -105,27 +105,27 @@ function(input, output, session) {
                  inputId = 'Id_LifetimeHarm_Information',
                  label='')
   observeEvent(input$Id_LifetimeHarm_Information, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       #content_TotalOrRates_Information  ## see if the content is the problem.
       content_LifetimeHarm_Information  ### yes!
     ))
   })
 
   observeEvent(input$Id_TotalOrRates_Information, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       content_TotalOrRates_Information
     ))
   })
 
   observeEvent(input$IdfeaturePlotInformation, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       content_FeaturePlot_Information
     ))
   })
 
 
   observeEvent(input$IdMapAdvice, {
-    showModal(modalDialog(#footer = NULL,
+    showModal(ourModalDialog(
       div(HTML(paste(
         'To zoom the map, scroll over the map',
         '<br>or use the buttons at top left.',
@@ -378,7 +378,7 @@ function(input, output, session) {
     if(length(rownumbersForTown) > 0)
       showTheseTracts(rownumbersForTown)
     else {
-      showModal(modalDialog(title = paste('There are NO tracts where the town ', town, ' is the sole occupant. '),
+      showModal(ourModalDialog(title = paste('There are NO tracts where the town ', town, ' is the sole occupant. '),
                             'Turning "Town shares?" back to YES.',
                             br(),
                             "(Try 'Murrysville' for an example.)"))
@@ -458,7 +458,7 @@ function(input, output, session) {
     else {
       townsString = paste(collapse="+", townsForThisTract)
       print(paste('showModal: townsForThisTract:', townsString))
-      showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
+      showModal(  ourModalDialog(  # cannot test in shinyDebuggingPanel -- modal!
         title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
         selectInput(inputId = "modalId", label = "select a town ",
                     choices = townsForThisTract
@@ -979,7 +979,7 @@ function(input, output, session) {
 
   outlierModal = reactive(
     {
-      showModal(modalDialog(
+      showModal(ourModalDialog(
         title="outlier quantile",
         numericInput(inputId = 'IdQuantile',
                      label='outlier quantile (e.g. blank (NA), 0.99, 0.999...',
@@ -1243,7 +1243,7 @@ function(input, output, session) {
     options(opt.save)
   })
 
-#  showModal(modalDialog(title=paste('in ', appName)))
+#  showModal(ourModalDialog(title=paste('in ', appName)))
   # if(length(appName) > 1)
   #   appName = 'BreatheMap'
   #
