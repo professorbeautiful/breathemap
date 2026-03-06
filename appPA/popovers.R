@@ -33,6 +33,8 @@ content_LifetimeHarm_Information.html =
   <br>
   "Birth cohort" refers to the number of babies born in a tract or community in 2019.
   <br>
+  (The estimates are not obtained by fitting IQ or earnings data over our region.)
+  <br>
   Details are in <a href=https://annalsofglobalhealth.org/articles/10.5334/aogh.5145 target=_blank>
   Whitman et al.</a>
   <br><br>
