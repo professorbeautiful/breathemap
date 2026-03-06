@@ -792,7 +792,7 @@ function(input, output, session) {
       div(
         div(style=styleHarmRow,
             Death_Information_button,
-            styleHarmSectionLabel("Death:"), buttons[3:5],
+            styleHarmSectionLabel("Deaths:"), buttons[3:5],
             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
 #            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
         ),
