@@ -61,7 +61,13 @@ function(input, output, session) {
 
 
 
-  content_Death_Information = 'TODO'
+  content_Death_Information =
+    HTML(paste(
+      'These are estimated excess deaths (total or by cause)
+      <br>
+      obtained from models fitted to our region\'s data.
+      '
+      ))
   Death_Information_button =
     actionButton(style=informationButtonStyle,
                  icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
@@ -75,7 +81,13 @@ function(input, output, session) {
 
 
 
-  content_Birth_outcomes_Information = 'TODO'
+  content_Birth_outcomes_Information =
+    HTML(paste(
+      'These are estimated adverse birth events
+      <br>
+      obtained from models fitted to our region\'s data.
+      '
+    ))
   Birth_outcomes_Information_button =
     actionButton(style=informationButtonStyle,
                  icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
