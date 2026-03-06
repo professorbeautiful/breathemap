@@ -9,6 +9,7 @@ function(input, output, session) {
   #                "; visibility: hidden",
   #                ''))
 
+  digitsDefault = 3
   includeScript('KeyHandler.js')
   observeEvent(input$ctrlDpressed, {}) # just to flush the ctrl-D press.
   shinyDebuggingPanel::makeDebuggingPanelOutput(
@@ -916,7 +917,7 @@ function(input, output, session) {
     }
     thisAreaFeatureSummaryString =  try(silent = TRUE,
         {
-       signif(digits=3,
+       signif(digits=digitsDefault,
                                               thisAreaFeatureSummary() )
     })
     if(class(thisAreaFeatureSummaryString) ==  'try-error') {
@@ -1069,7 +1070,7 @@ function(input, output, session) {
     theValues = sort(decreasing = TRUE,
                      x[ theOutlierRows(x, quantile)]
     )
-    signif(digits=3, theValues)
+    signif(digits=digitsDefault, theValues)
 
   }
   theOutlierTracts = function(x=thisAreaFeatureDistribution(), quantile =  rV$removeOutliersQuantile) {
@@ -1150,7 +1151,7 @@ function(input, output, session) {
       if(verbose>0)
         print(paste('initial outliers ',
                     paste(collapse=',',
-                          signif(digits=3, outliers))) )
+                          signif(digits=digitsDefault, outliers))) )
       #   rowsToDrop = which(outliers <= max(thisAreaFeature, na.rm=T) )
       #     # These outliers are smaller than thisAreaFeature !
       #     ### thisAreaFeature should appear on the plot, so drop smaller ones.
@@ -1174,7 +1175,7 @@ function(input, output, session) {
       #  equivalently, referenceDistribution %except% outliers
       if(verbose>1)
         print(paste('final outliers ', paste(collapse=', ',
-                                             signif(digits=3,outliers))))
+                                             signif(digits=digitsDefault,outliers))))
     }
     if(verbose>2) print('after:')
     if(verbose>2) print(summary(referenceDistribution))
@@ -1224,7 +1225,7 @@ function(input, output, session) {
                length=0)
         points(x=feature, y= arrowHeight)
         # text(x = feature, y= 0.5 * par('usr')[4]*(1.2 + 0.06), xpd=NA,
-        #      label = signif(digits=3, feature),
+        #      label = signif(digits=digitsDefault, feature),
         #      col='darkgreen', cex=1.5)   ### too busy- overlapping.
       }
     }
@@ -1240,7 +1241,7 @@ function(input, output, session) {
              x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
              col='darkgreen', lwd=3)
       text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
-           label = signif(digits=3, thisAreaFeatureSummary()),
+           label = signif(digits=digitsDefault, thisAreaFeatureSummary()),
            col='darkgreen', cex=1.5)
 
     })
@@ -1265,7 +1266,7 @@ function(input, output, session) {
       nToShow = 4
       biggestOutliers = sort(outliers, decreasing = T)
       biggestOutliers = as.character(
-        signif(digits=3,
+        signif(digits=digitsDefault,
                biggestOutliers[1:min(length(outliers),nToShow)] ))
       if(length(outliers) > nToShow)
         biggestOutliers = c(biggestOutliers, '...')
@@ -1292,7 +1293,7 @@ function(input, output, session) {
                        #"<strong>",
                        "Total of the ", length(thisAreaFeature),
                         "included tracts: ",
-                                    signif(digits=3, thisAreaFeatureSummary())
+                                    signif(digits=digitsDefault, thisAreaFeatureSummary())
                        #,'</strong>'
                      )  )
         )
