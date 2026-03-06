@@ -1232,11 +1232,16 @@ function(input, output, session) {
         text.default(adj = 1, x = mean(par()$usr[1:2]),
                      y = highestPlotValue * 1.05,
                      xpd=NA, #adj=c(0,0.5),
-                     labels = paste(
+                     cex=1.0,
+                     col = 'darkgreen',
+                     labels = HTML(
+                                   paste(
+                       #"<strong>",
                        "Total of the ", length(thisAreaFeature),
                         "included tracts: ",
                                     signif(digits=3, thisAreaFeatureSummary())
-                     )
+                       #,'</strong>'
+                     )  )
         )
         print(paste('RHS x', par('usr')[2]))
         print(paste('par usr', par('usr')))
