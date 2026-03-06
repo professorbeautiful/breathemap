@@ -27,10 +27,11 @@ content_LifetimeHarm_Information.html =
       •	Lifetime earnings lost.
       <br>
     •	IQ points lost
-  <hr><br>
-  These estimates are calculate from externally validated models using our birth cohort counts for 2019.
+  <hr>
+  These estimates are calculate from externally validated models
+  using our birth cohort counts for 2019.
   <br>
-  That means the number of babies born in a tract or community in 2019.
+  "Birth cohort" refers to the number of babies born in a tract or community in 2019.
   <br>
   Details are in <a href=https://annalsofglobalhealth.org/articles/10.5334/aogh.5145 target=_blank>
   Whitman et al.</a>
@@ -41,11 +42,12 @@ content_LifetimeHarm_Information.html =
       <a href="IQ-faq.html" target=_blank> click here . </a>
       <br>
       The conclusion of the study concerning IQ are, in brief:
-      <cite>
+      <br>
+      <blockquote>
       Among the 24,604 children born in the Pittsburgh MSA in 2019,
       PM2.5 pollution was linked to the loss of 60,668 full‑scale IQ points,
       resulting in estimated lifetime economic losses of $2.7 billion.
-      </cite>
+      </blockquote>
       <br>
       For details extracted from the article,
       <a href="article-results-on-IQ.html" target=_blank> click here . </a>
