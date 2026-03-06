@@ -8,11 +8,19 @@ appName = 'BreatheMap-test'  # 16730739
 appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
 
 
+extraFiles =   c( 'www/IQ-faq.html',
+                  'www/article-results-on-IQ.html')
+### (also the appName file; see below)
+
+##### no edits needed below this line ####
+
 #For showAppLog only
 appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap' ='16404137',
                'BreatheMap-test-with-IQ-no-popify' ='16827732',
                'BreatheMap-test' = '16730739')
+
+
 showAppLog = function(app='BreatheMap') {
   browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
                    appNumbers[app], '/logs'))
@@ -56,8 +64,7 @@ logLevel = c("normal", "quiet", "verbose") [3]
 ##
 source('appPA/appFileManifestKept.R')
 appFiles = c(appFileManifestKept,
-             'www/IQ-faq.Rmd',
-             'www/article-results-on-IQ.html',
+             extraFiles,
              paste0('deploying', appName))
 
 ##  Adding the correct 'deploying' file
