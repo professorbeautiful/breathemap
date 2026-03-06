@@ -79,7 +79,48 @@ function(input, output, session) {
     ))
   })
 
+  content_Reference_Information =
+    HTML(paste(collapse=' ',
+      '
+        •	<strong> Reference Tracts</strong>
+<br>
+  Here at the bottom, you can select a user-selected <strong> reference census tract </strong>.
+<br>
+  Its data appears on the histogram as a red diamond shape.
+  <br>
+  As you move to other areas, the red diamond stays put.
+  <br>
+  This provides a way to compare a selected tract to other tracts and communities.
 
+<hr>
+
+  •	<strong> Example:</strong>
+  <br>
+  The current default is a tract (42003492700) of Clairton,
+<br>
+  one of three that are within the community of Clairton.
+<br>
+  On the right, click on an indicator of harm, such as Total Deaths.
+<br>
+  The estimate for that tract\'s total estimated deaths in 2016 equals roughly 3.
+      <br>
+        Now select the "communities" toggle, top left.
+      <br>
+        Then the second and third Clairton tracts are added to the region, as seen on the map.
+      <br>
+        The estimate for Clairton’s total deaths in 2016 equals 13.2 people.
+      <br> the sum of three census tracks.
+      <br> (These counts are estimates, not records-based counts;
+            <br>therefore they are not round numbers.)
+      <hr>
+        Moving to a different tract or community, for example to South Fayette Township,
+      <br> the histogram remains the same, and the red diamond stays put on the axis,
+      <br> Selecting, say, PM2.5 (below graph), and South Fayette Township,
+      <br> we compare the average 7.92 against Clairton\'s 10.6 value.
+<br> The three tracts are almost identical,
+<br> while the three Clairton tracts are somewhat different.
+<hr>'
+    ))
 
   content_Birth_outcomes_Information =
     HTML(paste(
@@ -123,6 +164,12 @@ function(input, output, session) {
     ))
   })
 
+
+  observeEvent(input$IdReferenceInformation, {
+    showModal(ourModalDialog(
+      content_Reference_Information
+    ))
+  })
 
   observeEvent(input$IdMapAdvice, {
     showModal(ourModalDialog(
@@ -548,6 +595,11 @@ function(input, output, session) {
         input$areaSelectorId
     }
     div(
+      actionButton(style=informationButtonStyle,
+                   icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                   inputId = 'IdReferenceInformation',
+                   label=span(style='color:black !important',
+                              "⬅︎" )),
       strong(class='reference',
              actionButton('IdMakeReferenceCommunity',
                           label =
