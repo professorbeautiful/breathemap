@@ -16,6 +16,7 @@ content_IQdiscussion = readLines('www/IQ-faq.html')
 #### Before this cleanup,
 ### without HTML() no diag line problem, but not HTML.
 ### with HTML() looks good but diag line problem
+### Claude had added in complete web page header info!
 
 content_IQdiscussion = content_IQdiscussion[
   (grep('<body>', content_IQdiscussion) + 1)
@@ -64,14 +65,6 @@ content_LifetimeHarm_Information = div(
 )
 
 
-#  this did not work well!!
-# addPopover(session = session, trigger = 'focus',  #### not used.
-#            placement = 'bottom',
-#            id="IQ points lost" ,
-#            title = 'Using IQ to measure harm',
-#            content=div('TODO')
-# )
-
 content_FeaturePlot_Information =
   div( style= 'width: 120% !important;',
      "NOTE: ",
@@ -80,7 +73,7 @@ content_FeaturePlot_Information =
      br(),
      br(),
      indentMe(
-       "The toggle '...total'/'...rescaled to 1000 people'  ",
+       "The toggle '...total'/'...adjusted for population'  ",
        br(),
        "is in effect for the nine ", strong("'harm'"),
        "features at the top.",
@@ -102,9 +95,9 @@ content_FeaturePlot_Information =
        br(),
        "across the communities currently selected."
      ),
-     h5("If '......rescaled to 1000 people' is selected:"),
+     h5("If '...adjusted for population' is selected:"),
      indentMe(
-       "Yearly estimates are rescaled to per 1000 people.",
+       "yearly estimates are rescaled to per 1000 people.",
        br(),
        "If 'communities/tracts' is set to 'communities',",
        br(),
@@ -226,86 +219,6 @@ So Totals and Rates are each useful in different ways.
 
            <hr>'
 ))
-# addPopover(session = session, trigger = 'click',
-#            placement = 'left',
-#            id='Id_TotalOrRates_popover',
-#            title = 'About Totals and Rates:',
-#            content=content_TotalOrRates_popover
-# )
 
-###  Changing to button click event.
-addPopover(session = session,
-           placement = 'left',
-           id='IdfeaturePlotforpopover',
-           title = 'About this graph:',
-           content=div( style= 'width: 120% !important;',
-             "NOTE: ",
-             br(),
-             "The values plotted are for all ", strong("TRACTS"), "not communities.",
-             br(),
-             br(),
-             indentMe(
-             "The toggle '...total'/'...rescaled to 1000 people'  ",
-             br(),
-             "is in effect for the nine ", strong("'harm'"),
-             "features at the top.",
-             br(),
-             "but irrelevant for the three ",
-             br(),
-             strong("'information'"),
-             "features along the bottom.)"
-             ),
-             h5("If '...total' is selected:"),
-             indentMe(
-               "Yearly EXCESS harm estimates are totalled ",
-               br(),
-               "for the selected tract or community.",
-               br(),
-               "If 'communities/tracts' is set to 'communities',",
-               br(),
-               "this total is the sum",
-               br(),
-               "across the communities currently selected."
-             ),
-             h5("If '......rescaled to 1000 people' is selected:"),
-             indentMe(
-               "Yearly estimates are rescaled to per 1000 people.",
-               br(),
-               "If 'communities/tracts' is set to 'communities',",
-               br(),
-               "the rescaling is done combining  ",
-               br(),
-               "across the communities currently selected."
-
-             ),
-             h6("Outlier handling:"),
-             indentMe(
-               indentMe(
-                 "Outliers not on the graph ",
-                 br(),
-                 "are listed on the right side of the graph,",
-                 br(),
-                 " and in a quantile popover",
-                 br(),
-                 "To remove outlier handling, ",
-                 br(),
-                 "click in 'outlier quantile' box and delete."
-             ),
-             h6("Special KEYS for the outlier handling:"),
-             indentMe(
-               "Type  ", strong('9'), " for a popover to open the outlier quantile dialog",
-               br(),  ' while setting the outlier quantile to 0.999. ',
-               br(),
-               "Type capital ", strong('O'), " for a popover to open the outlier quantile dialog",
-               br(),  ' while setting the outlier quantile (no  outlier handling). ',
-               br()
-
-               ),
-             "Type capital ", strong('H'), " to toggle between ",
-             "histogram and density plot.",
-             ),
-             HTML(paste(rep('-', 50)) )
-           ), trigger='hover'
-)
 
 

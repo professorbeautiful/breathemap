@@ -648,7 +648,7 @@ function(input, output, session) {
   makeItARate = function(){
     isTRUE(
       (rV$featureToPlot %in% featureList) &
-      (input$IdTotalOrRate == '...rescaled to 1000 people') &
+      (input$IdTotalOrRate == '...adjusted for population') &
       (rV$featureToPlot != "PM2.5 average")
     )
   }
@@ -1000,7 +1000,7 @@ function(input, output, session) {
     else  if(input$IdTotalOrRate == '...total')
       paste(f, '(estimated total)')
     else
-      paste(f, '(rescaled to 1000 people)')
+      paste(f, '(adjusting to a population of 1000 people)')
   }
   #
   # observeEvent(input$idFeature, {
