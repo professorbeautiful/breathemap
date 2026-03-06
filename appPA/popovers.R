@@ -22,16 +22,39 @@ content_IQdiscussion = content_IQdiscussion[
   : (grep('</body>', content_IQdiscussion) - 1)
 ]
 
+content_LifetimeHarm_Information.html =
+'<br><h4> Lifetime harms</h4>
+      •	Lifetime earnings lost.
+      <br>
+    •	IQ points lost
+  <hr><br>
+  These estimates are calculate from externally validated models using our birth cohort counts for 2019.
+  <br>
+  That means the number of babies born in a tract or community in 2019.
+  <br>
+  Details are in <a href=https://annalsofglobalhealth.org/articles/10.5334/aogh.5145 target=_blank>
+  Whitman et al.</a>
+  <br><br>
+  <h3>Using IQ as an indicator of environmental harms</h3>
+  IQ has a history of being abused to advance racist doctrines.
+  <br> For an extensive discussion of the ethical issues,
+      <a href="IQ-faq.html" target=_blank> click here . </a>
+      <br>
+      The conclusion of the study concerning IQ are, in brief:
+      <cite>
+      Among the 24,604 children born in the Pittsburgh MSA in 2019,
+      PM2.5 pollution was linked to the loss of 60,668 full‑scale IQ points,
+      resulting in estimated lifetime economic losses of $2.7 billion.
+      </cite>
+      <br>
+      For details extracted from the article,
+      <a href="article-results-on-IQ.html" target=_blank> click here . </a>
+
+    '
+
 content_LifetimeHarm_Information = div(
   HTML(paste(collapse=' ',
-             paste('<br><h4>
-    These "Lifetime harms"  are  outcome estimates specifically for the birth cohort of 2019:
-that is, the babies born during the year 2019.
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
-  </h4><hr><br>
-    '),
-                   paste(collapse=' ',content_IQdiscussion)   ### It's this.
+             content_LifetimeHarm_Information.html
              )
   )
 )
