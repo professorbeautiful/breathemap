@@ -1228,16 +1228,25 @@ function(input, output, session) {
     ### Dealing with Total off scale.
     if(input$IdTotalOrRate == '...total') {
       #if(thisAreaFeatureSummary() > )
-      if(length(thisAreaFeature) > 1)
-        text.default(x = mean(par()$usr[1:2]),
-                     y = highestPlotValue * 1.1,
+      if(length(thisAreaFeature) > 1)  {
+        text.default(adj = 1, x = mean(par()$usr[1:2]),
+                     y = highestPlotValue * 1.05,
                      xpd=NA, #adj=c(0,0.5),
-                     labels = paste("Total of included tracts: ",
-                                    signif(digits=2, thisAreaFeatureSummary())
+                     labels = paste(
+                       "Total of the ", length(thisAreaFeature),
+                        "included tracts: ",
+                                    signif(digits=3, thisAreaFeatureSummary())
                      )
         )
-
-
+        print(paste('RHS x', par('usr')[2]))
+        print(paste('par usr', par('usr')))
+        if(thisAreaFeatureSummary() >= par('usr')[2]){
+          arrows(x0 = mean(par()$usr[1:2]), x1 = 0.9*par('usr')[2],
+                 y0 = highestPlotValue * 1.05, y1 = highestPlotValue * 1.05,
+                 col=breatheGreen,
+                 xpd=NA, lwd=3)
+        }
+      }
     }
 
     options(opt.save)
