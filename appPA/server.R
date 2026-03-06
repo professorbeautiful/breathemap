@@ -1213,6 +1213,20 @@ function(input, output, session) {
                    xpd=NA, adj=c(0,0.5),
                    labels = outlierLabel)
     }
+    ### Dealing with Total off scale.
+    if(input$IdTotalOrRate == '...total') {
+      #if(thisAreaFeatureSummary() > )
+      if(length(thisAreaFeature) > 1)
+        text.default(x = mean(par()$usr[1:2]),
+                     y = highestPlotValue * 1.1,
+                     xpd=NA, #adj=c(0,0.5),
+                     labels = paste("Total of included tracts: ",
+                                    signif(digits=2, thisAreaFeatureSummary())
+                     )
+        )
+
+
+    }
 
     options(opt.save)
   })
