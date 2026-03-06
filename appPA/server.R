@@ -804,9 +804,9 @@ function(input, output, session) {
       div(
         fluidRow(style=styleHarmRow,
                  column(1, Death_Information_button),
-                 column(4, styleHarmSectionLabel("Deaths:")),
+                 column(3, styleHarmSectionLabel("Deaths:")),
                  #column(2, ""),
-                 column(7, buttons[3:5]),
+                 column(8, buttons[3:6]),
                  # HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
                  #            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
         ),
