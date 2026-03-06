@@ -517,7 +517,7 @@ function(input, output, session) {
                                inputId = 'Id_TotalOrRates_Information',
                                label='')
       ) ,
-      column(4, strong( "As total or as rate?")),
+      column(4, strong( "As total or adjusted for population?")),
       column(7,
              radioButtons(inputId='IdTotalOrRate',
                           label=NULL,
@@ -787,24 +787,28 @@ function(input, output, session) {
     #styleHarmRow = 'text-indent: 20px;margin:auto'
     styleHarmRow = ''  ### not the problem
     styleHarmSectionLabel = function(word)
-      span(style='color:green; font-style: italic;', word)
+      span(style='color:black; font-style: italic;', word)
     buttonsFixed =
       div(
-        div(style=styleHarmRow,
-            Death_Information_button,
-            styleHarmSectionLabel("Deaths:"), buttons[3:5],
-            HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
-#            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
+        fluidRow(style=styleHarmRow,
+                 column(1, Death_Information_button),
+                 column(4, styleHarmSectionLabel("Deaths:")),
+                 #column(2, ""),
+                 column(7, buttons[3:5]),
+                 # HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
+                 #            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
         ),
-        div(style=styleHarmRow,
-            Birth_outcomes_Information_button,
-            styleHarmSectionLabel("Birth outcomes:") , buttons[7:9]),
-        div(style=styleHarmRow,
-            LifetimeHarm_Information_button,
-            styleHarmSectionLabel("Lifetime harm to  newborns"),
-            buttons[2],
+        fluidRow(style=styleHarmRow,
+                 column(1, Birth_outcomes_Information_button),
+                 column(4, styleHarmSectionLabel("Birth outcomes:") ),
+                 column(7,  buttons[7:9])
+        ),
+        fluidRow(style=styleHarmRow,
+            column(1, LifetimeHarm_Information_button),
+            column(4, styleHarmSectionLabel("Lifetime harm to  newborns")),
+            column(7, buttons[2],
             span(style=hideIfDesired(),
-                 buttons[[1]]
+                 buttons[[1]])
             )
         )
       )

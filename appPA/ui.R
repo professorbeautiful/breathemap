@@ -160,8 +160,8 @@ fluidPage(
                                 actionButton(style=informationButtonStyle,
                                              icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
                                              inputId = 'IdfeaturePlotInformation',
-                                             label=paste(
-                                                         "about this graph" )),
+                                             label=span(style='color:black !important',
+                                                       "⬅︎About this graph" )),
                                 plotOutput(outputId="featurePlot",
                                            height=300)
                               )
