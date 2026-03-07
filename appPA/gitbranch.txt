@@ -1,44 +1,44 @@
 Deployed: 
- * BreatheMap   8d606ea [ahead 2] slight improvement in publish_site.R , which works on source'ing! 
+ * iqfix      4bf8f7b Unless I do subtraction, "Heart Disease" should be "All". 
 =-=-=-=-=-
 Recent:
- commit 8d606ea8b56b1c16d7aaeceb26d11fef8fa2b0e1
+ commit 4bf8f7b5c6a460f3effdce51dc1e96a8f4e7d91a
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 16:51:11 2026 -0500
+Date:   Sat Mar 7 10:56:34 2026 -0500
 
-    slight improvement in publish_site.R , which works on source'ing!
+    Unless I do subtraction, "Heart Disease" should be "All".
 
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit e64064505232469a2623c5001c75dc32b8efe075
+commit 8fcee96a45a7033254285573e390354d6c6e692b
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 16:50:19 2026 -0500
+Date:   Sat Mar 7 10:19:18 2026 -0500
 
-    More FAQ tweaks.
+    About this graph: removed section on  total and adjusted ( done elsewhere).
+    And some indentation change.
 
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ 1 file changed, 15 insertions(+), 47 deletions(-)
 
-commit 49c5c9b61b2c34cbb935d8711f2b27e433f12f49
+commit 87670aa219a4f31b5a76b821b0f318539dd2a568
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 16:37:29 2026 -0500
+Date:   Sat Mar 7 10:04:24 2026 -0500
 
-    Set initial toggle to "towns".
-    Deployed to BreatheMap, 2026-02-18
+    consistent capitalization
 
- 2 files changed, 44 insertions(+), 12 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit c5a26102382261de21298ee894ff49896c0293a9
+commit 2fe32ff18abcf1b01932d521f9386ad921813bc5
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 15:37:30 2026 -0500
+Date:   Sat Mar 7 10:03:42 2026 -0500
 
-    Edits to the FAQ
+    fleshing out the links to the article.
 
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-commit 8542841beea685b10d4daaffd81afaf58a7d92b5
+commit 2b96afb139bd89d471b5b149dd4ccc9b9a6007d5
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Feb 18 15:25:12 2026 -0500
+Date:   Sat Mar 7 10:03:19 2026 -0500
 
-    Adding an FAQ.
+    removed "(total or by cause)", per this from the article: "702 deaths from IHD; and 65 deaths from myocardial infarction (a wholly contained subset of IHD deaths) "
 
- 4 files changed, 73 insertions(+), 5 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)

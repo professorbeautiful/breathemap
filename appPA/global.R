@@ -47,6 +47,7 @@ hideIfDesired <<- function(style = ';',
 source('moveColumns.R')
 source('cq.R')
 source('inclRmd.R')
+source('www/content_TotalOrRates_Information.R')
 
 indentMe = function(...)
   fluidRow(column(12, offset=1,
