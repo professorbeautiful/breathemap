@@ -835,7 +835,7 @@ function(input, output, session) {
     if(feat == 'All-cause deaths')
       feat='Total Deaths'
     if(feat == 'Ischemic Heart Disease Deaths')
-      feat='Other Heart Disease'
+      feat='All Heart Disease'
     feat = gsub('[dD]eaths', '', feat)
     if(feat == "Myocardial Infarctions")
         feat = "Heart Attack"
