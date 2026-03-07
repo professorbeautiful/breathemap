@@ -10,6 +10,7 @@ appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',
                   'www/content_TotalOrRates_Information',
+                  'www/content_FeaturePlot_Information',
                   'www/article-results-on-IQ.html')
 ### (also the appName file; see below)
 
