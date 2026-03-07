@@ -36,8 +36,17 @@ content_LifetimeHarm_Information.html =
   <br>
   (The estimates are not obtained by fitting IQ or earnings data over our region.)
   <br>
-  Details are in <a href=https://annalsofglobalhealth.org/articles/10.5334/aogh.5145 target=_blank>
-  Whitman et al.</a>
+  Details are in the research article
+  <a href=https://annalsofglobalhealth.org/articles/10.5334/aogh.5145 target=_blank>
+  <br>
+  Particulate Air Pollution, Disease, and Death in the Cities and Towns of Southwestern Pennsylvania,
+  <br>
+  <strong>
+E. M. Whitman,
+L. Bryan,
+S. Sehdev,
+P. J. Landrigan
+</strong></a>
   <br><br>
   <h3>Using IQ as an indicator of environmental harms</h3>
   IQ has a history of being abused to advance racist doctrines.
@@ -52,7 +61,7 @@ content_LifetimeHarm_Information.html =
       resulting in estimated lifetime economic losses of $2.7 billion.
       </blockquote>
       <br>
-      For details extracted from the article,
+      For details extracted from the Whitman et al article,
       <a href="article-results-on-IQ.html" target=_blank> click here . </a>
 
     '
