@@ -40,10 +40,12 @@ sapply(ls(),
 ls(envir = env.2025_12_29)
 rmNotEnv = function(){
   toRemove = not_envNames.f()
-  toRemove = setdiff(toRemove,
-                     c('rmNotEnv', 'not_envNames.f', 'envNames.f',
-                       'cq', 'moveColumns', 'showTownsInLeaflet'))
-  toRemove = c(toRemove, 'thisSession')
+  dontRemove =       c('rmNotEnv', 'not_envNames.f', 'envNames.f',
+                       'cq', 'moveColumns', 'showTownsInLeaflet',
+                       'appName', 'appNumbers',
+                       'showAppLog', 'runSelectedApp')
+  toRemove = setdiff(toRemove, dontRemove)
+  toRemove = c(toRemove, 'thisSession')  ### also an environment.
   print(toRemove)
   cat("were removed\n")
   rm(list = toRemove, pos=1)
