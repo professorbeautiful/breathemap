@@ -87,7 +87,7 @@ function(input, output, session) {
 <br>
   Here at the bottom, you can select a user-selected <strong> reference census tract </strong>.
 <br>
-  Its data appears on the histogram as a red diamond shape.
+  Its data appears along the bottom of the histogram as a red diamond shape.
   <br>
   As you move to other areas, the red diamond stays put.
   <br>
