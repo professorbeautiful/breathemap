@@ -833,8 +833,9 @@ function(input, output, session) {
       paste(rightSideButtonStyle, '; font-size:10px')
     else ButtonStyle = rightSideButtonStyle
     if(feat == 'All-cause deaths')
-       feat='Total Deaths'
-    ##   if(feat == 'Ischemic Heart Disease')  #stet, per Philip.
+      feat='Total Deaths'
+    if(feat == 'Ischemic Heart Disease Deaths')
+      feat='Other Heart Disease'
     feat = gsub('[dD]eaths', '', feat)
     if(feat == "Myocardial Infarctions")
         feat = "Heart Attack"
@@ -859,7 +860,7 @@ function(input, output, session) {
                  column(1, Death_Information_button),
                  column(3, styleHarmSectionLabel("Deaths:")),
                  #column(2, ""),
-                 column(8, buttons[3:6]),
+                 column(8, buttons[c(3,5, 6, 4)]),
                  # HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),
                  #            styleHarmSectionLabel("Other:"), buttons[6])   ### omit?
         ),
