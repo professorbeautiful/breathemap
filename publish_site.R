@@ -21,17 +21,14 @@ appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap-test-with-IQ-no-popify' ='16827732',
                'BreatheMap-test' = '16730739')
 
-
-showAppLog = function(app='BreatheMap') {
+showAppLog = function(app=appName) {
   browseURL(paste0('https://www.shinyapps.io/admin/#/application/',
                    appNumbers[app], '/logs'))
 }
-runSelectedApp = function(app='BreatheMap') {
+runSelectedApp = function(app=appName) {
   browseURL(paste0('https://trials.shinyapps.io/',
                    app))
 }
-
-
 
 appTitle = 'BreatheMap for southwestern Pennsylvania'
 
