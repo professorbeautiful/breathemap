@@ -49,6 +49,7 @@ source('cq.R')
 source('inclRmd.R')
 source('www/content_TotalOrRates_Information.R')
 source('www/content_FeaturePlot_Information.R')
+source('www/content_LifetimeHarm_Information.R')
 
 source('indentMe.R')
 
