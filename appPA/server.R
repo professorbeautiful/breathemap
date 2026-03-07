@@ -64,7 +64,7 @@ function(input, output, session) {
 
   content_Death_Information =
     HTML(paste(
-      'These are estimated excess deaths (total or by cause)
+      'These are estimated excess deaths
       <br>
       obtained from models fitted to our region\'s data.
       '
