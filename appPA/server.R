@@ -872,7 +872,7 @@ function(input, output, session) {
         fluidRow(style=styleHarmRow,
             column(1, LifetimeHarm_Information_button),
             #column(4, styleHarmSectionLabel("Lifetime harm to  newborns")),
-            column(4, styleHarmSectionLabel("Economic Impact/IQ")),
+            column(4, styleHarmSectionLabel("Economic impact/IQ")),
             column(7, buttons[2],
             span(style=hideIfDesired(),
                  buttons[[1]])
