@@ -50,10 +50,7 @@ source('inclRmd.R')
 source('www/content_TotalOrRates_Information.R')
 source('www/content_FeaturePlot_Information.R')
 
-indentMe = function(...)
-  fluidRow(column(12, offset=1,
-                  ...)
-  )
+source('indentMe.R')
 
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
