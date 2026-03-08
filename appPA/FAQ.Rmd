@@ -16,22 +16,6 @@ href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
   especially those near steel mills and coke ovens like Clairton and Braddock.
 <hr>
 
-  •	<strong> Totals versus rates</strong> .
-<br>
-  Totals give a sense of actual people harmed (and sum over tracts when appropriate).
-<br>
-  Rates allow for comparisons among different regions.
-<br>So Totals and Rates (rescaled to 1000) are each useful in different ways.
-<br>Hover over the histogram's information button to see an explanation of
-"...total" versus "...rescaled to 1000 people".
-<br>
-<br>
-<strong>NOTE</strong> that the three quantities are not affected by this toggle.
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;•	<strong>PM2.5 </strong>always shows the <strong>average</strong> over tracts.
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
-
 <hr>
 
 <br>
