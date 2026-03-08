@@ -32,9 +32,11 @@ if(length(appName) > 1)  ### running from RStudio, not a deployed one.
 print(paste('appName: ', appName))
 
 ### use this to mask elements.
+
 hideIfDesired <<- function(style = ';',
                            hideMe =
                              appName %in% c('BreatheMap-test',
+                                            'BreatheMap', ### Added for web page.
                                             'BreatheMap-noIQ'))
   paste(style,
         ifelse(hideMe,
