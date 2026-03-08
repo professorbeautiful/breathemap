@@ -435,7 +435,7 @@ function(input, output, session) {
     if(length(rownumbersForTown) > 0)
       showTheseTracts(rownumbersForTown)
     else {
-      showModal(ourModalDialog(title = paste('There are NO tracts where the town ', town, ' is the sole occupant. '),
+      showModal(modalDialog(title = paste('There are NO tracts where the town ', town, ' is the sole occupant. '),
                             'Turning "Town shares?" back to YES.',
                             br(),
                             "(Try 'Murrysville' for an example.)"))
@@ -515,7 +515,7 @@ function(input, output, session) {
     else {
       townsString = paste(collapse="+", townsForThisTract)
       print(paste('showModal: townsForThisTract:', townsString))
-      showModal(  ourModalDialog(  # cannot test in shinyDebuggingPanel -- modal!
+      showModal(  modalDialog(  # cannot test in shinyDebuggingPanel -- modal!
         title = div(span('From the tract ', rV$savedTract),  br(), span('select one town:', townsString)),
         selectInput(inputId = "modalId", label = "select a town ",
                     choices = townsForThisTract
