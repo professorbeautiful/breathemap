@@ -154,6 +154,7 @@ fluidPage(
                        )),
                      uiOutput('UITotalOrRates'),
                      uiOutput('histTitle'),
+                     hr(),
                      fluidRow(
                        column(12,
                               div(  ### this div does not help! but popover works now.
