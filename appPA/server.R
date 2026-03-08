@@ -64,7 +64,12 @@ function(input, output, session) {
 
   content_Death_Information =
     HTML(paste(
-      'These are estimated excess deaths
+
+      '<h4>Death estimates</h4>
+      <br>
+      These outcomes are the estimated excess deaths
+      <br>
+      due to PM2.5,
       <br>
       obtained from models fitted to our region\'s data.
       '
@@ -125,9 +130,13 @@ function(input, output, session) {
 
   content_Birth_outcomes_Information =
     HTML(paste(
-      'These are estimated adverse birth events
+      '<h4>Birth outcomes</h4>
       <br>
-      obtained from models fitted to our region\'s data.
+      These outcomes are the estimated excess numbers of adverse birth events.
+      <br>
+      due to PM2.5,
+      <br>
+      Estimates are obtained from models fitted to our region\'s data.
       '
     ))
   Birth_outcomes_Information_button =
