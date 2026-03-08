@@ -1291,7 +1291,7 @@ function(input, output, session) {
                    labels = outlierLabel)
     }
     ### Dealing with Total off scale.
-    if(input$IdTotalOrRate == '...total') {
+    if(identical(input$IdTotalOrRate, '...total')  ) {
       #if(thisAreaFeatureSummary() > )
       if(length(thisAreaFeature) > 1)  {
         text.default(adj = 1, x = mean(par()$usr[1:2]),
