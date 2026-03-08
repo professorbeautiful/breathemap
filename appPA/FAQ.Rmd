@@ -1,5 +1,4 @@
-  •	<strong>The fully-featured map</strong> is <a target=_blank
-href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
+<strong><h4>Overview </h4></strong>
 <br>
   •	<strong>Areas Shown: </strong>The areas shown in the map on the left are census tracts
 <br>for the Pittsburgh  Metropolitan Statistical Area (8 counties, 739 tracts).
@@ -19,6 +18,10 @@ href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
 
 <hr>
 
-<br>
+
 •	<strong> Map version: </strong> `r appName`
+<br>
+  •	<strong>The fully-featured map</strong> is <a target=_blank
+href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
+<br>
 
