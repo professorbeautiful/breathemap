@@ -1,5 +1,30 @@
+#source('identMe.R')
 content_TotalOrRates_Information =
-  HTML(paste(collapse=' ',
+  div(
+    h5("If '...total' is selected:"),
+    indentMe(
+      "Yearly EXCESS harm estimates are totalled ",
+      br(),
+      "for the selected tract or community.",
+      br(),
+      "If 'communities/tracts' is set to 'communities',",
+      br(),
+      "this total is the sum",
+      br(),
+      "across the communities currently selected."
+    ),
+    h5("If '...adjusted for population' is selected:"),
+    indentMe(
+      "yearly estimates are rescaled to per 1000 people.",
+      br(),
+      "If 'communities/tracts' is set to 'communities',",
+      br(),
+      "the rescaling is done combining  ",
+      br(),
+      "across the communities currently selected."
+
+    ),
+    HTML(paste(collapse=' ',
 
              '•	<strong> Totals versus adjusted rates</strong> .
 <br>
@@ -82,4 +107,5 @@ So Totals and Rates are each useful in different ways.
              &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># babies in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
 
            <hr>'
-))
+    ))
+)
