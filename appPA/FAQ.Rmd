@@ -33,15 +33,6 @@ href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
 &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>Total # of people </strong>  and <strong># in the birth cohort</strong> always show the <strong>sum</strong> over tracts.
 
 <hr>
-<div style="`r hideIfDesired()`">
-•	<strong> Birth cohort</strong>
-<br>
-Some outcome estimates apply specifically to the birth cohort of 2019:
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;•	IQ points lost
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;•	Lifetime earnings lost
-</div>  
 
 <br>
 •	<strong> Map version: </strong> `r appName`
