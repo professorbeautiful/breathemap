@@ -883,8 +883,8 @@ function(input, output, session) {
             #column(4, styleHarmSectionLabel("Lifetime harm to  newborns")),
             column(4, styleHarmSectionLabel("Economic impact/IQ")),
             column(7, buttons[2],
-            span(style=hideIfDesired(),
-                 buttons[[1]])
+            # span(style=hideIfDesired(),  buttons[[1]])
+            buttons[[1]]
             )
         )
       )
