@@ -47,11 +47,11 @@ hideIfDesired <<- function(style = ';',
 source('moveColumns.R')
 source('cq.R')
 source('inclRmd.R')
-source('www/content_TotalOrRates_Information.R')
-source('www/content_FeaturePlot_Information.R')
-source('www/content_LifetimeHarm_Information.R')
-
-source('indentMe.R')
+# source('www/content_TotalOrRates_Information.R')
+# source('www/content_FeaturePlot_Information.R')
+# source('www/content_LifetimeHarm_Information.R')
+print(dir())
+# source('indentMe.R')
 
 if(!require(shinyDebuggingPanel))
   devtools::install_github('professorbeautiful/shinyDebuggingPanel')
@@ -71,6 +71,7 @@ ourModalDialog = function(...) {
       div(...)
   )
 }
+
 
 #### infoList, for the bottom 3 buttons, handled differently in plot ####
 infoList = c(
