@@ -126,7 +126,7 @@ fluidPage(
                      fluidRow(
                        column(width=3,
                               #div(
-                              actionButton('IdFAQ', label='FAQ',
+                              actionButton('IdFAQ', label='Overview',
                                            style=leftSideButtonStyle)
                        ),
                        column(width=3,
