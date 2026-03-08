@@ -4,8 +4,9 @@
 
 appName = 'BreatheMap-noIQ'  #16630494
 appName = 'BreatheMap'  #16404137
-appName = 'BreatheMap-test'  # 16730739
+appName = 'BreatheMap-test'  # 16730739    The toggles and IQ are hidden
 appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
+appName = 'BreatheMap-full'  #16842009
 
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',
@@ -18,6 +19,7 @@ extraFiles =   c( 'www/IQ-faq.html',
 #For showAppLog only
 appNumbers = c('BreatheMap-noIQ'='16630494',
                'BreatheMap' ='16404137',
+               'BreatheMap-full'= '16842009',
                'BreatheMap-test-with-IQ-no-popify' ='16827732',
                'BreatheMap-test' = '16730739')
 
