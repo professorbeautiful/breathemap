@@ -186,7 +186,7 @@ So Totals and Rates are each useful in different ways.
 
              <br>
              <strong>NOTE</strong> that the  quantities from the three buttons
-             <br> under the graph are not affected by this toggle.
+             <br> UNDER the graph are not affected by this toggle.
            <br>
              &nbsp;&nbsp;&nbsp;&nbsp;•	<strong>PM2.5 </strong>always shows the <strong>average</strong> over tracts.
            <br>
