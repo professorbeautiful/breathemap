@@ -91,6 +91,8 @@ This is indicated by a horizontal green arrow reaching to the right hand side.
 #### content_TotalOrRates_Information ####
 content_TotalOrRates_Information =
   div(
+    strong(h4("As total or adjusted for population? Details:" ) ),
+    br(),
     h5("If '...total' is selected:"),
     indentMe(
       "Yearly EXCESS harm estimates are totalled ",
