@@ -40,21 +40,22 @@ content_FeaturePlot_Information =
        br(),
        br(),
        h5('Multiple tracts:'),
-       "When the 'tracts/communities' toggle is set to 'communities' (the default),
-       there may be multiple tracts for the community.",
+       "When the 'tracts/communities' toggle is set to 'communities' (the default),",
+       br(),
+       "there may be multiple tracts for the community.",
        br(),
        "If so, the  value for each tract is shown as a half-height green line.",
        br(),
        br(),
-       "If '...total' is selected, then the tract results are combined by adding.
-      <br>
-In that case, the total is written along the top of the graph,
-<br>
-with the number of tracts contributing.
-<br>
-The total might be larger than the right hand side of the feature axis.
-<br>
-This is indicated by a horizontal green arrow reaching to the right hand side.
+       "If '...total' is selected, then the tract results are combined by adding.",
+      br(),
+'In that case, the total is written along the top of the graph,',
+br(),
+'with the number of tracts contributing.',
+br(),
+'The total might be larger than the right hand side of the feature axis.',
+br(),
+"This is indicated by a horizontal green arrow reaching to the right hand side.
 ",
        br(),      br(),
 
