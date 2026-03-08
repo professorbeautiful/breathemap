@@ -1,4 +1,4 @@
-source('indentMe.R')
+# source('www/indentMe.R')
 content_FeaturePlot_Information =
   div( style= 'width: 120% !important;',
 h5('This graph:'),
@@ -30,10 +30,11 @@ This is indicated by a horizontal green arrow reaching to the right hand side.
       br(),      br(),
 
        h5("Outlier handling:"),
-       indentMe(
+       # indentMe(
 
-         "When '...total' is selected and 'communities' is selected,
-         Outliers not on the graph ",
+         "When '...total' is selected and 'communities' is selected,",
+         br(),
+         "Outliers not on the graph ",
          br(),
          "are listed on the right side of the graph,",
          br(),
@@ -42,9 +43,10 @@ This is indicated by a horizontal green arrow reaching to the right hand side.
          "To remove outlier handling, ",
          br(),
          "click in 'outlier quantile' box and delete."
-       ),
+       # )
+,
        h5("Special KEYS for the outlier handling:"),
-       indentMe(
+       # indentMe(
          "Type  ", strong('9'), " for a popover to open the outlier quantile dialog",
          br(),  ' while setting the outlier quantile to 0.999. ',
          br(),
@@ -52,6 +54,6 @@ This is indicated by a horizontal green arrow reaching to the right hand side.
          br(),  ' while setting the outlier quantile (no  outlier handling). ',
          br()
 
-       )
+       #)
        #  ,      HTML(paste(rep('-', 50)) )  NEEDED only if popover on the left.
   )
