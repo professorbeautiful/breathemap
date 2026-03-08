@@ -10,6 +10,7 @@ href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
   •	<strong>Health Harms </strong> The health harms reported in this study are attributable to PM 2.5 exposure.
 <br>
   Much of this harm occurs even when PM 2.5 exposure levels are below the current federal standard of 9.0 µg/m³.
+<br> For more information about these measures of harm, click on the information buttons along the left edge of the right panel.
 <br>
   This indicates that the federal standard needs to be reduced to protect the health of vulnerable populations,
 <br>
