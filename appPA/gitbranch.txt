@@ -1,44 +1,43 @@
 Deployed: 
- * iqfix      4bf8f7b Unless I do subtraction, "Heart Disease" should be "All". 
+ * iqfix      c0a9255 Undoing Claude's "bug fix".  It was a mistake. 
 =-=-=-=-=-
 Recent:
- commit 4bf8f7b5c6a460f3effdce51dc1e96a8f4e7d91a
+ commit c0a92556c525319ef979a342bb69b4dfb2a16ef7
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 7 10:56:34 2026 -0500
+Date:   Sun Mar 8 11:20:45 2026 -0400
 
-    Unless I do subtraction, "Heart Disease" should be "All".
+    Undoing Claude's "bug fix".  It was a mistake.
+
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit f39158689c774eea398bb76061e9e173f2e2d433
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Sun Mar 8 10:55:03 2026 -0400
+
+    New name for full-featured: BreatheMap-full
 
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit 8fcee96a45a7033254285573e390354d6c6e692b
+commit bd586c52f7d25678d3ee2eaa38e6c6bfb6ac2983
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 7 10:19:18 2026 -0500
+Date:   Sun Mar 8 10:54:01 2026 -0400
 
-    About this graph: removed section on  total and adjusted ( done elsewhere).
-    And some indentation change.
+    BreatheMap is now the link for web page version.
 
- 1 file changed, 15 insertions(+), 47 deletions(-)
+ 1 file changed, 2 insertions(+)
 
-commit 87670aa219a4f31b5a76b821b0f318539dd2a568
+commit 060aa566f469b2429aca896840e230fff5f1bff1
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 7 10:04:24 2026 -0500
+Date:   Sun Mar 8 10:53:02 2026 -0400
 
-    consistent capitalization
+    un-hide the IQ button
 
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-commit 2fe32ff18abcf1b01932d521f9386ad921813bc5
+commit 3fceb5069fc47e28e51acb3bae94600471d5df1d
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 7 10:03:42 2026 -0500
+Date:   Sun Mar 8 10:34:47 2026 -0400
 
-    fleshing out the links to the article.
+    A bit of information about the full-featured version.
 
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-commit 2b96afb139bd89d471b5b149dd4ccc9b9a6007d5
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 7 10:03:19 2026 -0500
-
-    removed "(total or by cause)", per this from the article: "702 deaths from IHD; and 65 deaths from myocardial infarction (a wholly contained subset of IHD deaths) "
-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 1 file changed, 6 insertions(+)
