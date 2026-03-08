@@ -200,7 +200,7 @@ function(input, output, session) {
   twt$twt = twt$twt.for.tracts = twt$twt.for.towns =
     gsub( '^Pittsburgh 42', 'Pittsburgh (unspecified) 42',
           twt$twtSaved )
-  updateSelectInput(session, inputId = 'areaSelectorId', choices = twt$twt, selected = 'Clairton 42003492700')
+  updateSelectInput(session, inputId = input$areaSelectorId, choices = twt$twt, selected = 'Clairton 42003492700')
 
 
   #### getTownsForThisTract ####
@@ -257,7 +257,7 @@ function(input, output, session) {
     if(verbose> 0 )
       printpaste('savedTractObserver:  rV$savedTract: ', rV$savedTract)
     if(input$areaSelectorId != rV$savedTract)
-      updateSelectInput(session, inputId = 'areaSelectorId', selected = rV$savedTract)
+      updateSelectInput(session, inputId = input$areaSelectorId, selected = rV$savedTract)
     tractIsChanged('savedTractObserver')
   })
 
