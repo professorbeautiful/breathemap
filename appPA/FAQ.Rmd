@@ -40,4 +40,10 @@ P. J. Landrigan
   •	<strong>The fully-featured map</strong> is <a target=_blank
 href='https://trials.shinyapps.io/BreatheMap/'> here</a>.
 <br>
+It includes user's toggle controls for:
+<br>   • Tracts/communities
+<br>   • Pittsburgh neighborhoods
+<br>   • Yes/no "Community can overlap" (Only tracts with a community as sole tract occupant)
+
+
 
