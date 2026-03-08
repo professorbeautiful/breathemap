@@ -1,43 +1,35 @@
 Deployed: 
- * iqfix      c0a9255 Undoing Claude's "bug fix".  It was a mistake. 
+ * iqfix      c391437 Doing the line breaks as br(). 
 =-=-=-=-=-
 Recent:
- commit c0a92556c525319ef979a342bb69b4dfb2a16ef7
+ commit c391437fd8f5a5bc9301d37a756436c72000ae82
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 11:20:45 2026 -0400
+Date:   Sun Mar 8 12:55:07 2026 -0400
 
-    Undoing Claude's "bug fix".  It was a mistake.
+    Doing the line breaks as br().
 
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-commit f39158689c774eea398bb76061e9e173f2e2d433
+commit 5da6d77f6d94adc7d59f00b092b1d906ec93db72
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 10:55:03 2026 -0400
+Date:   Sun Mar 8 12:38:57 2026 -0400
 
-    New name for full-featured: BreatheMap-full
+    solves another red flash, using identical().
 
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit bd586c52f7d25678d3ee2eaa38e6c6bfb6ac2983
+commit c4b91ba43fe35318fa414356dbf630a94b72e8c1
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 10:54:01 2026 -0400
+Date:   Sun Mar 8 12:18:47 2026 -0400
 
-    BreatheMap is now the link for web page version.
+    add hr above About this graph.
 
- 1 file changed, 2 insertions(+)
+ 1 file changed, 1 insertion(+)
 
-commit 060aa566f469b2429aca896840e230fff5f1bff1
+commit 0e089efe2ce7b1d7c23d3fedf430c52673626aa8
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 10:53:02 2026 -0400
+Date:   Sun Mar 8 12:01:03 2026 -0400
 
-    un-hide the IQ button
+    ourModalDialog is BAD for the town selector dialog and for "NO tracts" dialog.
 
  1 file changed, 2 insertions(+), 2 deletions(-)
-
-commit 3fceb5069fc47e28e51acb3bae94600471d5df1d
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 10:34:47 2026 -0400
-
-    A bit of information about the full-featured version.
-
- 1 file changed, 6 insertions(+)

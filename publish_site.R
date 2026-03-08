@@ -3,9 +3,9 @@
 # the last one is deployed when source'ing this file
 
 appName = 'BreatheMap-noIQ'  #16630494
-appName = 'BreatheMap'  #16404137
 appName = 'BreatheMap-test'  # 16730739    The toggles and IQ are hidden
 appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
+appName = 'BreatheMap'  #16404137
 appName = 'BreatheMap-full'  #16842009
 
 extraFiles =   c( 'www/IQ-faq.html',
@@ -110,15 +110,4 @@ rsconnect::deployApp(
   envManagementPy = NULL,
   space = NULL
 )
-
-#_site.yml
-# publish_site(
-#   site_dir = 'appPA',
-#   site_name = 'appPA',  #'appPAtest',
-#   method = c("rsconnect"),
-#   server = 'shinyapps.io',
-#   account = 'trials',
-#   render = TRUE,
-#   launch_browser = interactive()
-# )
-
+print(appName)
