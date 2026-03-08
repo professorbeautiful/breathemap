@@ -1,6 +1,9 @@
-#### popovers using shinyBS
-### doesn't work as popify, or with id=IdfeaturePlotforpopover on the div().
-### we put the "contents" for info buttons here.
+
+####  popovers.R,  but these are no longer popovers ####
+#  Better to leave the file name alone, though.
+
+### We put the "contents" for info buttons here.
+### They can use indentMe here.
 
 indentMe = function(...)
   fluidRow(column(12, offset=1,
