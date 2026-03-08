@@ -130,14 +130,14 @@ fluidPage(
                                            style=leftSideButtonStyle)
                        ),
                        column(width=3,
-                              #div(
-                              actionButton('IdAck', label='Acknowledgments',
-                                           style=leftSideButtonStyle)
-                       ),
-                       column(width=3,
                               actionButton(inputId='IdMapAdvice',
                                            style=leftSideButtonStyle,
                                            label = 'Navigating the map')
+                       ),
+                       column(width=3,
+                              #div(
+                              actionButton('IdAck', label='Acknowledgments',
+                                           style=leftSideButtonStyle)
                        ),
                        column(width = 2, offset = 0.5,
                               downloadButton("downloadData", "Export Data",
