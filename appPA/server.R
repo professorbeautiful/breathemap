@@ -1129,6 +1129,7 @@ function(input, output, session) {
                )
     (input$IdTotalOrRate == '...total') &
                                 (input$Id_ToggleTownTract == 'towns')
+    #### bug fix from Claude, seems to be correct, towns not communities.
   })
 
   #### featurePlot histogram arrow ####
