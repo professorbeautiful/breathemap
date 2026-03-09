@@ -210,7 +210,7 @@ content_LifetimeHarm_Information.html =
       <br>
     •	IQ points lost
   <hr>
-  These estimates are calculate from externally validated models
+  These estimates are calculated from externally validated models
   using our birth cohort counts for 2019.
   <br>
   "Birth cohort" refers to the number of babies born in a tract or community in 2019.

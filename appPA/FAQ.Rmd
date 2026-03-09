@@ -16,13 +16,26 @@ P. J. Landrigan
 </strong></a>
 
 <hr>
-  •	<strong>Areas Shown: </strong>The areas shown in the map on the left are census tracts
+  •	<strong>Areas Shown: </strong>
+  <br> The areas shown in the map on the left are census tracts
 <br>for the Pittsburgh  Metropolitan Statistical Area (8 counties, 739 tracts).
-<br> The numbers presented on the histogram to the right
-<br> are estimates obtained from models based on the year 2016,
-<br>the most recent year for which this fine-grained data was available.
 <hr>
-  •	<strong>Health Harms </strong> The health harms reported in this study are attributable to PM 2.5 exposure.
+  •	<strong>Harm Estimates: </strong>
+<br> The numbers presented on the histogram to the right
+<br> are estimates obtained from models.
+<br> Those in the top two categories, "Deaths" and "Birth outcomes", are based on the year 2016,
+<br>the most recent year for which this fine-grained data was available.
+<br>
+Those estimates in the third category, "Economic impact/IQ", utilize the 2019 birth cohort counts (the number of babies born that year), combined with the PM2.5 data.
+<br>
+  They are calculated from externally validated models for "Lifetime Earnings Lost" and "IQ Points lost".
+    <br>
+  (The estimates are not obtained by fitting IQ or earnings data over our region.)
+  <br>
+  For details of the modeling, refer to the article cited above.
+<hr>
+  •	<strong>Health Harms </strong> 
+  <br>The health harms reported in this study are attributable to PM 2.5 exposure.
 <br>
   Much of this harm occurs even when PM 2.5 exposure levels are below the current federal standard of 9.0 µg/m³.
 <br> For more information about these measures of harm, click on the information buttons along the left edge of the right panel.
@@ -32,10 +45,9 @@ P. J. Landrigan
   especially those near steel mills and coke ovens like Clairton and Braddock.
 <hr>
 
-<hr>
-
 
 •	<strong> Map version: </strong> `r appName`
+<br>
 <br>
   •	<strong>The fully-featured map</strong> is <a target=_blank
 href='https://trials.shinyapps.io/BreatheMap-full/'> here</a>.
@@ -43,7 +55,7 @@ href='https://trials.shinyapps.io/BreatheMap-full/'> here</a>.
 It includes user's toggle controls for:
 <br>   • Tracts/communities
 <br>   • Pittsburgh neighborhoods
-<br>   • Yes/no "Community can overlap" (Only tracts with a community as sole tract occupant)
+<br>   • Yes/no "Community can overlap" (when a community is selected, only include tracts with a community as sole tract occupant)
 
 
 
