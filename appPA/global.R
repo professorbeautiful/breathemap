@@ -13,6 +13,7 @@ library(shinyWidgets)
 library(keys)
 library(markdown)
 library(rmarkdown)
+library(standby)
 
 shinyjs::useShinyjs()
 

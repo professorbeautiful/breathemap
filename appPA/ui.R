@@ -4,6 +4,7 @@ source('coloring.R')
 #breatheLabelColoring = 'background-color:green; color:white'
 
 fluidPage(
+  standby::useSpinkit(),
   useKeys(),
   keysInput("keys", c("O", "H", "B", "9")),
   {
@@ -186,4 +187,4 @@ fluidPage(
     )  # end of mainPanel
 })
 
-
+ # end of standby
