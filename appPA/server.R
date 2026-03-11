@@ -51,11 +51,19 @@ function(input, output, session) {
 
   print(paste('======== BEGIN server: #unspecified=',
               length(grep('unspec', twt$twt)), '======'))
-#  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
-  faq = inclRmd('FAQ.Rmd')   ### the link will not work from the Rhtml file. This does.
+  Overview = inclRmd('Overview.Rmd')
+  observeEvent(input$IdOverview, {
+    showModal(ourModalDialog(
+      #faq
+      Overview
+    ))
+  })#  faq = HTML(paste(readLines('FAQ.Rhtml'), collapse=''))
+  #faq = inclRmd('FAQ.Rmd')   ### the link will not work from the Rhtml file. This does.
+  faq_new =  readLines('Tool Revisions - FAQ.html')
   observeEvent(input$IdFAQ, {
     showModal(ourModalDialog(
-      faq
+      #faq
+      HTML(faq_new)
     ))
   })
   source('acknowledgements.R')
