@@ -113,7 +113,7 @@ fluidPage(
                                   popify(title='Selecting one community in a tract:',
                                          content=
                                            div(style='font-size:6px !important; container:body !important',
-                                               HTML('With "Community can overlap?" = YES<br>  ____ show ALL tracts that include this community.<hr>With "Community can overlap?" = NO<br>   ____ show ONLY tracts where this is the only community.'
+                                               HTML('With "Community can overlap?" is CHECKED <br>  ____ show ALL tracts that include this community.<hr>With "Community can overlap?" is NOT checked<br>   ____ show ONLY tracts where this is the only community.'
                                                )),
                                          checkboxInput("Id_townSharesCheckbox",
                                                        'Community can overlap?'
