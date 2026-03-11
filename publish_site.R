@@ -10,8 +10,9 @@ appName = 'BreatheMap-full'  #16842009
 
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',
-                  'www/indentMe.R',
+                  'Tool Revisions - FAQ.html',
                   'www/article-results-on-IQ.html')
+removeFiles = 'FAQ.Rmd'
 ### (also the appName file; see below)
 
 ##### no edits needed below this line ####
@@ -63,10 +64,10 @@ logLevel = c("normal", "quiet", "verbose") [3]
 #  etc to detect the version in ui and server.
 ##
 source('appPA/appFileManifestKept.R')
-appFiles = c(appFileManifestKept,
+appFiles = c(unique(appFileManifestKept),
              extraFiles,
              paste0('deploying', appName))
-
+appFiles = setdiff(appFiles, removeFiles)
 ##  Adding the correct 'deploying' file
 #  to the manifest will signal the app code, in hideIfDesired().
 
