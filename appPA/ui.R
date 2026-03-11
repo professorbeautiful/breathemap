@@ -130,11 +130,12 @@ fluidPage(
                               actionButton('IdFAQ', label='Overview',
                                            style=leftSideButtonStyle)
                        ),
-                       column(width=3,
+                       hideIfDesired(
+                         column(width=3,
                               actionButton(inputId='IdMapAdvice',
                                            style=leftSideButtonStyle,
                                            label = 'Navigating the map')
-                       ),
+                       )),
                        column(width=3,
                               #div(
                               actionButton('IdAck', label='Acknowledgments',
