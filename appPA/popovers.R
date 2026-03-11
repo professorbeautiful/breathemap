@@ -229,7 +229,7 @@ S. Sehdev,
 P. J. Landrigan
 </strong></a>
   <br><br>
-  <h3>Using IQ as an indicator of environmental harms</h3>
+  <h4>Using IQ as an indicator of environmental harms</h4>
   IQ has a history of being abused to advance racist doctrines.
   <br> For an extensive discussion of the ethical issues,
       <a href="IQ-faq.html" target=_blank> click here . </a>
