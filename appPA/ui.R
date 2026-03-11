@@ -92,7 +92,7 @@ fluidPage(
                                                             '"communities":',
                                                             ' <br>_____You pick one community in this tract,<br>',
                                                             ' and we show tracts for that community',
-                                                            ' <hr>See "Community shares" checkbox for details'
+                                                            ' <hr>See "Include sharing tracts" checkbox for details'
                                          ) ),
                                          radioButtons("Id_ToggleTownTract", "Areas shown:",
                                                       choiceNames=c('tracts', 'communities'),
@@ -110,13 +110,13 @@ fluidPage(
                                                        #'See each Pgh nbhd?'
                                                        ,value = TRUE)
                                   ),
-                                  popify(title='Selecting one community in a tract:',
+                                  popify(title='When selecting one community in a tract:',
                                          content=
                                            div(style='font-size:6px !important; container:body !important',
                                                HTML('With "Community can overlap?" is CHECKED <br>  ____ show ALL tracts that include this community.<hr>With "Community can overlap?" is NOT checked<br>   ____ show ONLY tracts where this is the only community.'
                                                )),
                                          checkboxInput("Id_townSharesCheckbox",
-                                                       'Community can overlap?'
+                                                       'Include sharing tracts?'
                                                        #"Community shares?"
                                                        ,value = TRUE)
                                   )
