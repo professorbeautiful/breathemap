@@ -110,10 +110,10 @@ fluidPage(
                                                        #'See each Pgh nbhd?'
                                                        ,value = TRUE)
                                   ),
-                                  popify(title='When selecting one community in a tract:',
+                                  popify(title='When a selected tract has more than one community:',
                                          content=
                                            div(style='font-size:6px !important; container:body !important',
-                                               HTML('With "Community can overlap?" is CHECKED <br>  ____ show ALL tracts that include this community.<hr>With "Community can overlap?" is NOT checked<br>   ____ show ONLY tracts where this is the only community.'
+                                               HTML('If "Include sharing tracts?" is CHECKED <br>  ____ show ALL tracts that include this community.<hr>If "Include sharing tracts?" is NOT checked<br>   ____ show ONLY tracts where this is the only community.'
                                                )),
                                          checkboxInput("Id_townSharesCheckbox",
                                                        'Include sharing tracts?'
