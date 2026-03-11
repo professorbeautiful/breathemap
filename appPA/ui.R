@@ -131,7 +131,7 @@ fluidPage(
                                            style=leftSideButtonStyle)
                        ),
 
-                       column(width=2,
+                       column(width=1,
                               #div(
                               actionButton('IdFAQ', label='FAQ',
                                            style=leftSideButtonStyle)
