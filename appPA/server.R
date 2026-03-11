@@ -2,6 +2,11 @@ function(input, output, session) {
   source('coloring.R')
   source('popovers.R', local = T)
 
+  printpaste <<- function(intro, ..., ppverbose=1, ppcollapse=', ') {
+    if(verbose>ppverbose)
+      print(paste(intro, paste(collapse=ppcollapse, ...)))
+  }
+
   # hideIfDesired <<- function(style,
   #                            hideMe = appName=='BreatheMap-test')
   #   paste(style,
@@ -1113,11 +1118,6 @@ function(input, output, session) {
     return(data.frame(outlierRows = outlierRows,
                      outlierValues=x[outlierRows],
                      tracts = twt$twt[outlierRows]))   #### OK
-  }
-
-  printpaste = function(intro, ..., ppverbose=1, ppcollapse=', ') {
-    if(verbose>ppverbose)
-      print(paste(intro, paste(collapse=ppcollapse, ...)))
   }
 
   rV$do.hist = TRUE
