@@ -113,3 +113,4 @@ rsconnect::deployApp(
   space = NULL
 )
 print(appName)
+print('  showAppLog() ;  runSelectedApp()   ')
