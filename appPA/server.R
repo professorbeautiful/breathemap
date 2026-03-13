@@ -286,6 +286,12 @@ function(input, output, session) {
       datarow = tract
 
     zoom = 10
+    ### yes, decimal parts good too. zoom out: lower number. max zoom in is 13?
+    ### This works in debugging panel:
+    #invisible(leafletProxy("map", session) %>%
+    # flyTo(lng = getLonLat(rV$savedTract)$lon,
+    #       lat = getLonLat(rV$savedTract)$lat, zoom=11))
+
     lon = twtNoGeom$lon.tracts[datarow]
     lat = twtNoGeom$lat.tracts[datarow]
     if(verbose > 1) cat('=====getLonLat:\n')
