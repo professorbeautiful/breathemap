@@ -20,11 +20,11 @@ content_IQdiscussion = readLines('www/IQ-faq.html')
 ### without HTML() no diag line problem, but not HTML.
 ### with HTML() looks good but diag line problem
 ### Claude had added in complete web page header info!
-
-content_IQdiscussion = content_IQdiscussion[
-  (grep('<body>', content_IQdiscussion) + 1)
-  : (grep('</body>', content_IQdiscussion) - 1)
-]
+#
+# content_IQdiscussion = content_IQdiscussion[
+#   (grep('<body>', content_IQdiscussion) + 1)
+#   : (grep('</body>', content_IQdiscussion) - 1)
+# ]
 
 #### content_FeaturePlot_Information ####
 content_FeaturePlot_Information =
@@ -249,10 +249,15 @@ P. J. Landrigan
 
 content_LifetimeHarm_Information = div(
   HTML(paste(collapse=' ',
-             content_LifetimeHarm_Information.html
+             content_LifetimeHarm_Information.html)),
+  h4( "Concerns about the abuse of IQ to advance racist doctrines"),
+  #  <a href="IQ-faq.html" target=_blank> click here . </a>
+  includeHTML('www/IQ-faq.html')
+
   )
-  )
-)
+
+printpaste('content_LifetimeHarm_Information' )
+
 
 
 

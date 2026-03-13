@@ -833,18 +833,18 @@ function(input, output, session) {
   sapply(featureList, makeFeatureActionButtonObserver)
 
 
-  IQbutton = renderUI({  #### too much cruft-- not using
-    #if(appName == 'BreatheMap-test-with-IQ-no-popify')
-      return(buttons[[1]])
-    return(popify(el = buttons[[1]],
-                  title="",
-                  content = HTML(paste(
-                    readLines('IQ-faq.html'),
-                    collapse=' '
-                  ))
-    )
-    )
-  })
+  # IQbutton = renderUI({  #### too much cruft-- not using
+  #   #if(appName == 'BreatheMap-test-with-IQ-no-popify')
+  #     return(buttons[[1]])
+  #   return(popify(el = buttons[[1]],
+  #                 title="",
+  #                 content = HTML(paste(
+  #                   readLines('IQ-faq.html'),  ### NOT DOING IT HERE
+  #                   collapse=' '
+  #                 ))
+  #   )
+  #   )
+  # })
 
   #### makeFeatureActionButton ####
   makeFeatureActionButton = function(feat) {
