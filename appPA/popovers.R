@@ -205,11 +205,15 @@ So Totals and Rates are each useful in different ways.
 
 #### content_LifetimeHarm_Information ####
 content_LifetimeHarm_Information.html =
+  paste(collapse=' ',
   '<br><h4> Lifetime harms</h4>
-      •	Lifetime earnings lost.
-      <br>
-    •	IQ points lost
-  <hr>
+  Two measures of harm refer to babies born in the year 2019:',
+  fluidRow(column(12, offset=1,
+                  '    •	Lifetime earnings lost')),
+  br(),
+  fluidRow(column(12, offset=1,
+                  '    •	IQ points lost')),
+  '
   These estimates are calculated from externally validated models
   using our birth cohort counts for 2019.
   <br>
@@ -246,10 +250,12 @@ P. J. Landrigan
       <a href="article-results-on-IQ.html" target=_blank> click here . </a>
 
     '
+  )
 
 content_LifetimeHarm_Information = div(
   HTML(paste(collapse=' ',
              content_LifetimeHarm_Information.html)),
+  hr(),
   h4( "Concerns about the abuse of IQ to advance racist doctrines"),
   #  <a href="IQ-faq.html" target=_blank> click here . </a>
   includeHTML('www/IQ-faq.html')
