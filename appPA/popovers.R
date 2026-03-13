@@ -210,7 +210,6 @@ content_LifetimeHarm_Information.html =
   Two measures of harm refer to babies born in the year 2019:',
   fluidRow(column(12, offset=1,
                   '    •	Lifetime earnings lost')),
-  br(),
   fluidRow(column(12, offset=1,
                   '    •	IQ points lost')),
   '
@@ -234,20 +233,18 @@ P. J. Landrigan
 </strong></a>
   <br><br>
   <h4>Using IQ as an indicator of environmental harms</h4>
-  IQ has a history of being abused to advance racist doctrines.
-  <br> For an extensive discussion of the ethical issues,
-      <a href="IQ-faq.html" target=_blank> click here . </a>
       <br>
-      The conclusion of the study concerning IQ are, in brief:
-      <br>
-      <blockquote>
-      Among the 24,604 children born in the Pittsburgh MSA in 2019,
-      PM2.5 pollution was linked to the loss of 60,668 full‑scale IQ points,
+      The conclusions of the study concerning IQ are, in brief:
+
+      <blockquote style="font-size:smaller;">
+      Among the 24,604 children born in the Pittsburgh MSA in 2019,<br>
+      PM2.5 pollution was linked to the loss of 60,668 full‑scale IQ points,<br>
       resulting in estimated lifetime economic losses of $2.7 billion.
       </blockquote>
-      <br>
+
       For details extracted from the Whitman et al article,
       <a href="article-results-on-IQ.html" target=_blank> click here . </a>
+  <br>However, IQ has a history of being abused in regard to both race and sex.
 
     '
   )
