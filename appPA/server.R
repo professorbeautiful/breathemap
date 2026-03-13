@@ -946,11 +946,13 @@ function(input, output, session) {
     }
     thisAreaFeatureSummaryString =  try(silent = TRUE,
         {
-       signif(digits=digitsDefault,
+       paste0(ifelse(thisFeature=="Lifetime earnings lost", '$', ''),
+                     signif(digits=digitsDefault,
                                               thisAreaFeatureSummary() )
+       )
     })
     if(class(thisAreaFeatureSummaryString) ==  'try-error') {
-      printpaste(thisAreaFeatureSummaryString)
+      printpaste('thisAreaFeatureSummaryString', thisAreaFeatureSummaryString)
       thisAreaFeatureSummaryString = ''
     }
     printpaste('output$histTitle: thisAreaFeatureSummaryString ', thisAreaFeatureSummaryString)
@@ -1266,7 +1268,10 @@ function(input, output, session) {
              x1 = thisAreaFeatureSummary(), y1= par('usr')[4]*1.2, xpd=NA,
              col='darkgreen', lwd=3)
       text(x = thisAreaFeatureSummary(), y=par('usr')[4]*(1.2 + 0.06), xpd=NA,
-           label = signif(digits=digitsDefault, thisAreaFeatureSummary()),
+           label =
+             paste0(ifelse(rV$featureToPlot=="Lifetime earnings lost",
+                           '$', ''),
+                    signif(digits=digitsDefault, thisAreaFeatureSummary())),
            col='darkgreen', cex=1.5)
 
     })
@@ -1318,7 +1323,9 @@ function(input, output, session) {
                        #"<strong>",
                        "Total of the ", length(thisAreaFeature),
                         "included tracts: ",
-                                    signif(digits=digitsDefault, thisAreaFeatureSummary())
+                       paste0(ifelse(rV$featureToPlot=="Lifetime earnings lost",
+                                     '$', ''),
+                                    signif(digits=digitsDefault, thisAreaFeatureSummary()) )
                        #,'</strong>'
                      )  )
         )
