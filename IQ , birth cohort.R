@@ -110,12 +110,13 @@ plot(birthsComparison$pop, birthsComparison$ellaCounts.Freq)
 plot(twt.df$Population.in.2019[twt.df$county.tracts == '003'],
      twt.df$Births.in.2019[twt.df$county.tracts == '003']
      )
-#### bad!
 plot(twt.df$Population.in.2019[twt.df$county.tracts != '003'],
      twt.df$Births.in.2019[twt.df$county.tracts != '003']
 )
-#### also bad!
 
+tooManyBabies = twt.df[which(twt.df$Population.in.2019 <= twt.df$Births.in.2019),
+                       c('tracts', 'Population.in.2019', 'Births.in.2019')]
+### only zeros. 9 tracts. tooManyBabies$tracts
 
 #### Did we pull in ellaCounts correctly?
 Allegheny = which(twt.df$county.tracts == '003')
@@ -123,7 +124,7 @@ from.twt =   data.frame(tract=twt.df$tracts[Allegheny],
                         pop=twt.df$Population.in.2019[Allegheny],
                         twtBirths=twt.df$Births.in.2019[Allegheny])
 comparison.w.twt = merge(from.twt,  birthsComparison)
-####  aha!  I must have messed up reading in births to twt.
+### ok,  twtBirths matches ellaCounts.Freq
 
 names(comparison.w.twt)
 head(comparison.w.twt)
@@ -146,12 +147,9 @@ cohort$births = ellaBirths.SW.counts$ellaCounts.Freq[
 ]
 head(cohort)
 cohort$births[is.na(cohort$births)] = 0
-cor(cohort$cpop, cohort$births)  #### ok.
+cor(cohort$cpop, cohort$births)  #### ok.  0.76
 
-table(cohort$tract==twt$tracts, exclude=NULL)  ## 739
-setcompare(cohort$tract, twt$tracts)
-## ella has 120 extra tracts.  twt had 16 extra.  Now set to births=zero.
-setcompare(cohort$tract, twt$tracts)  ### identical
+table(cohort$tract==twt$tracts, exclude=NULL)  ## 739  They all match.
 
 plot(cohort$cpop, cohort$births)
 cor(cohort$cpop, cohort$births)  ## 0.76, excellent!
