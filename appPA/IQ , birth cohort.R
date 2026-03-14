@@ -157,7 +157,8 @@ cor(cohort$cpop, twt$`Population in 2019`)  ## 1, perfect
 # So  twt$`PM2.5 average`    should be in the right order too.
 cohort.iq.lost = twt$`PM2.5 average` * cohort$births * 0.27  ## sum
   #### lifetime earnings per IQ point is $10,600–13,100
-cohort.earnings.lost = cohort.iq.lost * mean(10.6,13.1) * 1000
+cohort.earnings.lost= twt$`PM2.5 average` * cohort$births *  mean(10.6,13.1) * 1000 ## sum
+cohort.earnings.lost.per.article  = cohort.iq.lost * mean(10.6,13.1) * 1000
 
 cohort$cohort.iq.lost = cohort.iq.lost
 cohort$cohort.earnings.lost = cohort.earnings.lost
