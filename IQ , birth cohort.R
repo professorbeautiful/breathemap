@@ -160,7 +160,8 @@ cohort.iq.lost = twt$`PM2.5 average` * cohort$births * 0.27  ## sum
   #### lifetime earnings per IQ point is $10,600–13,100     APPARENTLY IN ERROR
 cohort.earnings.lost.per.article  = cohort.iq.lost * mean(10.6,13.1) * 1000
 #### lifetime earnings per PM2.5 is $10,600–13,100     APPARENTLY CORRECT
-cohort.earnings.lost= twt$`PM2.5 average` * cohort$births *  mean(10.6,13.1) * 1000 ## sum
+earningsFactor = mean(c(10.6,13.1) )   #### not mean(10.6,13.1)   Oops! Thats 10.6. 2nd is "trim"!
+cohort.earnings.lost= twt$`PM2.5 average` * cohort$births * earningsFactor * 1000 ## sum
 
 cohort$cohort.iq.lost = cohort.iq.lost
 cohort$cohort.earnings.lost = cohort.earnings.lost
