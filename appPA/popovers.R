@@ -259,7 +259,6 @@ content_LifetimeHarm_Information = div(
 
   )
 
-printpaste('content_LifetimeHarm_Information' )
 
 
 
