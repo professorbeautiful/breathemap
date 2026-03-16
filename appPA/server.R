@@ -568,6 +568,8 @@ function(input, output, session) {
 
   #### leaflet output$map ####
   output$map <- renderLeaflet({
+    input$render ### to stop the standby circling
+
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
       setView(lng = medianLON, lat = medianLAT, zoom = 10)  %>%

@@ -7,6 +7,7 @@ fluidPage(
   standby::useSpinkit(),
   useKeys(),
   keysInput("keys", c("O", "H", "B", "9")),
+
   {
     mainPanel(width = 12,
             # tags$head(
@@ -122,7 +123,11 @@ fluidPage(
                                   )
                               ))
                      ),
-                     leafletOutput("map", height = 450),
+                     actionButton("render", "Render"),
+                     spinkit( type = "circle-fade",
+                              leafletOutput("map", height = 450)
+                              # end of standby
+                     ),
                      br(),
                      fluidRow(
                        column(width=2,
@@ -192,6 +197,8 @@ fluidPage(
               )  # end of right side
             )  # end of the entire page, in one Fluidrow
     )  # end of mainPanel
-})
+}
+)
 
- # end of standby
+
+

@@ -14,6 +14,8 @@ library(keys)
 library(markdown)
 library(rmarkdown)
 library(standby)
+library(waiter)
+
 
 shinyjs::useShinyjs()
 
