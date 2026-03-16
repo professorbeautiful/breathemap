@@ -614,7 +614,16 @@ function(input, output, session) {
                           choices=c('...total', '...adjusted for population'),
                           selected='...total',
                           inline=TRUE)
-      )
+      ),
+      hr(),
+      br(),
+      fluidRow(column(offset=4, width = 8,
+                      actionButton(style=informationButtonStyle,
+                                   icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
+                                   inputId = 'IdfeaturePlotInformation',
+                                   label=span(style='color:black !important',
+                                              "⬅︎About this graph" ))
+      ))
     )
   })
 

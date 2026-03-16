@@ -124,7 +124,8 @@ fluidPage(
                               ))
                      ),
                      actionButton("render", "Render"),
-                     spinkit( type = "circle-fade",
+                     spinkit( type = "circle-fade", #"circle-fade",
+                              color="green",
                               leafletOutput("map", height = 450)
                               # end of standby
                      ),
@@ -167,15 +168,9 @@ fluidPage(
                        )),
                      uiOutput('UITotalOrRates'),
                      uiOutput('histTitle'),
-                     hr(),
                      fluidRow(
                        column(12,
                               div(  ### this div does not help! but popover works now.
-                                actionButton(style=informationButtonStyle,
-                                             icon = icon(name='circle-info', class = NULL, lib = "font-awesome"),
-                                             inputId = 'IdfeaturePlotInformation',
-                                             label=span(style='color:black !important',
-                                                       "⬅︎About this graph" )),
                                 plotOutput(outputId="featurePlot",
                                            height=300)
                               )
