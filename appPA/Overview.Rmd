@@ -56,14 +56,19 @@ It includes user's toggle controls for:
 <br>   • Tracts/communities
 <br>   • Pittsburgh neighborhoods
 <br>   • Yes/no "Community can overlap" (when a community is selected, only include tracts with a community as sole tract occupant)
+<br><br>
 
 BreatheMap is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free Software Foundation,
+<br>
 either version 3 of the License, or (at your option) any later version.
-
+<br>
 BreatheMap is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+<br>
 See the <a> href="https://www.gnu.org/licenses/"> GNU General Public License </a> for more details.
 <https://www.gnu.org/licenses/>.
+<br>
+A copy of GPL 3 is included here in the file <strong>COPYING </strong>.
 
