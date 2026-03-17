@@ -1,35 +1,35 @@
 Deployed: 
- * iqfix      c391437 Doing the line breaks as br(). 
+ * mar        2933448 move "About this graph" from ui to server, so it appears with the other info buttons. And centered. 
 =-=-=-=-=-
 Recent:
- commit c391437fd8f5a5bc9301d37a756436c72000ae82
+ commit 293344872213396b3fa756f1fa82b50dcd31a591
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 12:55:07 2026 -0400
+Date:   Mon Mar 16 14:40:42 2026 -0400
 
-    Doing the line breaks as br().
+    move "About this graph" from ui to server, so it appears with the other info buttons. And centered.
 
- 1 file changed, 12 insertions(+), 11 deletions(-)
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-commit 5da6d77f6d94adc7d59f00b092b1d906ec93db72
+commit cef5f94d5d95428c99e630a6f3a9b97a6b041dca
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 12:38:57 2026 -0400
+Date:   Mon Mar 16 10:51:03 2026 -0400
 
-    solves another red flash, using identical().
+    The standby package, using spinkit, appears to be working, locally and at deployed.  spinner over the map until the map is rendered.  (The waiter package could be a good alternative.)
 
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
-commit c4b91ba43fe35318fa414356dbf630a94b72e8c1
+commit 61d35a7b603d77f700d4973ede3cc8fa1366feda
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 12:18:47 2026 -0400
+Date:   Sat Mar 14 12:09:22 2026 -0400
 
-    add hr above About this graph.
+    Correcting earningsFactor:  the use of mean()
 
- 1 file changed, 1 insertion(+)
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-commit 0e089efe2ce7b1d7c23d3fedf430c52673626aa8
+commit f175b58f6ed43a10aed30a28661fab013e655011
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 8 12:01:03 2026 -0400
+Date:   Sat Mar 14 12:08:22 2026 -0400
 
-    ourModalDialog is BAD for the town selector dialog and for "NO tracts" dialog.
+    Just cleaning up code, checking out "tooManyBabies", all 9 tracts are zeros.
 
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 6 insertions(+), 8 deletions(-)

@@ -5,9 +5,9 @@
 ####  It would be bette to include appName as arg in hideIfDesired.
 appName = 'BreatheMap-noIQ'  #16630494
 appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
-appName = 'BreatheMap'  #16404137       The toggles are hidden
-appName = 'BreatheMap-full'  #16842009
 appName = 'BreatheMap-test'  # 16730739    The toggles are hidden
+appName = 'BreatheMap-full'  #16842009
+appName = 'BreatheMap'  #16404137       The toggles are hidden
 
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',
