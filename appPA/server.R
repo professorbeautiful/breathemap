@@ -571,7 +571,7 @@ function(input, output, session) {
   ## Replace the closing lines of renderLeaflet({...}) with this:
   output$map <- renderLeaflet({
 
-      input$render
+      #input$render
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels",
                        options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
@@ -761,6 +761,15 @@ function(input, output, session) {
 
   })
 
+  output$featureNameOverMap = renderUI({
+    strong(span(  style=paste(
+                 ifelse(isFALSE(input$IdShowFeatureColor),
+                        "; visibility: hidden;",
+                        '') ),
+                        decorateFeatureName()
+    ))
+
+  })
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
 
   makeItARate = function(){
