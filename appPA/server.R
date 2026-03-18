@@ -1249,6 +1249,7 @@ function(input, output, session) {
 
   #### featurePlot histogram arrow ####
   output$featurePlot <- renderPlot({
+
     xlab = decorateFeatureName()
 
     # if( isTRUE(total.communities())) {
@@ -1492,7 +1493,10 @@ function(input, output, session) {
            col = NA, border = "grey40", lwd = 0.5, xpd = NA)
     }
 
-    try(silent = TRUE, drawFeatureColorBar())
+    try(silent = TRUE,
+        if(isTRUE(input$IdShowFeatureColor))
+          drawFeatureColorBar()
+        )
 
     options(opt.save)   # ← this line was already there; keep it last
   })
