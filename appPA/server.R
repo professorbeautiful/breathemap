@@ -567,27 +567,31 @@ function(input, output, session) {
 
 
   #### leaflet output$map ####
+  ## ── ADD 1: in output$map renderLeaflet, add a layersControl ──────────────────
+  ## Replace the closing lines of renderLeaflet({...}) with this:
   output$map <- renderLeaflet({
-    input$render ### to stop the standby circling
-
+    input$render
     leaflet() %>%
-      addProviderTiles("CartoDB.PositronNoLabels", options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
-      setView(lng = medianLON, lat = medianLAT, zoom = 10)  %>%
-      addPolygons(data = twt,
-                  weight = 1,
-                  color = "Black",
-                  fillColor = "lightblue",
+      addProviderTiles("CartoDB.PositronNoLabels",
+                       options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
+      setView(lng = medianLON, lat = medianLAT, zoom = 10) %>%
+      addPolygons(data        = twt,
+                  weight      = 1,
+                  color       = "Black",
+                  fillColor   = "lightblue",
                   fillOpacity = 0.3,
-                  # label is the label shown
-                  #label = ~areaField, #works ok. PAtown[['NAME']] = PAtown[['areaField']]
-                  label = ~twt,
-                  layerId = ~twt, ## initially.
-                  highlight = highlightOptions(
-                    fillColor = '#224488',
-                    #color = "blue",
-                    weight = 2,
+                  label       = ~twt,
+                  layerId     = ~twt,
+                  highlight   = highlightOptions(
+                    fillColor  = '#224488',
+                    weight     = 2,
                     fillOpacity = 0.1,
-                    bringToFront = T))
+                    bringToFront = TRUE)) %>%
+      addLayersControl(
+        overlayGroups = c("featureGroup", "selectedTractGroup", "referenceTractGroup"),
+        options = layersControlOptions(collapsed = FALSE)
+      ) %>%
+      hideGroup("featureGroup")          # off by default; user can toggle on
   })
 
 
@@ -681,6 +685,70 @@ function(input, output, session) {
     safe.sum(getThisAreaFeature(rows, whoCalled='feat.sum'))
   }
   # feat.mean = function() mean(getThisAreaFeature(), na.rm=T)  # raw mean, not pop-weighted.
+
+
+  ## ── ADD 2: reactive that computes per-tract feature values ───────────────────
+  ## Place this after the existing featureList helper functions
+  ## (e.g. after feat.sum / feat.pop.weightedAverage definitions).
+
+  allTractsFeatureValues = reactive({
+    ## Returns a numeric vector, one value per row of twt,
+    ## respecting the total/rate toggle and the current featureToPlot.
+    feat  = rV$featureToPlot
+    nrows = nrow(twt)
+
+    if (feat %in% infoList) {
+      ## infoList items are never rate-adjusted
+      vals = as.numeric(data.frame(twt)[[toDots(feat)]])
+
+    } else if (isTRUE(makeItARate())) {
+      ## per-1000-population rate for every tract
+      vals = sapply(seq_len(nrows), function(r) feat.countsPer1000(r))
+      vals[popIsZero()] = NA          # avoid Inf / NaN
+
+    } else {
+      ## raw totals
+      vals = as.numeric(data.frame(twt)[[toDots(feat)]])
+    }
+    vals
+  })
+
+
+  observe({
+    vals = allTractsFeatureValues()
+    req(!all(is.na(vals)))
+
+    pal = colorNumeric(
+      palette = "RdYlGn",          # red = high harm, green = low harm
+      domain  = vals,
+      reverse = TRUE,              # flip so red = worst
+      na.color = "transparent"
+    )
+
+    ## ── ADD 3: observer that redraws "featureGroup" whenever feature/mode changes ─
+    ## Place this after allTractsFeatureValues (still inside server function).
+
+    leafletProxy("map", session) %>%
+      clearGroup("featureGroup") %>%
+      addPolygons(
+        data        = twt,
+        group       = "featureGroup",
+        weight      = 0.5,
+        color       = "grey",
+        fillColor   = ~pal(vals),
+        fillOpacity = 0.65,
+        label       = ~paste0(twt, ": ", signif(vals, digitsDefault)),
+        labelOptions = labelOptions(style = list("font-size" = "11px"))
+      ) %>%
+      addLegend(
+        layerId  = "featureLegend",   # overwrite on each update
+        position = "bottomright",
+        pal      = pal,
+        values   = vals,
+        title    = decorateFeatureName(),
+        opacity  = 0.8
+      )
+  })
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
 
@@ -1350,8 +1418,63 @@ function(input, output, session) {
         }
       }
     }
+    ## ── REPLACE the existing options(opt.save) at the end of output$featurePlot ──
+    ## with this block.  Everything from "try(silent=TRUE, { arrows(...) })" onward
+    ## stays the same; just append the color-bar drawing before options(opt.save).
 
-    options(opt.save)
+    drawFeatureColorBar = function(vals_all = allTractsFeatureValues()) {
+      ## vals_all: full regional distribution (same domain as the legend).
+      ## We draw in plot coordinates, using xpd=NA to reach into the margin.
+
+      usr   = par("usr")          # c(x1, x2, y1, y2)  in data coords
+      xlow  = usr[1]
+      xhigh = usr[2]
+      ylow  = usr[3]
+
+      ## How tall is one line of text in data-coordinate units?
+      line_h = diff(usr[3:4]) / par("pin")[2] *
+        par("cin")[2] * par("cex") * par("lheight")
+
+      ## Place bar just below y=0 (the x axis baseline):
+      ##   bar top    ~ 1.0 lines below the axis
+      ##   bar bottom ~ 1.8 lines below the axis
+      bar_top    = ylow - 2.2 * line_h
+      bar_bottom = ylow - 3.0 * line_h
+
+      ## Build a fine gradient across the x range
+      n_steps = 500
+      xs      = seq(xlow, xhigh, length.out = n_steps + 1)
+      domain  = range(vals_all, na.rm = TRUE)
+
+      ## Map x position → normalized [0,1] → color
+      ## Using RdYlGn reversed (red = high) to match the map layer
+      ramp   = colorRamp(rev(RColorBrewer::brewer.pal(11, "RdYlGn")))
+      norm   = (xs - domain[1]) / diff(domain)   # may extend beyond [0,1]
+      norm   = pmax(0, pmin(1, norm))             # clamp
+
+      rgb_mat = ramp(norm)
+      cols    = rgb(rgb_mat[, 1], rgb_mat[, 2], rgb_mat[, 3], maxColorValue = 255)
+
+      ## Draw one thin rectangle per step
+      for (i in seq_len(n_steps)) {
+        rect(xleft   = xs[i],
+             xright  = xs[i + 1],
+             ybottom = bar_bottom,
+             ytop    = bar_top,
+             col     = cols[i],
+             border  = NA,
+             xpd     = NA)
+      }
+
+      ## Thin border around the whole bar
+      rect(xleft = xlow, xright = xhigh,
+           ybottom = bar_bottom, ytop = bar_top,
+           col = NA, border = "grey40", lwd = 0.5, xpd = NA)
+    }
+
+    try(silent = TRUE, drawFeatureColorBar())
+
+    options(opt.save)   # ← this line was already there; keep it last
   })
 
 #  showModal(ourModalDialog(title=paste('in ', appName)))
