@@ -738,9 +738,10 @@ function(input, output, session) {
         fillColor   = ~pal(vals),
         fillOpacity = 0.65,
         label       = ~paste0(twt, ": ", signif(vals, digitsDefault)),
-        labelOptions = labelOptions(style = list("font-size" = "11px"))
-       )   %>%
-      hideGroup('featureGroup')
+        labelOptions = labelOptions(style = list("font-size" = "11px")),
+      options     = pathOptions(interactive = FALSE) #%>%   # clicks pass through to base layer
+      )
+    #hideGroup('featureGroup')
       # addLegend(
       #   layerId  = "featureLegend",   # overwrite on each update
       #   position = "bottomright",
