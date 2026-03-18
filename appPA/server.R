@@ -570,7 +570,8 @@ function(input, output, session) {
   ## ── ADD 1: in output$map renderLeaflet, add a layersControl ──────────────────
   ## Replace the closing lines of renderLeaflet({...}) with this:
   output$map <- renderLeaflet({
-    input$render
+
+      input$render
     leaflet() %>%
       addProviderTiles("CartoDB.PositronNoLabels",
                        options = tileOptions(minZoom = 5, maxZoom = 13)) %>%
@@ -586,14 +587,22 @@ function(input, output, session) {
                     fillColor  = '#224488',
                     weight     = 2,
                     fillOpacity = 0.1,
-                    bringToFront = TRUE)) %>%
-      addLayersControl(
-        overlayGroups = c("featureGroup", "selectedTractGroup", "referenceTractGroup"),
-        options = layersControlOptions(collapsed = FALSE)
-      ) %>%
-      hideGroup("featureGroup")          # off by default; user can toggle on
+                    bringToFront = TRUE))  #%>%
+      # addLayersControl(
+      #   overlayGroups = c("featureGroup", "selectedTractGroup", "referenceTractGroup"),
+      #   options = layersControlOptions(collapsed = FALSE)
+      # ) %>%
   })
 
+observeEvent(  input$IdShowFeatureColor, {
+  map =     leafletProxy("map", session)
+  if(isTRUE(input$IdShowFeatureColor))
+    hideGroup(map=map, group="featureGroup")
+  # off by default; user can toggle on
+  else
+    showGroup(map=map, group="featureGroup")          # off by default; user can toggle on
+
+  })
 
   # export button
   output$downloadData <- downloadHandler(
@@ -739,7 +748,8 @@ function(input, output, session) {
         fillOpacity = 0.65,
         label       = ~paste0(twt, ": ", signif(vals, digitsDefault)),
         labelOptions = labelOptions(style = list("font-size" = "11px"))
-       )  # %>%
+       )   %>%
+      hideGroup('featureGroup')
       # addLegend(
       #   layerId  = "featureLegend",   # overwrite on each update
       #   position = "bottomright",

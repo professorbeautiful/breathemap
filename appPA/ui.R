@@ -124,6 +124,9 @@ fluidPage(
                               ))
                      ),
                      actionButton("render", "Render"),
+                     checkboxInput("IdShowFeatureColor",
+                                   "Show feature values in color",
+                                   value = FALSE),
                      spinkit( type = "circle-fade", #"circle-fade",
                               color="green",
                               leafletOutput("map", height = 450)
