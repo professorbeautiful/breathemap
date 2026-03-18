@@ -739,15 +739,15 @@ function(input, output, session) {
         fillOpacity = 0.65,
         label       = ~paste0(twt, ": ", signif(vals, digitsDefault)),
         labelOptions = labelOptions(style = list("font-size" = "11px"))
-      ) %>%
-      addLegend(
-        layerId  = "featureLegend",   # overwrite on each update
-        position = "bottomright",
-        pal      = pal,
-        values   = vals,
-        title    = decorateFeatureName(),
-        opacity  = 0.8
-      )
+       )  # %>%
+      # addLegend(
+      #   layerId  = "featureLegend",   # overwrite on each update
+      #   position = "bottomright",
+      #   pal      = pal,
+      #   values   = vals,
+      #   title    = decorateFeatureName(),
+      #   opacity  = 0.8
+      # )
   })
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
