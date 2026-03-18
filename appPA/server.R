@@ -1431,8 +1431,8 @@ function(input, output, session) {
                        #,'</strong>'
                      )  )
         )
-        print(paste('RHS x', par('usr')[2]))
-        print(paste('par usr', par('usr')))
+        #print(paste('RHS x', par('usr')[2]))
+        #print(paste('par usr', par('usr')))
         if(thisAreaFeatureSummary() >= par('usr')[2]){
           arrows(x0 = mean(par()$usr[1:2]), x1 = 0.9*par('usr')[2],
                  y0 = highestPlotValue * 1.05, y1 = highestPlotValue * 1.05,
