@@ -594,15 +594,6 @@ function(input, output, session) {
       # ) %>%
   })
 
-observeEvent(  input$IdShowFeatureColor, {
-  map =     leafletProxy("map", session)
-  if(isTRUE(input$IdShowFeatureColor))
-    hideGroup(map=map, group="featureGroup")
-  # off by default; user can toggle on
-  else
-    showGroup(map=map, group="featureGroup")          # off by default; user can toggle on
-
-  })
 
   # export button
   output$downloadData <- downloadHandler(
@@ -758,6 +749,15 @@ observeEvent(  input$IdShowFeatureColor, {
       #   title    = decorateFeatureName(),
       #   opacity  = 0.8
       # )
+  })
+  observeEvent(  c(input$IdShowFeatureColor,  allTractsFeatureValues() ), {
+    map =     leafletProxy("map", session)
+    if(isTRUE(input$IdShowFeatureColor))
+      showGroup(map=map, group="featureGroup")
+    # off by default; user can toggle on
+    else
+      hideGroup(map=map, group="featureGroup")          # off by default; user can toggle on
+
   })
 
   cq = function(s, split=',') strsplit(split=split, s)[[1]]
