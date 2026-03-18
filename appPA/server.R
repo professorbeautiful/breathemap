@@ -1308,6 +1308,8 @@ function(input, output, session) {
     if(verbose>2) print(summary(referenceDistribution))
     if(verbose>2) print(length(referenceDistribution))
 
+    par(mgp = c(4, 1, 0),   # move x-axis label down: 4 lines from axis (was ~3)
+        mar = c(7, 4, 4, 2)) # increase bottom margin to make room: 7 lines (was 5)
 
 
     if(rV$do.hist) {
