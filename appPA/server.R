@@ -54,8 +54,8 @@ function(input, output, session) {
                       savedclick = NULL, showingModal = FALSE)
   # savedTract can be either numeric or a character entry in areaSelectorId
 
-  print(paste('======== BEGIN server: #unspecified=',
-              length(grep('unspec', twt$twt)), '======'))
+  print(paste('======== BEGIN server: appName=',
+              appName, '======'))
   Overview = inclRmd('Overview.Rmd')
   observeEvent(input$IdOverview, {
     showModal(ourModalDialog(
