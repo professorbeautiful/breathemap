@@ -1,3 +1,8 @@
+#  Copyright 2026  The Breathe Project, Fireman Creative, and Roger Day.
+#  BreatheMap is free software.
+#  Information on copyright and reusing this code is
+#  in the file www/Copyright.html in this distribution.
+
 # loads packages required to run the app
 library(sf)
 library(leaflet)

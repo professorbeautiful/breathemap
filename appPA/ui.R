@@ -1,7 +1,9 @@
-source('coloring.R')
+#  Copyright 2026  The Breathe Project, Fireman Creative, and Roger Day.
+#  BreatheMap is free software.
+#  Information on copyright and reusing this code is
+#  in the file www/Copyright.html in this distribution.
 
-# margin and height do not help.
-#breatheLabelColoring = 'background-color:green; color:white'
+source('coloring.R')
 
 fluidPage(
   standby::useSpinkit(),
