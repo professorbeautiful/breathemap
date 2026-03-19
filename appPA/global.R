@@ -27,7 +27,7 @@ shinyjs::useShinyjs()
 verbose = 0
 
 defaultAppName =   #### used only when run locally.
-  'BreatheMap-test-with-IQ-no-popify'
+  'BreatheMap'
 
 # if( ! (basename(getwd()) == 'appPA') )
 #      setwd('appPA')  ### NOT NEEDED IF FILES ARE LINKED IN THE 2 FOLDERS.

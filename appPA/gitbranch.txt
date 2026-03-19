@@ -1,35 +1,75 @@
 Deployed: 
- * mar        2933448 move "About this graph" from ui to server, so it appears with the other info buttons. And centered. 
+ * mar        57dcb55 comment out print paste statements 
 =-=-=-=-=-
 Recent:
- commit 293344872213396b3fa756f1fa82b50dcd31a591
+ commit 57dcb555f14c2b141838ec1301035e5ebe826883
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Mon Mar 16 14:40:42 2026 -0400
+Date:   Wed Mar 18 15:41:08 2026 -0400
 
-    move "About this graph" from ui to server, so it appears with the other info buttons. And centered.
+    comment out print paste statements
 
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-commit cef5f94d5d95428c99e630a6f3a9b97a6b041dca
+commit 91e8f942debe569d2f76c913264d15cd2bdde3d4
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Mon Mar 16 10:51:03 2026 -0400
+Date:   Wed Mar 18 15:34:40 2026 -0400
 
-    The standby package, using spinkit, appears to be working, locally and at deployed.  spinner over the map until the map is rendered.  (The waiter package could be a good alternative.)
+    move down X label a bit.
 
- 3 files changed, 14 insertions(+), 3 deletions(-)
+ 1 file changed, 2 insertions(+)
 
-commit 61d35a7b603d77f700d4973ede3cc8fa1366feda
+commit 27c8a831c592f00181bf95a6940e25c066cd691e
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 14 12:09:22 2026 -0400
+Date:   Wed Mar 18 14:27:15 2026 -0400
 
-    Correcting earningsFactor:  the use of mean()
+    drawFeatureColorBar only if isTRUE(input$IdShowFeatureColor)
 
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-commit f175b58f6ed43a10aed30a28661fab013e655011
+commit de55990ae1b79f4f01844c282baf3ce8c51762c4
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Sat Mar 14 12:08:22 2026 -0400
+Date:   Wed Mar 18 14:03:44 2026 -0400
 
-    Just cleaning up code, checking out "tooManyBabies", all 9 tracts are zeros.
+    removed the Render button. Show featureNameOverMap
 
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ 2 files changed, 15 insertions(+), 4 deletions(-)
+
+commit ca8b27f8519ab3e7e07dc67ffce0eebf66fcd36b
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Mar 18 13:46:44 2026 -0400
+
+    OK, now you can select a tract even when IdShowFeatureColor is on. (But the number doesn't show up in the label... that's ok.)
+
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+commit 87c90d56a080e9910b7c148e0ae454f383944792
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Mar 18 13:21:57 2026 -0400
+
+    moving observeEvent(  input$IdShowFeatureColor lower, and swapping hideGroup showGroup. good, but when showing feature, can't select a tract.
+
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+commit b6baef0cd3c91947ac7f907c6a66916912e4a57f
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Mar 18 12:27:31 2026 -0400
+
+    Pretty good now. A little funky when changing the variable.
+
+ 2 files changed, 21 insertions(+), 8 deletions(-)
+
+commit ce56863b6340a751bf1bbec694c7a99efb6f81f8
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Mar 18 10:36:28 2026 -0400
+
+    Hide the color legend over the map.
+
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+commit 4f8948ae37e21934d16daa2561e1f53a420daa0a
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Wed Mar 18 10:35:55 2026 -0400
+
+    Add color scale for feature values.
+
+ 1 file changed, 141 insertions(+), 18 deletions(-)

@@ -126,11 +126,13 @@ fluidPage(
                               ))
                      ),
                      #actionButton("render", "Render"),
-                     fluidRow( column(4, checkboxInput("IdShowFeatureColor",
-                                   "Show feature values in color",
-                                   value = FALSE)),
-                           column(7, uiOutput('featureNameOverMap'))
-                           ),
+                     fluidRow(
+                       style=hideIfDesired(),
+                       column(4, checkboxInput("IdShowFeatureColor",
+                                               "Show feature values in color",
+                                               value = FALSE)),
+                       column(7, uiOutput('featureNameOverMap'))
+                     ),
                      spinkit( type = "circle-fade", #"circle-fade",
                               color="green",
                               leafletOutput("map", height = 450)
