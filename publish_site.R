@@ -6,8 +6,8 @@
 appName = 'BreatheMap-noIQ'  #16630494
 appName = 'BreatheMap-test-with-IQ-no-popify'  #16827732
 appName = 'BreatheMap-test'  # 16730739    The toggles are hidden
-appName = 'BreatheMap-full'  #16842009
 appName = 'BreatheMap'  #16404137       The toggles are hidden
+appName = 'BreatheMap-full'  #16842009
 
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',

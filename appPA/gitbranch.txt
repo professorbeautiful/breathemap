@@ -1,8 +1,32 @@
 Deployed: 
- * mar        57dcb55 comment out print paste statements 
+ * mar        84178c1 hiding the IdShowFeatureColor feature if web site version. 
 =-=-=-=-=-
 Recent:
- commit 57dcb555f14c2b141838ec1301035e5ebe826883
+ commit 84178c188d73d08a9e8e4ecceaba1aec3b9702ea
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Thu Mar 19 18:57:22 2026 -0400
+
+    hiding the IdShowFeatureColor feature if web site version.
+
+ 3 files changed, 65 insertions(+), 23 deletions(-)
+
+commit 93440fcd1641e5f997ab2d0f6861b061e0292ef1
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Thu Mar 19 18:55:29 2026 -0400
+
+    print out appName at the beginning
+
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 05360ca68450125380a38b20e461910134dcc3f9
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Thu Mar 19 18:47:40 2026 -0400
+
+    Copyright notices and files.
+
+ 6 files changed, 37 insertions(+), 15 deletions(-)
+
+commit 57dcb555f14c2b141838ec1301035e5ebe826883
 Author: Roger Day <notsofeo@gmail.com>
 Date:   Wed Mar 18 15:41:08 2026 -0400
 
@@ -17,59 +41,3 @@ Date:   Wed Mar 18 15:34:40 2026 -0400
     move down X label a bit.
 
  1 file changed, 2 insertions(+)
-
-commit 27c8a831c592f00181bf95a6940e25c066cd691e
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 14:27:15 2026 -0400
-
-    drawFeatureColorBar only if isTRUE(input$IdShowFeatureColor)
-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-commit de55990ae1b79f4f01844c282baf3ce8c51762c4
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 14:03:44 2026 -0400
-
-    removed the Render button. Show featureNameOverMap
-
- 2 files changed, 15 insertions(+), 4 deletions(-)
-
-commit ca8b27f8519ab3e7e07dc67ffce0eebf66fcd36b
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 13:46:44 2026 -0400
-
-    OK, now you can select a tract even when IdShowFeatureColor is on. (But the number doesn't show up in the label... that's ok.)
-
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-commit 87c90d56a080e9910b7c148e0ae454f383944792
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 13:21:57 2026 -0400
-
-    moving observeEvent(  input$IdShowFeatureColor lower, and swapping hideGroup showGroup. good, but when showing feature, can't select a tract.
-
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-commit b6baef0cd3c91947ac7f907c6a66916912e4a57f
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 12:27:31 2026 -0400
-
-    Pretty good now. A little funky when changing the variable.
-
- 2 files changed, 21 insertions(+), 8 deletions(-)
-
-commit ce56863b6340a751bf1bbec694c7a99efb6f81f8
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 10:36:28 2026 -0400
-
-    Hide the color legend over the map.
-
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-commit 4f8948ae37e21934d16daa2561e1f53a420daa0a
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 10:35:55 2026 -0400
-
-    Add color scale for feature values.
-
- 1 file changed, 141 insertions(+), 18 deletions(-)
