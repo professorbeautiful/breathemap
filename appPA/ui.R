@@ -113,13 +113,13 @@ fluidPage(
                                                        #'See each Pgh nbhd?'
                                                        ,value = TRUE)
                                   ),
-                                  popify(title='When a selected tract has more than one community:',
+                                  popify(title='When a community is selected: ',
                                          content=
                                            div(style='font-size:6px !important; container:body !important',
-                                               HTML('If "Include sharing tracts?" is CHECKED <br>  ____ show ALL tracts that include this community.<hr>If "Include sharing tracts?" is NOT checked<br>   ____ show ONLY tracts where this is the only community.'
-                                               )),
+                                               HTML(gsub('\n', '', paste(collapse=' ',
+                                                          readLines('sharing.html')) ) ) ),
                                          checkboxInput("Id_townSharesCheckbox",
-                                                       'Include sharing tracts?'
+                                                       'Include all community-sharing tracts?'
                                                        #"Community shares?"
                                                        ,value = TRUE)
                                   )
