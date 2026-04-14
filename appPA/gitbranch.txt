@@ -1,8 +1,32 @@
 Deployed: 
- * BreatheMap 39b56c9 tiny change of phrase, capital ONLY 
+ * BreatheMap 39caf1a updates gitbranch.txt 
 =-=-=-=-=-
 Recent:
- commit 39b56c9f9209c8b512c0c00f9896d44d31d18212
+ commit 39caf1a88a517d4c30ae4b15ab9230d4c504f562
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Tue Apr 14 09:27:06 2026 -0400
+
+    updates gitbranch.txt
+
+ 1 file changed, 16 insertions(+), 24 deletions(-)
+
+commit 3a40dd60f15cf6ee0487c09ac4a883a98ff8ca99
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Tue Apr 14 09:26:25 2026 -0400
+
+    Added "sharing.html" to manifest.
+
+ 1 file changed, 1 insertion(+)
+
+commit 84764f639987d3ef9e1c61b461f6a9b39bc24c2f
+Author: Roger Day <notsofeo@gmail.com>
+Date:   Tue Apr 14 09:25:56 2026 -0400
+
+    Added a link back to the Breathe Project version.
+
+ 1 file changed, 2 insertions(+)
+
+commit 39b56c9f9209c8b512c0c00f9896d44d31d18212
 Author: Roger Day <notsofeo@gmail.com>
 Date:   Mon Mar 23 09:34:25 2026 -0400
 
@@ -17,19 +41,3 @@ Date:   Sun Mar 22 18:59:22 2026 -0400
     looking better
 
  1 file changed, 23 insertions(+), 20 deletions(-)
-
-commit f0255cbab8a51cff106ed3af18ac00721c76bec9
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 22 17:51:57 2026 -0400
-
-    revising the "tract shares" toggle.
-
- 2 files changed, 36 insertions(+), 4 deletions(-)
-
-commit 26cbadd6f62e73e6ac5e05b4b442584be0431e3c
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Sun Mar 22 17:34:09 2026 -0400
-
-    defaultAppName set to BreatheMap-full
-
- 1 file changed, 1 insertion(+), 1 deletion(-)
