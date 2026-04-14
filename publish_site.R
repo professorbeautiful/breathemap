@@ -11,6 +11,7 @@ appName = 'BreatheMap-full'  #16842009
 
 extraFiles =   c( 'www/IQ-faq.html',
                   'gitbranch.txt',
+                  'sharing.html',
                   'Tool Revisions - FAQ.html',
                   'www/article-results-on-IQ.html')
 removeFiles = 'FAQ.Rmd'
