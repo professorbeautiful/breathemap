@@ -1,43 +1,35 @@
 Deployed: 
- * mar        84178c1 hiding the IdShowFeatureColor feature if web site version. 
+ * BreatheMap 39b56c9 tiny change of phrase, capital ONLY 
 =-=-=-=-=-
 Recent:
- commit 84178c188d73d08a9e8e4ecceaba1aec3b9702ea
+ commit 39b56c9f9209c8b512c0c00f9896d44d31d18212
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Thu Mar 19 18:57:22 2026 -0400
+Date:   Mon Mar 23 09:34:25 2026 -0400
 
-    hiding the IdShowFeatureColor feature if web site version.
-
- 3 files changed, 65 insertions(+), 23 deletions(-)
-
-commit 93440fcd1641e5f997ab2d0f6861b061e0292ef1
-Author: Roger Day <notsofeo@gmail.com>
-Date:   Thu Mar 19 18:55:29 2026 -0400
-
-    print out appName at the beginning
+    tiny change of phrase, capital ONLY
 
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-commit 05360ca68450125380a38b20e461910134dcc3f9
+commit 90565cad5f3edcbdfccf1d5fc472fca10244f9e3
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Thu Mar 19 18:47:40 2026 -0400
+Date:   Sun Mar 22 18:59:22 2026 -0400
 
-    Copyright notices and files.
+    looking better
 
- 6 files changed, 37 insertions(+), 15 deletions(-)
+ 1 file changed, 23 insertions(+), 20 deletions(-)
 
-commit 57dcb555f14c2b141838ec1301035e5ebe826883
+commit f0255cbab8a51cff106ed3af18ac00721c76bec9
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 15:41:08 2026 -0400
+Date:   Sun Mar 22 17:51:57 2026 -0400
 
-    comment out print paste statements
+    revising the "tract shares" toggle.
 
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 36 insertions(+), 4 deletions(-)
 
-commit 91e8f942debe569d2f76c913264d15cd2bdde3d4
+commit 26cbadd6f62e73e6ac5e05b4b442584be0431e3c
 Author: Roger Day <notsofeo@gmail.com>
-Date:   Wed Mar 18 15:34:40 2026 -0400
+Date:   Sun Mar 22 17:34:09 2026 -0400
 
-    move down X label a bit.
+    defaultAppName set to BreatheMap-full
 
- 1 file changed, 2 insertions(+)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
