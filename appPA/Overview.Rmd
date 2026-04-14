@@ -57,6 +57,8 @@ It includes user's toggle controls for:
 <br>   • Pittsburgh neighborhoods
 <br>   • Yes/no "Community can overlap" (when a community is selected, only include tracts with a community as sole tract occupant)
 <br><br>
+The <a target=_blank
+href='https://breatheproject.org/air-pollution-health-impacts/'> Breathe Project web site</a> provides a simpler version of this map.
 <br><br>
 
 BreatheMap is free software.
